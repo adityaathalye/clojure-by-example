@@ -24,9 +24,12 @@ Think of this as an exercise in "constrained creativity".
   - Focus on what things do; not what they are, or why they are.
   - Inform your _intuition for doing things_, and then use that to 
     dive deeper into all the juicy details at your own pace, later.
-  - Take what is useful, discard the rest.
+
+Take what is useful, discard the rest.
 
 # Philosophy
+
+My philosophy, that is... you need not be slave to it ;-)
 
 Almost anyone can hope to do more with more. Up to a point, that is.
 
@@ -44,6 +47,11 @@ Live long, and prosper.
 \\//_
 
 
+# Credits
+  - @clj-pune people, especially @kapilreddy, and @jaju for
+    critique while making this: https://github.com/clj-pune/pratham
+  - @inclojure-org for creating the forum and community under which
+    this work started
 
 ## License
 
