@@ -9,10 +9,12 @@
 
 
 ;; Let's begin again, with our planets, our moons checker, and `map`
-(def planets [{:name "Mercury" :moons 0}
-              {:name "Venus"   :moons 0}
-              {:name "Earth"   :moons 1}
-              {:name "Mars"    :moons 2}])
+(def planets [{:name "Mercury" :moons 0  :mass 0.0533}
+              {:name "Venus"   :moons 0  :mass 0.815}
+              {:name "Earth"   :moons 1  :mass 1}
+              {:name "Mars"    :moons 2  :mass 0.107}
+              {:name "Jupiter" :moons 69 :mass 317.8}
+              {:name "Saturn"  :moons 62 :mass 95.2}])
 
 
 ;; Our little "helper" function, to check if a planet has moons.
@@ -43,14 +45,16 @@
 (filter (fn [p] (not (planet-has-moons? p)))
         planets)
 
-;; We can define new "helper" function, in terms of earlier helper
-;; functions...
+;; You can define new "helper" function, in terms of earlier helper
+;; functions... Fix the function body, and make it work.
 (defn planet-without-moon?
   "Planets without moons are exactly opposite to planets with moons."
-  [planet]
-  (not (planet-has-moons? planet)))
+  [FIXME]
+  FIXME)
 
-(filter planet-without-moon? planets)
+;; Now, find planets without moons...
+;; Uncomment, Fix, Evaluate
+;; (FIXME FIXME FIXME)
 
 
 ;; With the above knowledge, can we write a function to separate out
@@ -64,9 +68,10 @@
 ;;  :planets-without-moons [planet-A-hash-map p-B-hash-map ...]}
 
 
-;; Why does this work?
+;; Will this work? Why? Take a guess...
 {:planets-with-moons    (filter planet-has-moons? planets)
  :planets-without-moons (filter planet-without-moon? planets)}
+
 
 ;; Note: Do More With Less
 ;;
@@ -82,15 +87,17 @@
  (filter planet-without-moon? planets)]
 
 
-;; So now, we can just do this to write a planet-grouping function...
+;; So now, to group planets by moons, we can... do what?
 (defn group-planets-by-moons
   [planets]
-  {:planets-with-moons    (filter planet-has-moons? planets)
-   :planets-without-moons (filter planet-without-moon? planets)})
+  ;;FIXME - put a data structure here that represents the grouping.
+)
 
-;; And use it like this..
-(group-planets-by-moons planets)
+;; Use the function to group planets. Uncomment, fix, evaluate:
+;;(FIXME FIXME)
 
+
+;; If you did it right, this is what happened:
 ;; - When we called the function with `planets`, it did this:
 ;;   - evaluated each filter one by one
 ;;   - put the results in the respective places in the hash-map
@@ -99,9 +106,8 @@
 ;; Now we can further find...
 (:planets-with-moons (group-planets-by-moons planets))
 
-;; and further...
-(map :name
-     (:planets-with-moons (group-planets-by-moons planets)))
+;; Find names of those planets that have moons...
+;; (FIXME FIXME FIXME)
 
 
 ;; Lesson: Thinking with Data:
@@ -132,7 +138,7 @@
 ;; i.e., how to count the sum total of moons of all given planets?
 ;; Well...
 (reduce + 0 (map :moons planets))
-;; computes this: 0 + p1-moons + p2-moons + .... + pN-moons
+;; It computes this: 0 + p1-moons + p2-moons + .... + pN-moons
 
 ;; `reduce` takes a function, an "accumulator" value, and an input
 ;; collection, and returns an "accumulated" value.
@@ -162,6 +168,109 @@
 ;; `reductions` is a convenience function that helps us visualize
 ;; the "accumulator" at each step of the `reduce` computation:
 (reductions + 0 (map :moons planets))
+
+
+
+;; Lesson-end Exercises:
+
+;; IMPORTANT:
+;; - Don't refer back to the code above unless you're _really_ stuck.
+;; - Try to reason from first principles - use the basic ideas we have
+;;   acquired so far.
+;; - Write your own functions _from scratch_, if you need them.
+
+
+;; Calculate the total mass of all `planets`
+;; Write your solution below:
+
+
+
+;; Count the number of `planets` that have moons.
+;; - Reuse the `planet-has-moons?` function that we already defined.
+;; - Use the `count` function to find the counts.
+     (count [42 43 44 45]) ; example
+;; Your solution below:
+
+
+
+;; Calculate the total mass of planets having moons.
+;; - Reuse the `planet-has-moons?` function that we already defined.
+
+
+
+;; Calculate the total mass of planets _without_ moons.
+;; - Reuse the `planet-without-moons?` function that we defined earlier.
+
+
+
+;; Write a function `massier-than-earth?` which, given a planet, returns
+;; true if the planet's mass exceeds Earth's mass; false otherwise.
+
+
+
+
+;; Write a function `planetary-stats` that takes TWO arguments:
+;; 1. a "predicate" function like `massier-than-earth?`
+;; 2. a sequence of some planets,
+;; and returns the following stats about input planets that match
+;; the filter criteria:
+;; - count of the planets
+;; - names of the planets
+;; - total mass of the planets
+;; The return value must be, an easy-to-query data structure.
+
+;; Uncomment and fix:
+
+#_(defn planetary-stats
+    [pred-fn given-planets]
+    ;; `let` is a way to define ("bind") function-local variables.
+    (let [filtered-planets FIXME]
+      {:count FIXME
+       FIXME  FIXME
+       FIXME  FIXME}))
+
+
+;; Uncomment and evaluate to review your function's output:
+(planetary-stats identity planets)
+(planetary-stats identity (take 2 planets))
+(planetary-stats identity (drop 2 planets))
+
+
+
+;; Write a function `more-planetary-stats` that takes a sequence
+;; of planets, and returns an easy-to-query data structure containing
+;; the following information, based on the given planets:
+;; - given planets
+;;   - count
+;;   - names
+;;   - total mass
+;; - planets with moons
+;;   - count
+;;   - names
+;;   - total mass
+;; - planets without moons
+;;   - count
+;;   - names
+;;   - total mass
+;; - planets having more mass than earth
+;;   - count
+;;   - names
+;;   - total mass
+;; - planets having less mass than earth
+;;   - count
+;;   - names
+;;   - total mass
+
+
+;; Write the `more-planetary-stats` function below:
+
+
+
+
+;; Check your results with:
+(more-planetary-stats planets)
+(more-planetary-stats (take 2 planets))
+(more-planetary-stats (drop 2 planets))
 
 
 ;; RECAP:
