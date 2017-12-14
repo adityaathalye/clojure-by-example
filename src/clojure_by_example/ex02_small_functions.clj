@@ -99,12 +99,12 @@
 
 ;; How about the anonymous version of `same`?
 ;; Does it return `fn?` unchanged as well?
-(= fn?
+(= ; FIXME
    ((fn [x] x) fn?))
 
 ;; How about this?
 ;; What do we get if we pass `same` to itself?
-(= same
+(= ;FIXME
    (same same))
 
 
@@ -136,7 +136,7 @@
 (inc 42)
 
 ;; Clojure's `identity` function is exactly like our `same` function
-(= :moon
+(= ;FIXME
    (identity :moon)
    (same :moon))
 
@@ -153,6 +153,7 @@
 ;; of input and output, by way of a function.
 
 ;; What should this return?
+;; First predict the answer, then evaluate to confirm.
 (map even? [1 2 3 4 5 6])
 ;; Hint: mentally apply the `even?` function to each item, one by one,
 ;; and build up a collection of results of each function application.
@@ -199,6 +200,7 @@
 ;; Now, what if we pass a keyword instead of a real function, to `map`?
 
 ;; What should this return?
+;; Predict the answer, and then evaluate to confirm.
 (map :name planets)
 ;; (map :name over `planets`, which is vector of planet hash-maps)
 
@@ -222,17 +224,20 @@
 (planet-has-moons? {:name "Mars" :moons 2})
 
 
-;; Instead of querying each map, why not...
-(map planet-has-moons?
-     planets) ; query all of them at one go
+;; Instead of querying each map, why not query all of them at one go?
+(map ;FIXME ;FIXME
+ )
 
 ;; But of course, now we know we can also use an anonymous function...
-(map (fn [p] (> (:moons p) 0))
+;; Replace the FIXME comment with your own anonymous function that
+;; works just like `planet-has-moons?`.
+(map ;FIXME
      planets)
 
-;; And, finally, proof that both variants do exactly the same thing:
-(= (map (fn [p] (> (:moons p) 0))  planets)
-   (map planet-has-moons?          planets)
+;; And, finally, prove that both variants do exactly the same thing:
+(= (map ;FIXME- your anonymous function
+    planets)
+   ;; (FIXME FIXME FIXME) ; use `planet-has-moons?` to query `planets`
    [false false true true])
 
 
