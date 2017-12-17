@@ -8,7 +8,7 @@
 
 ;; Ex04: LESSON GOALS
 ;; - Introduce different ways to do data-processing logic in Clojure
-;;   - with branching control structures ()
+;;   - with branching control structures (if, when, case, cond)
 ;;   - without branching structures (we have already sneakily done this)
 ;;   - predicates and boolean expressions
 ;; - Have some more fun with much more sophisticated planets,
@@ -212,6 +212,36 @@ nil   ; is the only non-boolean "falsey" value
      (map moon-or-bust planets))
 
 
+;; `case` and `coned` are also available to do branching logic:
+
+(map (fn [num-moons]
+       ;; Use `cond` when you have to decide what to do based on
+       ;; testing the value of a thing.
+       (cond
+         (nil? num-moons) "Do nothing!"
+         (zero? num-moons)   "Send zero rockets."
+         (= num-moons 1)   "Send a rocket."
+         :else (str "Send " num-moons " rockets!")))
+
+     [nil 0 1 42])
+
+
+(map (fn [num-moons]
+       ;; Use case when you can decide what to do based on the
+       ;; actual value of a thing.
+       (case num-moons
+         nil "Do nothing!"
+         0   "Send zero rockets."
+         1   "Send a rocket."
+         (str "Send " num-moons " rockets!"))) ; default expression
+
+     [nil 0 1 42])
+
+
+
+
+
+;; Lesson-end exercise
 
 
 
