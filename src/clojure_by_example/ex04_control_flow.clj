@@ -17,29 +17,32 @@
 
 ;; The logical base for logic:
 
-;; `true` and `false`
-true  ; boolean true
-false ; boolean false
+;; Boolean
+
+(true? true)  ; `true` is boolean true
+
+(true? false) ; `false` is boolean false
 
 
 ;; Falsey
-nil   ; is the only non-boolean "falsey" value
+
+;; `nil` is the only non-boolean "falsey" value
+
 
 ;; Truthy
+;; - basically any non-nil value is truthy
+
 42    ; truthy
 :a    ; truthy
 "foo" ; truthy
 [7 3] ; truthy
-;; basically any non-nil value is truthy
 
 
-;; Of course, falsey is NOT boolean `false`
+;; Truthy/Falsey are NOT Boolean
 
-(true? 42)   ; 42 is not boolean true
+(true? 42)   ; Is Truthy 42 a boolean true?
 
-;; Likewise, truthy is NOT boolean `true`
-
-(false? nil) ; nil is not boolean false
+(false? nil) ; Is Falsey nil a boolean false?
 
 
 ;; Truthy/Falsey can be cast to boolean true/false
@@ -180,7 +183,7 @@ nil   ; is the only non-boolean "falsey" value
 
 ;; Evil - `even?` cannot handle nothing... so, this fails:
 
-(filter even?
+#_(filter even?
         [1 2 nil 4 5 nil 7 8])
 
 ;; So... Guard functions like `even?` against the evil of nil
