@@ -97,9 +97,9 @@
 ;; EXERCISE:
 ;;
 ;; How to get number of moons?
-;; - Fix the expression below:
+;; - Uncomment, and fix the expression below:
 
-(get earth 'FIX)
+;; (get earth 'FIX)
 
 
 ;; EXERCISE:
@@ -123,14 +123,14 @@
 ;; - Hint: Mentally replace FIX with the value of "atmosphere".
 ;; - Now ask yourself, what expression will return that value?
 
-(get 'FIX "other-gases")
+;; (get 'FIX "other-gases")
 
 
 ;; EXERCISE:
 ;;
 ;; Now, try to go even deeper, to find how much argon we have?
 
-(get 'FIX "argon")
+;; (get 'FIX "argon")
 
 
 
@@ -211,7 +211,7 @@
 ;;
 ;; How to find the atmosphere? Uncomment,fix, and evaluate:
 
-('FIX earth-alt)
+;; ('FIX earth-alt)
 
 
 ;; EXERCISE:
@@ -219,7 +219,7 @@
 ;; What are the other gases, in the atmosphere?
 ;; Hint: Remember, we can nest expressions inside expressions.
 
-('FIX 'FIX)
+;; ('FIX 'FIX)
 
 
 ;; EXERCISE:
@@ -227,7 +227,7 @@
 ;; How much argon is present in the atmosphere?
 ;; Hint: once again, more nested expressions.
 
-('FIX 'FIX)
+;; ('FIX 'FIX)
 
 
 ;; Clojure provides `get-in`, because nested access is so common.
@@ -251,7 +251,7 @@
 ;; We saw `get-in` work for keywords. Does it work for strings too?
 ;; Uncomment, fix, and evaluate:
 
-(get-in earth 'FIX)
+;; (get-in earth 'FIX)
 
 
 ;; Did that work? Why or why not?
@@ -382,11 +382,11 @@
 ;; Use the information below.
 ;;
 #_(;; FIXME
-  "Mercury"    ; has...
-  moons 0
-  mass 0.0553  ; recall we assume Earth mass is 1
-  radius 0.383 ; recall we assume Earth radius is 1
-  atmosphere   ; % of total volume
+   "Mercury"    ; has...
+   moons 0
+   mass 0.0553  ; recall we assume Earth mass is 1
+   radius 0.383 ; recall we assume Earth radius is 1
+   atmosphere   ; % of total volume
       oxygen      42.0
       sodium      29.0
       hydrogen    22.0
