@@ -1,6 +1,7 @@
 (ns clojure-by-example.ex02-small-functions)
 
 ;; Ex02: LESSON GOALS
+;;
 ;; - Learn to define simple functions, and use them
 ;; - Learn a little bit about how functions behave
 ;; - Learn about a few useful built-in Clojure functions
@@ -14,10 +15,12 @@
 
 
 ;; We define functions like this:
+;;
 ;; (defn function-name
 ;;   "Documentation string (optional)."
 ;;   [arg1 arg2 arg3 ... argN]
 ;;   (body of the function))
+
 
 ;; `defn` stands for:
 ;; - "DEfine a FuNction,
@@ -29,29 +32,42 @@
   [x]
   x)
 
+;; EXERCISE
+;;
 ;; What will these return?
+
 (same 42)
+
 (same {:name "Earth" :moons 1})
+
 (same [1 2 3 4 5])
 
 
 ;; We can define name-less functions too, like this:
+;;
 ;; (fn [arg1 arg2 arg3 ... argN]
 ;;     (body of the function))
-
+;;
 ;; `fn` is short for "define a FuNction, but _do not_ name it at all"
+;;
+;; E.g. This behaves _exactly_ like `same`, but it does not have a name:
 
-;; This behaves _exactly_ like `same`, but it does not have a name.
 (fn [x] x)
 
+
+
+;; EXERCISE:
+;;
 ;; What will these return?
-;; Hint: _mentally replace_ the function definition `(fn [x] x)`
-;; with _any name you like_, and imagine that is the function name.
+;; - Hint: _mentally replace_ the function definition `(fn [x] x)`
+;;   with _any name you like_, and imagine that is the function name.
+
 ((fn [x] x) 42)
 
 ((fn [x] x) {:name "Earth" :moons 1})
 
 ((fn [x] x) [1 2 3 4 5])
+
 
 ;; We will make good use of such "anonymous" functions soon.
 ;; Just understand they are just like 'regular' functions, except
@@ -71,9 +87,13 @@
 ;; pass it something that is a function, and false otherwise.
 
 ;; None of these are functions. So, return `false`.
+
 (fn? 42)
+
 (fn? "moons")
+
 (fn? [1 2 3 4 5])
+
 
 ;; We defined the function `same`, and truly, it is a function...
 (fn? same)
@@ -86,25 +106,26 @@
 
 
 ;; Wait a minute...!!!
-
+;;
 ;; We just passed functions as arguments to `fn?`, and it worked!
-
+;;
 ;; Is `fn?` special, or can we pass any function to any function?
 
 ;; Well we know `fn?` is a function...
+;; - Suppose we pass `fn?` to `same`, do we get back `fn?` unchanged?
 
-;; Suppose we pass `fn?` to `same`, do we get back `fn?` unchanged?
 (= fn?
    (same fn?))
 
+
 ;; How about the anonymous version of `same`?
 ;; Does it return `fn?` unchanged as well?
-(= ; FIXME
+(= 'FIX
    ((fn [x] x) fn?))
 
 ;; How about this?
 ;; What do we get if we pass `same` to itself?
-(= ;FIXME
+(= 'FIX
    (same same))
 
 
@@ -136,7 +157,7 @@
 (inc 42)
 
 ;; Clojure's `identity` function is exactly like our `same` function
-(= ;FIXME
+(= 'FIX
    (identity :moon)
    (same :moon))
 
@@ -145,28 +166,38 @@
 (map inc [1 2 3 4 5 6])
 
 ;; Such that...
-[ 1 2 3 4 5 6 ] ; each item of input
+( 1 2 3 4 5 6)  ; each item of input
 ;;| | | | | |   ; is incremented by `inc` to give a result where
-[ 2 3 4 5 6 7 ] ; each output item "maps" back to an input item
+( 2 3 4 5 6 7)  ; each output item "maps" back to an input item
 
 ;; In general, we can use `map` to express one-to-one "mappings"
 ;; of input and output, by way of a function.
 
+
+
+;; EXERCISE:
+;;
 ;; What should this return?
 ;; First predict the answer, then evaluate to confirm.
 (map even? [1 2 3 4 5 6])
 ;; Hint: mentally apply the `even?` function to each item, one by one,
 ;; and build up a collection of results of each function application.
 
+
 ;; How about this?
+
 (map odd? [1 2 3 4 5 6])
 
-;; And this?
-(map identity [1 2 3 4 5 6])
-;; Remember: Clojure's `identity` is just like our `same`
 
 ;; And this?
+
+(map identity [1 2 3 4 5 6]) ; Recall: `identity` is just like `same`
+
+
+;; And this?
+
 (map (fn [x] x) [1 2 3 4 5 6])
+
 ;; Our anonymous "identity" function is a drop-in replacement
 ;; for `identity`, as well as `same`.
 
@@ -176,17 +207,20 @@
 
 
 ;; This is a Clojure vector... of numbers
+
 [1 2 3 4 5 6]
 
+
 ;; This is a Clojure vector... of Clojure hash-maps.
+
 [{:name "Mercury" :moons 0}
  {:name "Venus"   :moons 0}
  {:name "Earth"   :moons 1}
- {:name "Mars"    :moons 2}]
-;; (Yes, we can do this. More in later sections :-)
+ {:name "Mars"    :moons 2}] ; (Yes we can do this. More on this later!)
 
 
 ;; Let's name our collection of planets as, um... `planets`
+
 (def planets [{:name "Mercury" :moons 0}
               {:name "Venus"   :moons 0}
               {:name "Earth"   :moons 1}
@@ -194,14 +228,20 @@
 
 
 ;; Recall that we can query a map, like this:
+
 (:name {:name "Mercury" :moons 0})
+
 ;; That is, a keyword _behaves like a function_ of a hash-map.
 
-;; Now, what if we pass a keyword instead of a real function, to `map`?
 
-;; What should this return?
-;; Predict the answer, and then evaluate to confirm.
+;; EXERCISE
+;;
+;; What if we pass a keyword instead of a real function, to `map`?
+;; - What should the following map expression return?
+;; - Predict the answer, and then evaluate to confirm.
+
 (map :name planets)
+
 ;; (map :name over `planets`, which is vector of planet hash-maps)
 
 
@@ -210,6 +250,7 @@
 
 
 ;; Let's define another little function.
+
 (defn planet-has-moons?
   "Given a 'planet' (assume it's a hash-map), return true if
   it has at least one moon."
@@ -224,21 +265,33 @@
 (planet-has-moons? {:name "Mars" :moons 2})
 
 
+;; EXERCISE
+;;
 ;; Instead of querying each map, why not query all of them at one go?
-(map ;FIXME ;FIXME
- )
 
-;; But of course, now we know we can also use an anonymous function...
-;; Replace the FIXME comment with your own anonymous function that
-;; works just like `planet-has-moons?`.
-(map ;FIXME
-     planets)
+#_(map 'FIX 'FIX)
 
+
+;; Also, as we now know, we can use anonymous functions creatively...
+
+
+;; EXERCISE
+;;
+;; Replace 'FIX with your own anonymous function that works
+;; just like `planet-has-moons?`.
+
+#_(map 'FIX  planets)
+
+
+;; EXERCISE
+;;
 ;; And, finally, prove that both variants do exactly the same thing:
-(= (map ;FIXME- your anonymous function
-    planets)
-   ;; (FIXME FIXME FIXME) ; use `planet-has-moons?` to query `planets`
-   [false false true true])
+
+#_(= (map planet-has-moons? 'FIX)
+
+     ('FIX 'FIX 'FIX)  ; use anonymous function
+
+     [false false true true])
 
 
 

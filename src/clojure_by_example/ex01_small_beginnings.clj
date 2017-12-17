@@ -9,6 +9,7 @@
 
 
 ;; Ex01: LESSON GOAL:
+;;
 ;; - Show a way to model things with pure data, in the form of hash-maps
 ;; - Show how to query hash-maps
 ;; - Introduce the idea of a function
@@ -29,12 +30,15 @@
 ;;                              "traces" 0.14
 
 
-;; Looks like a collection of name-value pairs. To some, it will look like JSON.
+;; Looks like a collection of name-value pairs. To some, it will
+;; look like JSON.
+;;
+;; This intuition is correct. We can describe the Earth by its
+;; properties, written as name-value pairs or "key"-value pairs.
 
-;; This intuition is correct. We can describe the Earth by its properties,
-;; written as name-value pairs or "key"-value pairs.
+;; If we put curly braces in the right places, it becomes a
+;; Clojure "hash-map":
 
-;; If we put curly braces in the right places, it becomes a Clojure "hash-map".
 {"name" "Earth"
  "mass" 1
  "radius" 1
@@ -53,22 +57,26 @@
 ;; for convenience.
 
 ;; Let's call it `earth`.
-;; (Warning: such global 'def's are best avoided.)
 
-(def earth {"name" "Earth"
-            "mass" 1
-            "radius" 1
-            "moons" 1
-            "atmosphere" {"nitrogen"     78.08
-                          "oxygen"       20.95
-                          "CO2"           0.40
-                          "water-vapour"  0.10
-                          "other-gases"   {"argon"  0.33
-                                           "traces" 0.14}}}) ; <- evaluate this
-;; Evaluate the above `def`. Place the cursor just after the closing paren `)`,
-;; and evaluate it using your editor's evaluate feature.
 
-;; Evaluation will attach (or 'bind') the hash-map to the symbol called 'earth'.
+(def earth
+  {"name" "Earth"
+   "mass" 1
+   "radius" 1
+   "moons" 1
+   "atmosphere" {"nitrogen"     78.08
+                 "oxygen"       20.95
+                 "CO2"           0.40
+                 "water-vapour"  0.10
+                 "other-gases"   {"argon"  0.33
+                                  "traces" 0.14}}}) ; <- evaluate this
+;; To evaluate the above `def`:
+;; - Place the cursor just after the closing paren `)`, and
+;; - evaluate it using your editor's evaluate feature
+;;   (in LightTable, hit ctrl+Enter on Win/Linux, and cmd+Enter on Mac)
+
+;; Evaluation will attach (or 'bind') the hash-map to the symbol
+;; we have called `earth`.
 
 
 ;; _Now_ let's query the 'earth' global...
@@ -76,18 +84,28 @@
 
 ;; Top-level access:
 
-;; Wait! What do you _expect_ 'get' to do, in the expression below?
+;; Wait!
+;;
+;; What do you _expect_ 'get' to do, in the expression below?
+;;
 ;; Try to predict, before you evaluate.
+
 (get earth "name") ; <- place cursor after closing paren and evaluate.
 
 
-;; EX: How to get number of moons? Uncomment, fix, and evaluate:
-;; (get earth FIXME)
+
+;; EXERCISE:
+;;
+;; How to get number of moons?
+;; - Fix the expression below:
+
+(get earth 'FIX)
 
 
-;; EX: What does the atmosphere contain? Uncomment, fix, and evaluate:
-;; (FIXME FIXME FIXME)
-
+;; EXERCISE:
+;;
+;; What does the atmosphere contain?
+;; - Type your expression below:
 
 
 ;; Lesson:
@@ -99,14 +117,20 @@
 
 ;; Nested access:
 
-;; EX: Now, how to find what the other gases are, in the atmosphere?
-;; Hint: Mentally replace FIXME with the value of "atmosphere".
-;; Now ask yourself, what expression returned that value?
-;; (get FIXME "other-gases")
+;; EXERCISE:
+;;
+;; Now, how to find what the other gases are, in the atmosphere?
+;; - Hint: Mentally replace FIX with the value of "atmosphere".
+;; - Now ask yourself, what expression will return that value?
+
+(get 'FIX "other-gases")
 
 
-;; EX: Now, try to go even deeper, to find how much argon we have?
-;; (get FIXME "argon")
+;; EXERCISE:
+;;
+;; Now, try to go even deeper, to find how much argon we have?
+
+(get 'FIX "argon")
 
 
 
@@ -124,13 +148,13 @@
 
 ;; Let's make our own function to access any "third" level value...
 
-;; What does this function's "body" look like?
 (defn get-level-3 ; function name
   [planet level1-key level2-key level3-key] ; arguments list
-  ;; function "body" follows:
+  ;; function "body":
   (get (get (get planet level1-key)
             level2-key)
-       level3-key))
+       level3-key)) ; What does the function's "body" look like?
+
 
 
 ;; Now we can...
@@ -147,8 +171,11 @@
 
 ;; Instead of plain old strings as keys, we can use
 ;; Clojure "keywords" as keys.
+
 "moons" ; a string
+
 :moons  ; a keyword
+
 
 ;; Like strings, keywords directly "represent" themselves.
 ;; (A keyword is what it is.)
@@ -171,26 +198,41 @@
 
 ;; Easier top-level access
 
+;; EXERCISE:
+;;
 ;; What will these return?
+
 (:name earth-alt)
+
 (:mass earth-alt)
 
-;; EX: How to find the atmosphere? Uncomment,fix, and evaluate:
-;; (FIXME earth-alt)
 
-;; EX: What are the other gases, in the atmosphere?
+;; EXERCISE:
+;;
+;; How to find the atmosphere? Uncomment,fix, and evaluate:
+
+('FIX earth-alt)
+
+
+;; EXERCISE:
+;;
+;; What are the other gases, in the atmosphere?
 ;; Hint: Remember, we can nest expressions inside expressions.
-;; (FIXME FIXME)
 
-;; EX: How much argon is present in the atmosphere?
-;; Hint: once again, more nest expressions.
-;; (FIXME FIXME)
+('FIX 'FIX)
+
+
+;; EXERCISE:
+;;
+;; How much argon is present in the atmosphere?
+;; Hint: once again, more nested expressions.
+
+('FIX 'FIX)
 
 
 ;; Clojure provides `get-in`, because nested access is so common.
-
-;; `get-in` is the cousin of `get` (and the granddaddy of our
-;; get-level-3 function!)
+;; - `get-in` is the cousin of `get` (and the granddaddy of our
+;;    get-level-3 function!)
 
 ;; Try evaluating each one of these...
 (get-in earth-alt [:atmosphere])
@@ -204,20 +246,27 @@
 (get-level-3 earth-alt :atmosphere :other-gases :argon)
 
 
-;; EX: We saw `get-in` work for keywords. Does it work for strings too?
+;; EXERCISE:
+;;
+;; We saw `get-in` work for keywords. Does it work for strings too?
 ;; Uncomment, fix, and evaluate:
-;; (get-in earth FIXME)
+
+(get-in earth 'FIX)
 
 
 ;; Did that work? Why or why not?
 
 
-;; EX: Use get-in to query other gases from the `earth` hash-map.
+;; EXERCISE:
+;;
+;; Use get-in to query other gases from the `earth` hash-map.
 ;; Type your expression below and evaluate it:
 
 
 
-;; EX: Use get-in to query argon from `earth`'s atmosphere
+;; EXERCISE:
+;;
+;; Use get-in to query argon from `earth`'s atmosphere
 ;; Type your expression below and evaluate it:
 
 
@@ -240,11 +289,18 @@
 ;; a Vector, if we know what "index" position it occupies in the vector.
 
 
+;; EXERCISE:
+;;
 ;; What will this return?
+
 (get [:foo :bar :baz] 0)
 ;; Note: We count position starting at `0`, not `1`, in Clojure
 
+
+;; EXERCISE:
+;;
 ;; What will this return?
+
 (get-in [:foo [:bar :baz]] [1 1])
 
 
@@ -320,23 +376,29 @@
 
 ;; Lesson-end Exercises:
 
-;; EX: Define another planet `mercury`, using keywords as keys.
-;; - "Mercury" has 0 moons
-;; - mass is 0.0553 (recall we assume Earth mass is 1)
-;; - radius is 0.383 (recall we assume Earth radius is 1)
-;; - atmosphere (% of total volume)
-;;   - oxygen 42.0
-;;   - sodium 29.0
-;;   - hydrogen 22.0
-;;   - helium 6.0
-;;   - potassium 0.5
-;;   - other-gases 0.5
+;; EXERCISE:
 ;;
-;; Define planet `mercury` below:
+;; Define another planet `mercury`, using keywords as keys.
+;; Use the information below.
+;;
+#_(;; FIXME
+  "Mercury"    ; has...
+  moons 0
+  mass 0.0553  ; recall we assume Earth mass is 1
+  radius 0.383 ; recall we assume Earth radius is 1
+  atmosphere   ; % of total volume
+      oxygen      42.0
+      sodium      29.0
+      hydrogen    22.0
+      helium      6.0
+      potassium   0.5
+      other-gases 0.5)
 
 
 
-;; EX: Query the planet in 3 ways:
+;; EXERCISE:
+;;
+;; Query the planet `mercury` in 3 ways:
 ;; - with nested `get`
 ;; - with get-in
 ;; - with keywords
@@ -344,7 +406,9 @@
 
 
 
-;; EX: Write a custom function to do a two-level deep query on mercury.
+;; EXERCISE:
+;;
+;; Write a custom function to do a two-level deep query on `mercury`.
 ;; - It should be able to query earth, and earth-alt as well.
 ;; Type your solution below:
 
@@ -353,14 +417,15 @@
 
 
 ;; RECAP:
-
+;;
 ;; - hash-maps let us conveniently represent objects we wish to
 ;;   model and query
 ;; - We can query hash-maps variously with keywords, `get`, and `get-in`
 ;; - If we use keywords as keys in hash-maps, querying is dead-simple
 ;; - We can define our own functions with `defn`, using this syntax:
 ;;
-;;   (defn function-name [arg1 arg2 arg3 ... argN]
+;;   (defn function-name
+;;         [arg1 arg2 arg3 ... argN]
 ;;         (body of the function))
 ;;
 ;; - Using general-purpose data structures, and writing general-purpose

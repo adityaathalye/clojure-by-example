@@ -1,16 +1,16 @@
-(ns clojure-by-example.ex04-control-flow
-  (:require [clojure-by-example.ex03-data-and-functions
-             :as ex03-data-and-functions]))
+(ns clojure-by-example.ex04-control-flow)
 
 
 ;; WORK IN PROGRESS...
 
 
 ;; Ex04: LESSON GOALS
+;;
 ;; - Introduce different ways to do data-processing logic in Clojure
 ;;   - with branching control structures (if, when, case, cond)
 ;;   - without branching structures (we have already sneakily done this)
 ;;   - predicates and boolean expressions
+;;
 ;; - Have some more fun with much more sophisticated planets,
 ;;   using control structures, and the stuff we learned so far
 
@@ -33,33 +33,48 @@ nil   ; is the only non-boolean "falsey" value
 ;; basically any non-nil value is truthy
 
 
-;; Of course, falsey is NOT boolean `false`, and truthy is NOT boolean `true`
+;; Of course, falsey is NOT boolean `false`
+
 (true? 42)   ; 42 is not boolean true
+
+;; Likewise, truthy is NOT boolean `true`
+
 (false? nil) ; nil is not boolean false
 
 
 ;; Truthy/Falsey can be cast to boolean true/false
+
 (boolean nil) ; coerce nil to `false`
-(map boolean [42 :a "foo" 3.141 [1 2 3 4]]) ; coerce non-nils to `true`
+
+(map boolean
+     [42 :a "foo" [1 2 3 4]]) ; coerce non-nils to `true`
 
 
 ;; However, we normally don't need to coerce booleans, to do branching logic,
 ;; as Clojure control structures understand truthy and falsey values too:
 
 ;; false is, well, false
-(if false
-  :hello
-  :bye-bye)
+
+(if false   ; if     condition
+  :hello    ; "then" expression
+  :bye-bye) ; "else" expression
+
 
 ;; `nil` is falsey
+
 (if nil
   :hello
   :bye-bye)
 
+
 ;; true is true, and every non-nil thing is truthy
+
 (if true  :hello :bye-bye)
+
 (if "Oi"  :hello :bye-bye)
+
 (if 42    :hello :bye-bye)
+
 (if [1 2] :hello :bye-bye)
 
 
@@ -68,6 +83,7 @@ nil   ; is the only non-boolean "falsey" value
 ;; - when a condition is true, it evaluates the body and
 ;;   returns its value
 ;; - otherwise, it does nothing, and returns `nil`, i.e. _falsey_
+
 (when 42
   :hello)
 
@@ -78,41 +94,56 @@ nil   ; is the only non-boolean "falsey" value
 (when (nil? nil) :bye-bye)
 
 
-
+;; MENTAL EXERCISES
+;;
 ;; Mental exercises to develop your intuition for how we use
 ;; "proper" booleans as well as truthy/falsey-ness.
 
 
+;; EXERCISE:
+;;
 ;; Predict what will happen...
+
 (map (fn [x] (if x :hi :bye))
      [1 2 nil 4 5 nil 7 8])
 
 
+
+;; EXERCISE:
+;;
 ;; Predict what will happen...
+
 (reduce (fn [acc x] (if x (inc acc) acc))
         0 ; initial accumulator
         [1 2 nil 4 5 nil 7 8])
 
 
-;; Predict and compare these two...
+;; EXERCISE:
+;;
+;; Predict and compare the result of these two...
+
 (filter nil?     [1 2 nil 4 5 nil 7 8])
 
 (filter false?   [1 2 nil 4 5 nil 7 8])
 
 
+;; EXERCISE:
+;;
 ;; Predict and compare these three...
-(map    identity [1 2 nil 4 5 nil 7 8])
+
+(map    identity
+        [1 2 nil 4 5 nil 7 8])
 
 (filter (fn [x] (not (nil? x)))
         [1 2 nil 4 5 nil 7 8])
 
-(filter identity [1 2 nil 4 5 nil 7 8])
-;; Hah! What happened here?!
+(filter identity
+        [1 2 nil 4 5 nil 7 8]) ;; Ha! What happened here?!
 
 
-;; Interlude...
 
-
+;; INTERLUDE...
+;;
 ;; The logic and ill-logic of `nil` in Clojure
 ;;
 ;; `nil`
@@ -128,8 +159,12 @@ nil   ; is the only non-boolean "falsey" value
 ;;
 ;; Embrace it.
 ;; Guard against it.
+;; But don't fear it.
 ;;
-;; Wield it as
+;; `nil` isn't the Enemy.
+;; Fear is.
+;;
+;; Wield `nil` as
 ;; a double-edged sword.
 ;; For it cuts both ways.
 ;;
@@ -139,22 +174,30 @@ nil   ; is the only non-boolean "falsey" value
 
 
 ;; Good - `filter` knows `nil` is falsey
-(filter identity [1 2 nil 4 5 nil 7 8])
+
+(filter identity
+        [1 2 nil 4 5 nil 7 8])
 
 ;; Evil - `even?` cannot handle nothing... so, this fails:
-(filter even? [1 2 nil 4 5 nil 7 8])
+
+(filter even?
+        [1 2 nil 4 5 nil 7 8])
 
 ;; So... Guard functions like `even?` against the evil of nil
+
 (filter (fn [x] (when x (even? x)))
         [1 2 nil 4 5 nil 7 8])
 
 
 ;; Lesson:
 ;; - Keep `nil` handling in mind, when you write your own functions.
-;; - It's possible to use `nil` for good, and make life easier.
+
 
 ;; Demonstration:
-;; How might someone use `nil` to advantage?
+;;
+;; - It's possible to use `nil` for good, and make life easier.
+;;
+;; - How might someone use `nil` to advantage?
 
 (def planets [{:name "Venus" :moons 0}
               {:name "Mars" :moons 2}
@@ -162,17 +205,21 @@ nil   ; is the only non-boolean "falsey" value
 
 ;; Using `when` ... we might design a function:
 
-(defn moon-or-nothing [planet]
+(defn moon-or-nothing
+  [planet]
+  ;; Recall: we can "let-bind" local variables
   (let [num-moons (:moons planet)]
-    ;; Recall: we use `let` to bind local variables.
     (when (> num-moons 0)
-      {:sent-rockets num-moons :to-moons-of (:name planet)})))
+      {:sent-rockets num-moons
+       :to-moons-of (:name planet)})))
+
+(moon-or-nothing {:name "Venus" :moons 0})
 
 
 ;; Later, someone may ask us...
 (defn good-heavens-what-did-you-do?
   [rocket-info]
-  (if rocket-info ; now we can treat rocket-info as truthy/falsey
+  (if rocket-info ; we will treat rocket-info as truthy/falsey
     ;; do/return this if true...
     (format "I sent %d rockets to the moons of %s! Traa la laaa..."
             (:sent-rockets rocket-info)
@@ -186,33 +233,36 @@ nil   ; is the only non-boolean "falsey" value
      (map moon-or-nothing planets))
 
 
+
 ;; But suppose, using `if` ... we design a function:
+
 (defn moon-or-bust [planet]
   (let [num-moons (:moons planet)]
     (if (> num-moons 0)
-      ;; do/return this if true...
       {:sent-rockets num-moons
        :to-moons-of (:name planet)}
-      ;; do/return this if false...
       "Bust!")))
 
 
 ;; And later, somebody wants to know from us...
-(defn good-heavens-what-did-you-do-again???
-  [rocket-info]
-  ;; Fix to ensure the same output as we produced earlier.
-  (if ;; FIXME - condition to check
-      ;; FIXME - expression if true
-      ;; FIXME - expression if false
-      ))
+
+#_(defn good-heavens-what-did-you-do-again???
+     [rocket-info]
+   ;; Fix to ensure the same output as we produced earlier.
+   (if 'FIX
+     'FIX
+     'FIX))
 
 
 ;; We should be able to provide the same answers as before...
-(map good-heavens-what-did-you-do-again???
+
+#_(map good-heavens-what-did-you-do-again???
      (map moon-or-bust planets))
 
 
-;; `case` and `coned` are also available to do branching logic:
+
+;; `case` and `cond`
+;; - are also available to do branching logic:
 
 (map (fn [num-moons]
        ;; Use `cond` when you have to decide what to do based on
@@ -250,44 +300,43 @@ nil   ; is the only non-boolean "falsey" value
 ;; Scratch work follows....
 
 
+;; ;; This is a cleaner way to do the same thing...
+;; (filter (comp not planet-has-moons?)
+;;         planets)
 
-;; This is a cleaner way to do the same thing...
-(filter (comp not planet-has-moons?)
-        planets)
+;; ;; `comp` is a handy function lets us "compose" or chain other functions
+;; ;; such that the output of the function on the right is connected to the
+;; ;; input of the function on the left.
+;; ;;
+;; ;; So, when you see an expression like:
+;; ;;    ((comp fn1 fn2 fn3 fn4) {:some "data"})
+;; ;;
+;; ;; you can mentally evaluated it like:
+;; ;;    FINAL RESULT <- fn1 <- fn2 <- fn3 <- fn4 <- {:some "data"}
+;; ;;
+;; ;; Which looks suspiciously like a "data pipeline", (or a Unix pipeline
+;; ;; for those familiar with Unix/Linux shell programming)
 
-;; `comp` is a handy function lets us "compose" or chain other functions
-;; such that the output of the function on the right is connected to the
-;; input of the function on the left.
-;;
-;; So, when you see an expression like:
-;;    ((comp fn1 fn2 fn3 fn4) {:some "data"})
-;;
-;; you can mentally evaluated it like:
-;;    FINAL RESULT <- fn1 <- fn2 <- fn3 <- fn4 <- {:some "data"}
-;;
-;; Which looks suspiciously like a "data pipeline", (or a Unix pipeline
-;; for those familiar with Unix/Linux shell programming)
+;; ;; Comp, in fact, returns a general-purpose function, which can take
+;; ;; any input and pass it to the right-most function
+;; (fn? (comp not planet-has-moons?))
 
-;; Comp, in fact, returns a general-purpose function, which can take
-;; any input and pass it to the right-most function
-(fn? (comp not planet-has-moons?))
+;; ;; True, Earth has a moon.
+;; (planet-has-moons?
+;;  {:name "Earth" :moons 1})
 
-;; True, Earth has a moon.
-(planet-has-moons?
- {:name "Earth" :moons 1})
-
-;; True, Mercury has no moons.
-((comp not planet-has-moons?)
- {:name "Mercury" :moons 0})
+;; ;; True, Mercury has no moons.
+;; ((comp not planet-has-moons?)
+;;  {:name "Mercury" :moons 0})
 
 
-;; Back to map...
-(map (comp not planet-has-moons?)
-     planets)
+;; ;; Back to map...
+;; (map (comp not planet-has-moons?)
+;;      planets)
 
-;; What if a function's output does not match
-;; Well, your function pipeline misbehaves (or could even fail):
+;; ;; What if a function's output does not match
+;; ;; Well, your function pipeline misbehaves (or could even fail):
 
-;; When a keyword can't find anything, it returns `nil`
-;; So the whole thing below, returns `nil`, which is useless.
-((comp :name planet-has-moons?) {:name "Earth" :moons 1})
+;; ;; When a keyword can't find anything, it returns `nil`
+;; ;; So the whole thing below, returns `nil`, which is useless.
+;; ((comp :name planet-has-moons?) {:name "Earth" :moons 1})
