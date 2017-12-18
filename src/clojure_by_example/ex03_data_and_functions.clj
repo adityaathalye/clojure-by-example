@@ -316,12 +316,48 @@
 ;; - planets with moons:
 
 
+;; EXERCISE:
+;;
+;; Calculate `planetary-stats` for:
+;;
 ;; - planets without moons:
 
 
+
+;; - planets without moons, using `complement`:
+;;   compare, understand, use:
+
+(planet-has-moons?              {:name "Earth" :moons 1})
+
+((complement planet-has-moons?) {:name "Earth" :moons 1})
+
+;; Type your solution here:
+
+
+
+
+;; EXERCISE:
+;;
+;; Calculate `planetary-stats' for:
+;;
 ;; - planets massier than the earth:
 
 
+
+;; - planets less massier than the earth, using `comp`:
+;;   compare, understand, use:
+#_(massier-than-earth?            {:name "Jupiter" :mass 317.8})
+
+#_((comp not massier-than-earth?) {:name "Jupiter" :mass 317.8})
+
+;; Type your solution here:
+
+
+
+;; EXERCISE:
+;;
+;; Calculate `planetary-stats' for:
+;;
 ;; - all `planets` (hint: use `identity`):
 
 
