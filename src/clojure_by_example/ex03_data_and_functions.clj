@@ -227,7 +227,6 @@
 
 
 
-
 ;; Lesson-end Exercises:
 
 ;; IMPORTANT:
@@ -303,10 +302,10 @@
 #_(defn planetary-stats
     [pred-fn given-planets]
     ;; `let` is a way to define ("bind") function-local variables.
-    (let [filtered-planets FIX]
-      {:count FIX
-       FIX    FIX
-       FIX    FIX}))
+    (let [filtered-planets 'FIX]
+      {:count 'FIX
+       'FIX1    'FIX
+       'FIX2    'FIX}))
 
 
 
