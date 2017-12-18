@@ -191,6 +191,17 @@
 (filter (fn [x] (when x (even? x)))
         [1 2 nil 4 5 nil 7 8])
 
+;; `fnil` is also handy, to "patch" nil input to a function
+
+;; We might use it as a guard for `even?` like this:
+((fnil even? 1) nil) ; pass 1 to `even?`, instead of nil
+((fnil even? 2) nil) ; pass 2 to `even?`, instead of nil
+
+;; Since we want `nil` to be non-even, we can nil-patch `even?` as:
+(filter (fnil even? 1)
+        [1 2 nil 4 5 nil 7 8])
+
+
 
 ;; Lesson:
 ;; - Keep `nil` handling in mind, when you write your own functions.
