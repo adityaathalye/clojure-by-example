@@ -55,7 +55,7 @@
          ;; Maybe not such a good idea to inject html-resource.
          ;; It could get really big. But then again, how to design the
          ;; api so that we can avoid parsing the DOM repeatedly?
-         :html-resource (html->html-resource table-data-file)))
+         :html-resource (file->html-resource table-data-file)))
 
 
 (comment
