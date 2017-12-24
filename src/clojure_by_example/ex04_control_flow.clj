@@ -384,6 +384,11 @@
 ;; - Let's say :chlorine, :sulphur-dioxide, :carbon-monoxide are poisons
 
 
+;; Quick-n-dirty test
+#_(poison-gases :oxygen)
+#_(poison-gases :chlorine)
+
+
 ;; EXERCISE:
 ;;
 ;; Write a "predicate" function to check if a given planet is "Earth".
@@ -404,6 +409,9 @@
   'FIX)
 
 
+#_(map :name
+     (filter carbon-dioxide? target-planets))
+
 ;; EXERCISE:
 ;;
 ;; Having no atmosphere is a bad thing, you know.
@@ -420,6 +428,7 @@
 ;; Type your solution below
 
 
+
 ;; Quick-n-dirty test
 #_(filter no-atmosphere? target-planets)
 
@@ -428,16 +437,51 @@
 ;; EXERCISE:
 ;;
 ;; Let's say the air is too poisonous if the atmosphere contains
-;; over 1% of _any_ poison gas.
+;; over 1.0 percent of _any_ poison gas.
 ;;
 ;; Write a "predicate" function that checks this, given a planet.
 ;;
 ;; Call it `air-too-poisonous?`.
+;;
+;; Use the following ideas:
+;;
+;; - The `poison-gases` set we defined previously can be used
+;;   as a truthy/falsey predicate:
+#_(poison-gases :oxygen)
+#_(poison-gases :chlorine)
+;;
+;; - A hash-map is a _collection_ of key-value _pairs_ / "kv" tuples.
+(map identity {:a 1 :b 2 :c 3}) ; see?!
+;;
+;; - Given a `kv` pair from a hash-map, (first kv) will always be
+;;   the key part, and (second kv) will always be the value part.
+(map first    {:a 1 :b 2 :c 3})
+(map second   {:a 1 :b 2 :c 3})
+;;
+;; - So, we can do something like this:
+(filter (fn [kv]
+          (when (#{:a :b :c} (first kv))
+            (even? (second kv))))
+        {:a 1 :b 2 :c 4 :d 8})
+;;
+;; - Finally, recall that we can test for empty? collections:
+(empty? [])
+(not (empty? []))
+;;
+;;
+;; Now, combine these ideas to fix the function below:
 
+
+(defn air-too-poisonous?
+  [planet]
+  (let [atmosphere 'FIX]
+    ;; Repurpose, and fix the logic above to do the needful.
+    'FIX))
 
 
 ;; Quick-n-dirty test
-#_(filter air-too-poisonous? planets)
+#_(map :name
+       (filter air-too-poisonous? target-planets))
 
 
 
@@ -450,6 +494,8 @@
   "Given a collection of functions that check a planet for 'good conditions',
   return true if a given planet satisfies at least one 'good condition'."
   [good-condition-fns planet]
+  ;;`some` takes a predicate and a collection, and returns true
+  ;; as soon as it finds an item that returns true for the predicate.
   (some (fn [good?] (good? planet))
         good-condition-fns))
 
@@ -459,7 +505,8 @@
 
 #_(filter (fn [planet]
             (planet-has-some-good-conds?
-              [earth? carbon-dioxide?] planet))
+              [earth? carbon-dioxide?]
+              planet))
           target-planets)
 
 ;; OR we could use `partial`:
@@ -499,7 +546,7 @@
                    [air-too-poisonous? no-atmosphere?])
           target-planets)
 
-#_(filter (complement
+#_(filter (complement ; Aha! Remember `complement`?
             (partial planet-has-no-bad-conds?
                      [air-too-poisonous? no-atmosphere?]))
           target-planets)
@@ -515,7 +562,7 @@
 ;; good-condition-fns, bad-condition-fns, and a planet.
 
 (defn habitable-planet?
-  [FIX]
+  [] ; <- Fix args
   'FIX)
 
 
@@ -539,12 +586,73 @@
 
 
 ;; Quick-n-dirty test:
-(map (comp (fn [p-name] (str "Send rockets to " p-name " now!"))
-           :name)
-     ((comp :habitable group-by-habitable)
-      target-planets))
+(defn colonize-habitable-planets!
+  [planets]
+  (let [send-rockets! (fn [p]
+                        (str "Send rockets to " (:name p) " now!"))]
+    ((comp (partial map send-rockets!)
+           :habitable
+           group-by-habitable)
+     planets)))
+
+
+#_(colonize-habitable-planets! target-planets)
 
 
 
 ;; RECAP:
-;; FIXME
+;;
+;; Phew! That was a _lot_ of computing.
+;;
+;; But we did it, with a rather small set of core things and core ideas:
+;;
+;; Core Clojure things:
+;;
+;; - named functions
+;; - anonymous functions
+;; - `let`-bound locals
+;; - Sequences:
+;;   - hash-maps (and keywords + keyword access)
+;;   - vectors
+;;   - hash-sets (and their great utility as predicates)
+;; - Sequence functions:
+;;   - map
+;;   - filter
+;;   - reduce
+;;   - some
+;;   - empty?
+;; - Branching and boolean logic:
+;;   - true/false and truthy/falsey
+;;   - nil handling
+;;   - if
+;;   - when
+;;   - case
+;;   - cond
+;;   - not
+;; - "Higher Order" Functions, for convenience:
+;;   (HOFs are functions that take functions as arguments
+;;    and/or return functions.)
+;;   - comp
+;;   - complement
+;;   - partial
+;;   - fnil
+;;
+;; Core Clojure ideas:
+;;
+;; - Functions are values. That's why we can:
+;;   - pass them as arguments,
+;;    - return them as results of functions, and
+;;    - even make collections of them (like our "good conditions" and
+;;      "bad conditions".)
+;;
+;; - Good functions "compose":
+;;   We write many small functions that each do one simple task well.
+;;   And then, we combine and mix-and-match those functions to do
+;;   increasingly sophisticated tasks.
+;;
+;; - We tend to think in terms of sequences, and sequence operations.
+;;   (As opposed to looping opertions on items of sequences.)
+;;
+;; - We strongly prefer to model real-world objects as pure data,
+;;   then and use many small functions to progressively transform our
+;;   data models into real-world outcomes.
