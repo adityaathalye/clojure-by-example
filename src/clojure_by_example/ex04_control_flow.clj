@@ -1,9 +1,6 @@
 (ns clojure-by-example.ex04-control-flow)
 
 
-;; WORK IN PROGRESS...
-
-
 ;; Ex04: LESSON GOALS
 ;;
 ;; - Introduce different ways to do data-processing logic in Clojure
@@ -612,9 +609,9 @@
 ;; - anonymous functions
 ;; - `let`-bound locals
 ;; - Sequences:
-;;   - hash-maps (and keywords + keyword access)
-;;   - vectors
-;;   - hash-sets (and their great utility as predicates)
+;;   - hash-maps (plus keywords + keyword access)
+;;   - vectors   (plus first and second to get the 1st and 2nd item)
+;;   - hash-sets (plus their great utility as predicates)
 ;; - Sequence functions:
 ;;   - map
 ;;   - filter
