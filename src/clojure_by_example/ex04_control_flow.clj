@@ -358,8 +358,8 @@
                  :sulphur-dioxide 0.015 :traces 0.095}}
 
    {:name "Earth" :mass 1 :radius 1 :moons 1
-    :atmosphere {:nitrogen 78.08 :oxygen 20.95 :carbon-dioxide 0.4}
-    :water-vapour 0.10 :argon 0.33 :traces 0.14}
+    :atmosphere {:nitrogen 78.08 :oxygen 20.95 :carbon-dioxide 0.4
+                 :water-vapour 0.10 :argon 0.33 :traces 0.14}}
 
    {:name "Mars" :mass 0.107 :radius 0.532 :moons 2
     :atmosphere {:carbon-dioxide 95.97 :argon 1.93 :nitrogen 1.89
