@@ -3,10 +3,13 @@
             [clojure.string :as cs]
             [clojure.inspector :as inspect]))
 
+(def nasa_fact_sheets_dir
+  "resources/nasa_fact_sheets/")
 
 (def planets-to-earth-ratios-table
   {:table-name :planet-to-earth-ratios
-   :table-data-file "resources/planetary_ratios_to_earth.html"
+   :table-data-file (str nasa_fact_sheets_dir
+                         "planetary_ratios_to_earth.html")
    :num-cols 10
    :num-rows 18
    :rows-label-path [:table :tr [:td html/first-child] :a]
@@ -16,8 +19,8 @@
 
 (def small-worlds-table
   {:table-name :small-worlds
-   :table-data-file
-   "resources/solar_system_small_worlds_fact_sheet.html"
+   :table-data-file (str nasa_fact_sheets_dir
+                         "solar_system_small_worlds_fact_sheet.html")
    ;; Of 12 cols, 11 have data, one is empty and must be removed
    ;; prior to processing.
    :num-cols 11
