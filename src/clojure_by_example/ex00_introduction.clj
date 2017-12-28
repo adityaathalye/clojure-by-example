@@ -2,10 +2,10 @@
 
 
 ;; IMPORTANT:
-;; - the README file explains why I have created this project
-;; - begin in this "ex00..." file, and work through it step by step
-;; - once you are done with "ex00...", open the next file and repeat
-;; - and so on, until you have worked through all the files
+;; - The README file explains why this project exists.
+;; - Begin in this "ex00..." file, and work through it step by step.
+;; - Once you are done with "ex00...", open the next file and repeat.
+;; - Keep going this way, until you have worked through all the files.
 
 
 ;; EX00: LESSON GOAL:
@@ -39,8 +39,6 @@
 ;; "Built-in" functions are also "expressions"
 ;; - We will meet all of these again, very soon.
 +                                       ; addition
-def                                     ; define a global constant
-defn                                    ; define a function
 map                                     ; map over a collection
 filter                                  ; filter from a collection
 reduce                                  ; transform a collection
