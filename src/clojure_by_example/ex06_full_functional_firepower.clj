@@ -10,10 +10,11 @@
 ;; - Show how to "keep state at the boundary"; e.g.:
 ;;   - ingest sophisticated planets from a JSON file
 ;;   ----------------Input boundary----------------
-;;   - punch it into a purely functional data processing
-;;   - do awesome things with just `map`, `filter`, `reduce`,
-;;     simple helper functions (with/without control flow)
-;;     and models of the world as pure data structures
+;;   - punch it into a purely functional data processing pipeline
+;;   - do awesome things with just
+;;     - `map`, `filter`, `reduce`,
+;;     - simple helper functions (with/without control flow), and
+;;     - models of the world as pure data structures
 ;;   ----------------Output boundary---------------
 ;;   - spit out various kinds of outputs into output files
 ;;
