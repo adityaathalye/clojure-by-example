@@ -46,21 +46,29 @@ pi ; evaluate to confirm
 ;; Hm, let's try vectors and maps.
 ;;
 ;; - We can "associate" new key-vals into an existing map
-
 (assoc {:a 1}
   :b 2
   :c 3)
+;;
+;; - With assoc, we can also update existing key-value pairs
+(assoc {:a 1 :b 2} :b 99)
+;;
+;; - And, finally, we can "dissociate" existing key-vals
+(dissoc {:a 1 :b 2 :c 3} :b :c)
+
 
 ;; - So suppose we define...
 
-(def habitable-planets [{:pname "Earth"}
-                        {:pname "Mars"}])
+(def habitable-planets [{:pname "Earth" :moons 1}
+                        {:pname "Mars" :moons 2}])
 
 ;; - Then, maybe, we can `assoc` a new k-v pair into all
 ;;   habitable-planets:
-
+;; - And while we're at it, also dissoc an existing one:
+;;
 (map (fn [planet]
-       (assoc planet :habitable? true))
+       (assoc (dissoc planet :moons)
+              :habitable? true))
      habitable-planets)
 
 
@@ -279,6 +287,7 @@ habitable-planets ; confirm by checking the value of this
 
 
 ;; Convenient Syntax for functions
+;;
 ;; - We use these conveniences for good effect in API design.
 
 
@@ -307,6 +316,7 @@ habitable-planets ; confirm by checking the value of this
   [& nums]
   (reduce + 0 nums))
 
+(add-any-numbers)
 (add-any-numbers 1)
 (add-any-numbers 1 2)
 (add-any-numbers 1 2 3 4 5)
@@ -314,8 +324,9 @@ habitable-planets ; confirm by checking the value of this
 
 ;; Multiple _and_ Variable airites, combined
 ;; - Guess what + actually is inside?
-
+;;
 (clojure.repl/source +) ; evaluate, check the REPL/LightTable console
+;;
 ;; We can implement each arity as a special case, to compute results
 ;; as optimally as possible.
 
@@ -420,6 +431,18 @@ habitable-planets ; confirm by checking the value of this
                     {:pname "Moonless"}]))
 
 
+;; Finally, we can specify default values directly in the destructuring:
+(let [add-message (fn [{:keys [pname moons]
+                        :or {moons 0} ; use 0, if :moons is absent
+                        :as planet}]
+                    (assoc planet
+                           :message (str "Planet " pname " has "
+                                         moons " moons.")))]
+  (map add-message [{:pname "Earth" :moons 1}
+                    {:pname "Mars"  :moons 2}
+                    {:pname "Moonless"}]))
+
+
 ;; Further, we can exploit combinations of de-structuring
 ;;
 ;; - Suppose we have a hash map, keyed by planet names:
@@ -435,13 +458,12 @@ habitable-planets ; confirm by checking the value of this
 (let [add-message-fn
       ;; (fn [acc-map [k v]] (body... )) for use in reduce
       ;;  [acc-map [k     v is further destructured]]
-      (fn [acc-map [pname {:keys [moons] :as pdata}]]
-        (let [pdata+msg
-              (assoc pdata
-                     :message (str "Planet " pname " has "
-                                   (or moons 0) " moons."))]
+      (fn [acc-map [pname {:keys [moons]
+                           :or {moons 0}
+                           :as pdata}]]
+        (let [msg (str "Planet " pname " has " moons " moons.")]
           (assoc acc-map
-                 pname pdata+msg)))]
+                 pname (assoc pdata :message msg))))]
   (reduce add-message-fn
           {} ; acc-map
           {"Earth" {:moons 1}
