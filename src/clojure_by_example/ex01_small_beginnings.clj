@@ -1,13 +1,6 @@
 (ns clojure-by-example.ex01-small-beginnings)
 
 
-;; IMPORTANT:
-;; - the README file explains why I have created this project
-;; - begin in this "ex01..." file, and work through it step by step
-;; - once you are done with "ex01...", open the next file and repeat
-;; - and so on, until you have worked through all the files
-
-
 ;; Ex01: LESSON GOAL:
 ;;
 ;; - Show a way to model things with pure data, in the form of hash-maps
