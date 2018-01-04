@@ -169,8 +169,8 @@
             {} ; out-map starts empty
             sensor-files-map)))
 
-(gather-all-sensor-data! sensor-data-dir
-                         sensor-data-files) ; try it
+#_(gather-all-sensor-data! sensor-data-dir
+                           sensor-data-files) ; try it
 
 ;; --------------------- Purely Functional Program begins --------------
 
@@ -233,9 +233,9 @@
 
 
 ;; First try this, to check packaged data...
-(denormalized-planetary-data
- (gather-all-sensor-data! sensor-data-dir
-                          sensor-data-files))
+#_(denormalized-planetary-data
+   (gather-all-sensor-data! sensor-data-dir
+                            sensor-data-files))
 
 ;; Does the result look familiar?
 
@@ -257,10 +257,10 @@
 
 
 ;; Try it!
-(ingest-export-sensor-data!
- sensor-data-dir
- sensor-data-files
- consolidated-data-file)
+#_(ingest-export-sensor-data!
+   sensor-data-dir
+   sensor-data-files
+   consolidated-data-file)
 
 ;; --------------------- Output Boundary ends ------------------------
 
@@ -272,10 +272,10 @@
 
 ;; The Planetary Data Scientists reveal their nefarious intentions:
 
-(clojure-by-example.ex04-control-flow/colonize-habitable-planets!
- (denormalized-planetary-data
-  (gather-all-sensor-data! sensor-data-dir
-                           sensor-data-files)))
+#_(clojure-by-example.ex04-control-flow/colonize-habitable-planets!
+   (denormalized-planetary-data
+    (gather-all-sensor-data! sensor-data-dir
+                             sensor-data-files)))
 ;; Note:
 ;; - For this to work, colonize-habitable-planets must be complete
 ;; - And you should have first evaluated it, to make it unable
