@@ -214,3 +214,13 @@
 ;; * If you've reached this far...
 ;;   - Congratulations, you just built a brand new Clojure project
 ;;     from scratch!
+;;
+;;
+
+
+;; HOMEWORK:
+;;
+;; * Why did we have to do all this?
+;;   Ben Vandgrift has a nice explanation at:
+;;   "Clojure: 'Hello World' from the Command Line"
+;;   http://ben.vandgrift.com/2013/03/13/clojure-hello-world.html
