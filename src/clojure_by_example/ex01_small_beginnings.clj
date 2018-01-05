@@ -170,8 +170,8 @@
 :moons  ; a keyword
 
 
-;; Like strings, keywords directly "represent" themselves.
-;; (A keyword is what it is.)
+;; Like strings and numbers, keywords directly "represent" themselves.
+;; (A keyword is a fundamental data type.)
 ;; _Unlike_ strings, keywords are designed to do special things.
 
 ;; To find out, we must first define an alternative hash-map,
