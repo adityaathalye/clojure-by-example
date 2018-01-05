@@ -171,7 +171,7 @@
 
 
 ;; Like strings, keywords directly "represent" themselves.
-;; (A keyword is what it is.)
+;; (A keyword is a fundamental type.)
 ;; _Unlike_ strings, keywords are designed to do special things.
 
 ;; To find out, we must first define an alternative hash-map,
@@ -273,7 +273,7 @@
 ;; Clojure "Vectors":
 
 ;; The square bracketed things we used with `get-in` are in fact a
-;; Clojure datastructure. (Other languages may call these "Arrays".)
+;; Clojure data structure. (Other languages may call these "Arrays".)
 ["atmosphere"] ; is a vector of one string
 [:atmosphere :other-gases]  ; is a vector of two keywords
 
