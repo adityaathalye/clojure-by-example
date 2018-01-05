@@ -154,24 +154,6 @@
 #_('FIX 'FIX 'FIX)
 
 
-
-;; Lesson: Thinking with Data:
-;;
-;; Why would we first group, and then query?
-;;
-;; Suppose we wanted to do some fact-finding to compare planets that
-;; have moons and those that don't. This suggests repeat use of the
-;; grouped planets, instead of a single collection of all planets.
-;;
-;; So now, we would want to create the grouping only once, and then
-;; pass that group down our data processing functions (pipeline).
-;;
-;; This way our "pipeline" can repeatedly use fast keyword-based
-;; look-ups to select one group or the other instead of repeated use
-;; of slower operations like (map planet-without-moons? planets) etc.
-
-
-
 ;; So far, we did some pretty cool things with sequence operations like
 ;; `map` and `filter`. Now for the big boss of sequence operations...
 
@@ -415,7 +397,7 @@
 ;;   and then build up sophisticated solutions by combining many such
 ;;   small functions.
 ;;
-;; - We can directly write down the actual structure of a datastructure,
+;; - We can directly write down the actual structure of a data structure,
 ;;   and Clojure will evaluate any un-evaluated values at run-time,
 ;;   and return us the same data structure, but with computed values.
 ;;
