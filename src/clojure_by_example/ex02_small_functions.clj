@@ -166,9 +166,9 @@
 (map inc [1 2 3 4 5 6])
 
 ;; Such that...
-( 1 2 3 4 5 6)  ; each item of input
-;;| | | | | |   ; is incremented by `inc` to give a result where
-( 2 3 4 5 6 7)  ; each output item "maps" back to an input item
+(comment ( 1 2 3 4 5 6))  ; each item of input
+;;         | | | | | |   ; is incremented by `inc` to give a result where
+(comment ( 2 3 4 5 6 7))  ; each output item "maps" back to an input item
 
 ;; In general, we can use `map` to express one-to-one "mappings"
 ;; of input and output, by way of a function.
