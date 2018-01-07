@@ -140,17 +140,15 @@ reduce                                  ; transform a collection
 
 ;; Why is Clojure a "List Processing" language?
 
-(+ 1 2) ; is a Clojure expression, that Clojure will evaluate as code
+'(+ 1 2) ; Recall: this is a Clojure list, that Clojure evaluates
+         ; as literal data.
 
-'(+ 1 2) ; is a Clojure list, that Clojure will evaluate as literal data
-
-(eval '(+ 1 2)) ; eval is a special function that will take a literal
-                ; expression and attempt to evaluate it as if it's code
-                ; (Ignore details of eval, just know it does this.)
+(+ 1 2) ; if we remove the single quote, Clojure treats the same list
+        ; as an executable list, and tries to evaluate it as code.
 
 
-;; Clojure code, like other lisps, is written in terms of its
-;; own data structures.
+;; More generally, Clojure code, like other lisps, is written
+;; in terms of its own data structures. For example:
 ;;
 ;; Here is a function definition.
 (defn hie
