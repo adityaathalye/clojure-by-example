@@ -95,7 +95,7 @@ earth ; evaluate and check the hash-map
 ;; How to get number of moons?
 ;; - Uncomment, and fix the expression below:
 
-;; (get earth 'FIX)
+(get earth "moons")
 
 
 ;; EXERCISE:
@@ -105,6 +105,7 @@ earth ; evaluate and check the hash-map
 ;;
 ;; ('FIX 'FIX 'FIX)
 
+(get earth "atmosphere")
 
 ;; Lesson:
 ;; - Given a hash-map and a "key", `get` returns the value
@@ -121,7 +122,7 @@ earth ; evaluate and check the hash-map
 ;; - Hint: Mentally replace FIX with the value of "atmosphere".
 ;; - Now ask yourself, what expression will return that value?
 
-;; (get 'FIX "other-gases")
+(get (get earth "atmosphere") "other-gases")
 
 
 ;; EXERCISE:
@@ -130,6 +131,8 @@ earth ; evaluate and check the hash-map
 ;; - Hint: now you have to replace 'FIX with a nested expression
 ;;
 ;; (get 'FIX "argon")
+
+(get (get (get earth "atmosphere") "other-gases") "argon")
 
 
 
@@ -154,7 +157,6 @@ earth ; evaluate and check the hash-map
   (get (get (get planet level1-key)
             level2-key)
        level3-key)) ; What does the function's "body" look like?
-
 
 
 ;; Now we can...
@@ -211,7 +213,7 @@ earth ; evaluate and check the hash-map
 ;;
 ;; How to find the atmosphere? Uncomment,fix, and evaluate:
 
-;; ('FIX earth-alt)
+(:atmosphere earth-alt)
 
 
 ;; EXERCISE:
@@ -221,6 +223,9 @@ earth ; evaluate and check the hash-map
 ;; - Replace each 'FIX with the appropriate value or s-expression.
 ;;
 ;; ('FIX 'FIX)
+;; Hint: Remember, we can nest expressions inside expressions.
+
+(:other-gases (:atmosphere earth-alt))
 
 
 ;; EXERCISE:
@@ -228,7 +233,7 @@ earth ; evaluate and check the hash-map
 ;; How much argon is present in the atmosphere?
 ;; Hint: once again, 'FIX with value(s) or nested s-expression(s).
 
-;; ('FIX 'FIX)
+(:argon (:other-gases (:atmosphere earth-alt)))
 
 
 ;; Clojure provides `get-in`, because nested access is so common.
@@ -252,7 +257,7 @@ earth ; evaluate and check the hash-map
 ;; We saw `get-in` work for keywords. Does it work for strings too?
 ;; Uncomment, fix, and evaluate:
 
-;; (get-in earth 'FIX)
+(get-in earth ["atmosphere" "other-gases"])
 
 
 ;; Did that work? Why or why not?
@@ -263,14 +268,14 @@ earth ; evaluate and check the hash-map
 ;; Use get-in to query other gases from the `earth` hash-map.
 ;; Type your expression below and evaluate it:
 
-
+(get-in earth ["atmosphere" "other-gases"])
 
 ;; EXERCISE:
 ;;
 ;; Use get-in to query argon from `earth`'s atmosphere
 ;; Type your expression below and evaluate it:
 
-
+(get-in earth ["atmosphere" "other-gases" "argon"])
 
 ;; Lesson:
 ;; - Given a hash-map and a path "key", `get` returns the value
@@ -403,18 +408,18 @@ earth ; evaluate and check the hash-map
 ;;
 ;; Use the information below.
 ;;
-#_(;; FIXME
-   pname "Mercury" ; has...
-   moons 0
-   mass 0.0553    ; recall we assume Earth mass is 1
-   radius 0.383   ; recall we assume Earth radius is 1
-   atmosphere     ; % of total volume
-      oxygen      42.0
-      sodium      29.0
-      hydrogen    22.0
-      helium      6.0
-      potassium   0.5
-      other-gases 0.5)
+(def mercury
+  {:name "Mercury"    ; has...
+   :moons 0
+   :mass 0.0553  ; recall we assume Earth mass is 1
+   :radius 0.383 ; recall we assume Earth radius is 1
+   :atmosphere   ; % of total volume
+   {:oxygen      42.0
+    :sodium      29.0
+    :hydrogen    22.0
+    :helium      6.0
+    :potassium   0.5
+    :other-gases 0.5}})
 
 
 
@@ -426,6 +431,11 @@ earth ; evaluate and check the hash-map
 ;; - with keywords
 ;; Type your solutions below:
 
+(get (get mercury :atmosphere) :oxygen)
+
+(get-in mercury [:atmosphere :oxygen])
+
+(:oxygen (:atmosphere mercury))
 
 
 ;; EXERCISE:
@@ -436,16 +446,15 @@ earth ; evaluate and check the hash-map
 ;;
 ;; Fix the function below:
 
-#_(defn get-level-2
-    ['FIX ...]
-    'FIX)
+(defn get-level-2
+  [planet level1-key level2-key]
+  (get-in planet [level1-key level2-key]))
 
-;; Uncomment and evaluate to check you get the correct values
-#_(get-level-2 earth     "atmosphere" "oxygen")
+;; Evaluate to check you get the correct values
 
-#_(get-level-2 earth-alt :atmosphere :oxygen)
-
-#_(get-level-2 mercury   :atmosphere :oxygen)
+(get-level-2 earth     "atmosphere" "oxygen")
+(get-level-2 earth-alt :atmosphere :oxygen)
+(get-level-2 mercury   :atmosphere :oxygen)
 
 
 ;; RECAP:
