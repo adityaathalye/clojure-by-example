@@ -175,7 +175,7 @@
 ;; --------------------- Purely Functional Program begins --------------
 
 
-(defn sensor-data->planet
+(defn add-sensor-data
   "Given a sensor key, a planetary hash-map, and a tuple having
   sensor data for a planet, inject the sensor data under the
   planet name found in the planetary hash-map."
@@ -188,18 +188,18 @@
 ;; `assoc-in` (nested map) is the partner of `get-in` (from nested map).
 
 
-(defn moons->planets
+(defn add-moon-data
   "Inject moons sensor data, into planets sensor data."
   [moons planets]
-  (reduce (partial sensor-data->planet :moons)
+  (reduce (partial add-sensor-data :moons)
           planets
           moons))
 
 
-(defn atmosphere->planets
+(defn add-atmosphere-data
   "Inject atmosphere sensor data, into planets sensor data."
   [atmosphere planets]
-  (reduce (partial sensor-data->planet :atmosphere)
+  (reduce (partial add-sensor-data :atmosphere)
           planets
           atmosphere))
 
@@ -218,14 +218,14 @@
        planets))
 
 
-(defn denormalized-planetary-data
+(defn denormalised-planetary-data
   "Given all sensor data, produce a collection of denormalized
   planetary data."
   [{:keys [planets atmosphere moons]
     :as all-sensor-data}]
   ((comp denormalise-planetary-data
-         (partial atmosphere->planets atmosphere)
-         (partial moons->planets moons))
+         (partial add-atmosphere-data atmosphere)
+         (partial add-moon-data moons))
    planets))
 
 
@@ -233,7 +233,7 @@
 
 
 ;; First try this, to check packaged data...
-#_(denormalized-planetary-data
+#_(denormalised-planetary-data
    (gather-all-sensor-data! sensor-data-dir
                             sensor-data-files))
 
@@ -252,7 +252,7 @@
   (write-out-json-file
    data-dir
    dest-data-file
-   (denormalized-planetary-data
+   (denormalised-planetary-data
     (gather-all-sensor-data! data-dir source-data-files))))
 
 
@@ -273,7 +273,7 @@
 ;; The Planetary Data Scientists reveal their nefarious intentions:
 
 #_(clojure-by-example.ex04-control-flow/colonize-habitable-planets!
-   (denormalized-planetary-data
+   (denormalised-planetary-data
     (gather-all-sensor-data! sensor-data-dir
                              sensor-data-files)))
 ;; Note:

@@ -1,9 +1,6 @@
 (ns clojure-by-example.ex05-immutability-and-fp)
 
 
-;; WORK IN PROGRESS
-
-
 ;; Ex05: Lesson Goals
 ;; - This section is more conceptual, than exercise-oriented.
 ;; - Set you up with some important ideas, which we will use heavily
@@ -59,26 +56,25 @@ pi ; evaluate to confirm
 
 ;; - So suppose we define...
 
-(def habitable-planets [{:pname "Earth" :moons 1}
-                        {:pname "Mars" :moons 2}])
+(def planets [{:pname "Earth" :moons 1}
+              {:pname "Mars" :moons 2}])
 
-;; - Then, maybe, we can `assoc` a new k-v pair into all
-;;   habitable-planets:
+;; - Then, maybe, we can `assoc` a new k-v pair into all planets:
 ;; - And while we're at it, also dissoc an existing one:
 ;;
 (map (fn [planet]
        (assoc (dissoc planet :moons)
-              :habitable? true))
-     habitable-planets)
+         :habitable? true))
+     planets)
 
 
 ;; EXERCISE:
 ;;
 ;; Predict the result of filtering by the value of `:habitable?`:
 
-(filter :habitable? habitable-planets)
+(filter :habitable? planets)
 
-habitable-planets ; confirm by checking the value of this
+planets ; confirm by checking the value of this
 
 
 
@@ -118,7 +114,7 @@ habitable-planets ; confirm by checking the value of this
 ;; At each re-definition, `am-i-mutable` effectively "becomes"
 ;; the new _immutable_ value.
 ;;
-;; "Immutable" value is actually an oxymoron. Recall, we said that
+;; "Mutable" value is actually an oxymoron. Recall, we said that
 ;; ALL values are by definition immutable. 3.141 will always be 3.141
 ;; for ever and ever, till the end of time.
 ;;
@@ -297,8 +293,8 @@ habitable-planets ; confirm by checking the value of this
 
 (defn add-upto-three-nums
   ([] 0) ; identity of addition
-  ([x] (+ x 0 0))
-  ([x y] (+ x y 0))
+  ([x] x)
+  ([x y] (+ x y))
   ([x y z] (+ x y z)))
 
 (add-upto-three-nums)
@@ -308,7 +304,7 @@ habitable-planets ; confirm by checking the value of this
 #_(add-upto-three-nums 1 2 3 4) ; will fail
 
 
-;; Variable aritiy
+;; Variable arity
 ;; - When we don't know in advance how many arguments we
 ;;   will have to handle, but we want to handle them all.
 
@@ -322,7 +318,7 @@ habitable-planets ; confirm by checking the value of this
 (add-any-numbers 1 2 3 4 5)
 
 
-;; Multiple _and_ Variable airites, combined
+;; Multiple _and_ Variable arities, combined
 ;; - Guess what + actually is inside?
 ;;
 (clojure.repl/source +) ; evaluate, check the REPL/LightTable console
@@ -421,26 +417,31 @@ habitable-planets ; confirm by checking the value of this
 
 ;; We can also alias the whole hash-map:
 
-(let [add-message (fn [{:keys [pname moons]
-                        :as planet}] ; alias the hash-map as `planet`
-                    (assoc planet
-                           :message (str "Planet " pname " has "
-                                         (or moons 0) " moons.")))]
-  (map add-message [{:pname "Earth" :moons 1}
-                    {:pname "Mars"  :moons 2}
-                    {:pname "Moonless"}]))
+(defn add-message-1
+  [{:keys [pname moons]
+    :as   planet}]  ; alias the hash-map as `planet`
+  (assoc planet
+    :message (str "Planet " pname " has "
+                  (or moons 0) " moons.")))
+
+(map add-message-1 [{:pname "Earth" :moons 1}
+                    {:pname "Mars" :moons 2}
+                    {:pname "Moonless"}])
 
 
 ;; Finally, we can specify default values directly in the destructuring:
-(let [add-message (fn [{:keys [pname moons]
-                        :or {moons 0} ; use 0, if :moons is absent
-                        :as planet}]
-                    (assoc planet
-                           :message (str "Planet " pname " has "
-                                         moons " moons.")))]
-  (map add-message [{:pname "Earth" :moons 1}
-                    {:pname "Mars"  :moons 2}
-                    {:pname "Moonless"}]))
+
+(defn add-message-2
+  [{:keys [pname moons]
+    :or   {moons 0} ; use 0, if :moons is absent
+    :as   planet}]
+  (assoc planet
+    :message (str "Planet " pname " has "
+                  moons " moons.")))
+
+(map add-message-2 [{:pname "Earth" :moons 1}
+                    {:pname "Mars" :moons 2}
+                    {:pname "Moonless"}])
 
 
 ;; Further, we can exploit combinations of de-structuring
@@ -455,21 +456,21 @@ habitable-planets ; confirm by checking the value of this
 ;;
 ;; - Now, we can exploit vector and map de-structuring, in combination:
 ;;
-(let [add-message-fn
-      ;; (fn [acc-map [k v]] (body... )) for use in reduce
-      ;;  [acc-map [k     v is further destructured]]
-      (fn [acc-map [pname {:keys [moons]
-                           :or {moons 0}
-                           :as pdata}]]
-        (let [msg (str "Planet " pname " has " moons " moons.")]
-          (assoc acc-map
-                 pname (assoc pdata :message msg))))]
-  (reduce add-message-fn
-          {} ; acc-map
-          {"Earth" {:moons 1}
-           "Mars"  {:moons 2}
-           "Moonless" {}
-           "Nomoon" nil}))
+
+(defn add-message-3
+  [acc-map [pname {:keys [moons]
+                   :or {moons 0}
+                   :as pdata}]]
+  (let [msg (str "Planet " pname " has " moons " moons.")]
+    (assoc acc-map
+      pname (assoc pdata :message msg))))
+
+(reduce add-message-3
+        {} ; acc-map
+        {"Earth"    {:moons 1}
+         "Mars"     {:moons 2}
+         "Moonless" {}
+         "Nomoon"   nil})
 
 
 ;; There are _many_ many ways of de-structuring.
@@ -484,13 +485,13 @@ habitable-planets ; confirm by checking the value of this
 ;; - `def` is best used only to define names for truly global values.
 ;;
 ;; - `defn` is just a wrapper over `def`, designed specifically to
-;;    define functions
+;;    define functions.
 ;;
 ;; - We exploit lexical scope to bind values as close as possible to the
 ;;   point of use in code. This greatly improves our ability to reason
 ;;   about our code. And it prevents an explosion of global `def`s.
 ;;
-;; - Write pure functions as far as possible, write pure
+;; - Write pure functions as far as possible.
 ;;
 ;; - Conveniences like multi-arity and variable-arity functions, with
 ;;   argument de-structuring, help us design better functional APIs.

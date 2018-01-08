@@ -312,7 +312,6 @@
 ;; - can be used as predicates (and often are used this way)
 
 (= #{:a :b :c}  ; A hash-set of three things, :a, :b, and :c.
-
    (hash-set :a :b :b :c :a :c :c :c))
 
 
@@ -335,8 +334,11 @@
 
 
 (filter (comp colonize-it? :name)
-        [{:name "Mercury"} {:name "Venus"} {:name "Earth"}
-         {:name "Mars"} {:name "Jupiter"}])
+        [{:name "Mercury"}
+         {:name "Venus"}
+         {:name "Earth"}
+         {:name "Mars"}
+         {:name "Jupiter"}])
 
 
 
@@ -381,7 +383,7 @@
 ;; - Let's say :chlorine, :sulphur-dioxide, :carbon-monoxide are poisons
 
 
-;; Quick-n-dirty test
+;; Is the gas poisonous?
 #_(poison-gases :oxygen)
 #_(poison-gases :chlorine)
 
@@ -413,8 +415,8 @@
 ;;
 ;; Having no atmosphere is a bad thing, you know.
 ;;
-;; Write a "predicate" function that returns true (or truthy)
-;; if a planet has no atmosphere. It should return false/falsey
+;; Write a "predicate" function that returns truthy
+;; if a planet has no atmosphere. It should return falsey
 ;; if the planet _has_ an atmosphere.
 ;;
 ;; Call it `no-atmosphere?`
@@ -648,7 +650,7 @@
 ;;   increasingly sophisticated tasks.
 ;;
 ;; - We tend to think in terms of sequences, and sequence operations.
-;;   (As opposed to looping opertions on items of sequences.)
+;;   (As opposed to looping operations on items of sequences.)
 ;;
 ;; - We strongly prefer to model real-world objects as pure data,
 ;;   then and use many small functions to progressively transform our
