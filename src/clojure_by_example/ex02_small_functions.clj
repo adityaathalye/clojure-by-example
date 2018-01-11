@@ -121,12 +121,12 @@
 
 ;; How about the anonymous version of `same`?
 ;; Does it return `fn?` unchanged as well?
-(= 'FIX
+(= fn?
    ((fn [x] x) fn?))
 
 ;; How about this?
 ;; What do we get if we pass `same` to itself?
-(= 'FIX
+(= same
    (same same))
 
 
@@ -159,7 +159,7 @@
 
 ;; Clojure's `identity` function is exactly like our `same` function.
 ;; - To prove it, fix the s-expression below so it evaluates to `true`:
-(= 'FIX
+(= :moon
    (identity :moon)
    (same :moon))
 ;; We will use `identity` in surprisingly useful ways later.
@@ -295,7 +295,7 @@
 ;;
 ;; Instead of querying each map, why not query all of them at one go?
 
-#_(map 'FIX 'FIX)
+(map planet-has-moons? planets)
 
 
 ;; Also, as we now know, we can use anonymous functions creatively...
@@ -306,18 +306,18 @@
 ;; Replace 'FIX with your own anonymous function that works
 ;; just like `planet-has-moons?`.
 
-#_(map 'FIX  planets)
+(map (fn [p] (> (:moons p) 0))  planets)
 
 
 ;; EXERCISE
 ;;
 ;; And, finally, prove that both variants do exactly the same thing:
 
-#_(= (map planet-has-moons? 'FIX)
+(= (map planet-has-moons? planets)
 
-     ('FIX 'FIX 'FIX)  ; use anonymous function
+   (map (fn [p] (> (:moons p) 0))  planets)
 
-     [false false true true])
+   [false false true true])
 
 
 
