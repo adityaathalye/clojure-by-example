@@ -65,15 +65,15 @@
 
 (defn planet-without-moons?
   "Planets without moons are exactly opposite to planets with moons."
-  [FIX]
-  FIX)
+  [planet]
+  (not (planet-with-moons? planet)))
 
 
 ;; EXERCISE
 ;;
 ;; Now, filter out planets without moons...
 
-;; (FIX FIX FIX) ; fixme and evaluate
+(filter planet-with-moons? planets) ; fixme and evaluate
 
 
 
@@ -114,8 +114,10 @@
 
 (defn group-planets-by-moons
   [planets]
-  ;; FIX: return a data structure here that represents the grouping.
-  'FIX)
+  ;; Return a data structure here that represents the grouping.
+  {:planets-with-moons    (filter planet-with-moons? planets)
+   :planets-without-moons (filter planet-without-moons? planets)})
+
 
 
 ;; EXERCISE:
@@ -123,7 +125,8 @@
 ;; Use `group-planets-by-moons` to group planets.
 ;; Write your solution below:
 
-#_('FIX 'FIX)
+(group-planets-by-moons planets)
+
 
 ;; If you did it right, this is what happened:
 ;;
@@ -143,7 +146,7 @@
 ;;
 ;; Find names of those planets that have moons...
 
-#_('FIX 'FIX 'FIX)
+(map :name (:planets-with-moons (group-planets-by-moons planets)))
 
 
 ;; So far, we did some pretty cool things with sequence operations like
@@ -222,6 +225,8 @@
 ;; - Hint: this will be a one-liner s-expression
 ;; - Write your solution below:
 
+(reduce + 0 (map :mass planets))
+
 
 ;; EXERCISE:
 ;;
@@ -233,21 +238,21 @@
 
 ;; Write your solution below:
 
-
+(count (filter planet-with-moons? planets))
 
 ;; EXERCISE:
 ;;
 ;; Calculate the total mass of planets having moons.
 ;; - Reuse the `planet-with-moons?` function that we already defined.
 
-
+(reduce + 0 (map :mass (filter planet-with-moons? planets)))
 
 ;; EXERCISE:
 ;;
 ;; Calculate the total mass of planets _without_ moons.
 ;; - Reuse the `planet-without-moons?` function that we defined earlier.
 
-
+(reduce + 0 (map :mass (filter planet-without-moons? planets)))
 
 ;; EXERCISE:
 ;;
@@ -256,7 +261,12 @@
 ;; - returns true if the planet's mass exceeds Earth's mass
 ;; - returns false otherwise
 
+(defn massier-than-earth?
+  [planet]
+  (> (:mass planet) 1))
 
+
+(map :name (filter massier-than-earth? planets))
 
 ;; EXERCISE:
 ;;
@@ -276,13 +286,13 @@
 ;; - The return value must be, an easy-to-query data structure.
 
 ;; Uncomment and fix:
-#_(defn planetary-stats
-    [pred-fn given-planets]
-    ;; `let` is a way to define ("bind") function-local names to values
-    (let [filtered-planets 'FIX]
-      {:count 'FIX
-       :names  'FIX
-       :total-mass  'FIX}))
+(defn planetary-stats
+  [pred-fn given-planets]
+  ;; `let` is a way to define ("bind") function-local variables.
+  (let [filtered-planets (filter pred-fn given-planets)]
+    {:count      (count filtered-planets)
+     :names      (map :name filtered-planets)
+     :total-mass (reduce + 0 (map :mass filtered-planets))}))
 
 
 
@@ -292,6 +302,7 @@
 ;;
 ;; - planets with moons:
 
+(planetary-stats planet-with-moons? planets)
 
 ;; EXERCISE:
 ;;
@@ -299,7 +310,7 @@
 ;;
 ;; - planets without moons:
 
-
+(planetary-stats planet-without-moons? planets)
 
 ;; - planets without moons, using `complement`:
 ;;   compare, understand, use:
@@ -308,11 +319,12 @@
 
 ((complement planet-with-moons?) {:name "Earth" :moons 1})
 
+
 ;; Fix the expression below:
 
-#_(planetary-stats
-   'FIX
-   planets)
+(planetary-stats
+ (complement planet-with-moons?)
+ planets)
 
 
 ;; EXERCISE:
@@ -321,17 +333,18 @@
 ;;
 ;; - planets with more mass than the earth:
 
+(planetary-stats massier-than-earth? planets)
 
 
 ;; - planets with less mass than the earth, using `comp`:
 ;;   compare, understand, use:
-#_(massier-than-earth?            {:name "Jupiter" :mass 317.8})
+(massier-than-earth?            {:name "Jupiter" :mass 317.8})
 
-#_((comp not massier-than-earth?) {:name "Jupiter" :mass 317.8})
+((comp not massier-than-earth?) {:name "Jupiter" :mass 317.8})
 
 ;; Type your solution here:
 
-
+(planetary-stats (comp not massier-than-earth?) planets)
 
 ;; EXERCISE:
 ;;
@@ -339,7 +352,7 @@
 ;;
 ;; - all `planets` (hint: use `identity`):
 
-
+(planetary-stats identity planets)
 
 ;; EXERCISE:
 ;;
@@ -373,23 +386,26 @@
 ;; Fix the `more-planetary-stats` function below:
 
 (defn more-planetary-stats
-  [FIX]
-  {:given-planets FIX
-   :with-moons FIX
-   :without-moons FIX
-   :massier-than-earth FIX
-   :less-massy-than-earth FIX})
-
+  [planets]
+  {:given-planets (planetary-stats identity planets)
+   :with-moons (planetary-stats
+                planet-with-moons? planets)
+   :without-moons (planetary-stats
+                   planet-without-moons? planets)
+   :massier-than-earth (planetary-stats
+                        massier-than-earth? planets)
+   :less-massy-than-earth (planetary-stats
+                           (comp not massier-than-earth?)
+                           planets)})
 
 
 ;; Check your results. Uncomment and evaluate:
 (comment
-  (more-planetary-stats planets)
+ (more-planetary-stats planets)
 
-  (more-planetary-stats (take 2 planets))
+ (more-planetary-stats (take 2 planets))
 
-  (more-planetary-stats (drop 2 planets)))
-
+ (more-planetary-stats (drop 2 planets)))
 
 
 ;; RECAP:
