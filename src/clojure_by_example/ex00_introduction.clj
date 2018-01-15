@@ -13,7 +13,8 @@
 ;;   eyes with it.
 ;;
 ;; - Don't get stuck here!
-;;   - Run through it once, and move on to EX01.
+;;   - Run through it once, try evaluating expressions of interest
+;;     and move on to EX01.
 ;;   - Your eyes and brain will adjust fairly quickly, as you
 ;;     work through the examples to follow.
 
@@ -52,21 +53,22 @@ reduce                                  ; transform a collection
 '(1 2 3 4 5)                            ; a list
 
 
-;; Any Clojure code that evaluates to a value is _also_ an "expression":
+;; Clojure code is also composed of expressions;
+;; - we refer to them as "symbolic" expressions (or "s"-expression)
 
-(+ 1 2) ; an expression
+(+ 1 2) ; an s-expression
 
-(+ (+ 1 2) (+ 1 2)) ; an expression of nested expressions
+(+ (+ 1 2) (+ 1 2)) ; an s-expression of nested expressions
 
 (+ (+ (+ 1 2) (+ 1 2))
-   (+ (+ 1 2) (+ 1 2))) ; an even more nested expression
+   (+ (+ 1 2) (+ 1 2))) ; an even more nested s-expression
 
 
 ;; In fact, ALL Clojure code is just "expressions"
 ;; - And, all Clojure expressions evaluate to a value.
 ;;
-;; - All literals evaluate to themselves.
-;;   (Hence "literal": it is what it is. :-D)
+;; - All literals evaluate to themselves. They are values.
+;;   (Hence "literal": a literal is what it is. :-D)
 ;;
 ;; - All collection literals also evaluate to themselves.
 ;;   (A literal collection is what it is, too.)
@@ -74,9 +76,9 @@ reduce                                  ; transform a collection
 ;; - All functions are values.
 ;;   (More on this a little later)
 ;;
-;; - All expressions, however deeply nested, finally evaluate to a value
-;;   (Either a literal, or a collection, or a function).
-
+;; - All s-expressions, however deeply nested, finally evaluate
+;;   to a return value. Expressions evaluate to either a literal,
+;;   or a collection, or a function.
 
 
 ;; Clojure expression syntax rules:
@@ -87,20 +89,14 @@ reduce                                  ; transform a collection
 ;; - Collection Literals:
 ;;   - Just write them down too, but also
 ;;   - make sure opening brackets are always matched by closing brackets
-;;     [1 2 3 4]   is a well-formed vector representation
-;;     [1 2 3 4    what's this? Nobody knows, and Clojure will complain.
+;;     [1 2 3]  is a well-formed vector representation
+;;     [1 2 3   is an "unbalanced" vector and will cause an error.
 ;;
-;; - "Code expressions":
+;; - Symbolic expressions ("s-expressions"):
 ;;   - Make sure the round parentheses close over the intended/required
 ;;     sub-expressions
-;;     (+ 1 2)     is a well-formed expression that will be evaluated
-;;     (+ 1 2      what's this? Nobody knows, and Clojure will complain.
-
-
-;; Clojure "code expressions" are called "s-expressions", because:
-(+ 1 2 3 4
- ) ; see, open paren + closed paren looks like an "S"?
-
+;;     (+ 1 2)  is a well-formed expression that will be evaluated
+;;     (+ 1 2   is an "unbalanced" s-expression and will cause an error.
 
 
 ;; Clojure Code Evaluation Rules:
@@ -118,6 +114,26 @@ reduce                                  ; transform a collection
 ;;   the first expression as arguments.
 ;;   - Recall: (+ (+ (+ 1 2) (+ 1 2))
 ;;                (+ (+ 1 2) (+ 1 2)))
+;;
+;;   - You may mentally evaluate the above form "inside-out", like this:
+;;     - Evaluate the smallest and innermost expressions first,
+;;     - Mentally replace them with their return values
+;;     - Pass those values as arguments to the next higher expression
+;;     - Continue until you are left with a literal value.
+;;
+;;     (+ (+ (+ 1 2) (+ 1 2))
+;;        (+ (+ 1 2) (+ 1 2)))
+;;
+;;     (+ (+  3       3     )
+;;        (+  3       3     ))
+;;
+;;     (+ 6
+;;        6)
+;;
+;;     12
+;;
+;;   - Keep this evaluation model in mind, when you read Clojure code,
+;;     to figure out how the code will evaluate.
 ;;
 ;; - To prevent evaluation, explicitly mark an expression as a list
 ;;   '(1 2) put a single quote in front of an expression to tell Clojure
@@ -137,7 +153,6 @@ reduce                                  ; transform a collection
 ;;    5 6)
 
 
-
 ;; Why is Clojure a "List Processing" language?
 
 '(+ 1 2) ; Recall: this is a Clojure list, that Clojure evaluates
@@ -155,12 +170,14 @@ reduce                                  ; transform a collection
   [person message]
   (str "Hie, " person " : " message))
 
-;;What does it look like?
+;; What does it look like?
+;; - Let's flatten it into one line for illustrative purposes:
+
 
 ;;[1] [2]   [3]              [4]
 (defn hie [person message] (str "Hie, " person " : " message)) ; [5]
 ;; Where:
-;; - [1] `defn` is a Clojure built-in
+;; - [1] `defn` is a Clojure built-in function
 ;;   - Notice, it's at the 1st position, and
 ;;   - 2-4 are all arguments to defn
 ;; Further:
