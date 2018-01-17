@@ -38,7 +38,7 @@
 
 (same 42)
 
-(same {:name "Earth" :moons 1})
+(same {:pname "Earth" :moons 1})
 
 (same [1 2 3 4 5])
 
@@ -61,10 +61,11 @@
 ;; What will these return?
 ;; - Hint: _mentally replace_ the function definition `(fn [x] x)`
 ;;   with _any name you like_, and imagine that is the function name.
+;;   BUT make sure it behaves just like `(fn [x] x)`.
 
 ((fn [x] x) 42)
 
-((fn [x] x) {:name "Earth" :moons 1})
+((fn [x] x) {:pname "Earth" :moons 1})
 
 ((fn [x] x) [1 2 3 4 5])
 
@@ -156,32 +157,56 @@
 ;; Increment by one
 (inc 42)
 
-;; Clojure's `identity` function is exactly like our `same` function
+;; Clojure's `identity` function is exactly like our `same` function.
+;; - To prove it, fix the s-expression below so it evaluates to `true`:
 (= 'FIX
    (identity :moon)
    (same :moon))
+;; We will use `identity` in surprisingly useful ways later.
 
 
+
+;; Now, let's use simple functions to process Collections
+
+
+;; `map`
+;;
 ;; `map` a function over a collection...
 (map inc [1 2 3 4 5 6])
-
 ;; Such that...
-(comment ( 1 2 3 4 5 6))  ; each item of input
-;;         | | | | | |   ; is incremented by `inc` to give a result where
-(comment ( 2 3 4 5 6 7))  ; each output item "maps" back to an input item
+#_( 1 2 3 4 5 6)  ; each item of input
+;;  | | | | | |   ; is incremented by `inc` to give a result where
+#_( 2 3 4 5 6 7)  ; each output item "maps" back to an input item
 
-;; In general, we can use `map` to express one-to-one "mappings"
-;; of input and output, by way of a function.
-
+;; Note:
+;; - Ignore the following subtlety for now:
+;;   You may have noticed that we passed a vector [] to `map` above,
+;;   but the result looks like a list (). Well it really isn't a
+;;   concrete list, but a "sequence" representation of the vector.
+;;   Clojure wraps a "sequence" in parens (), for display purposes only.
+;;
+;; - Think of `map` in general terms, as a way to express
+;;   one-to-one "mappings" of an input sequence to an output sequence,
+;;   by way of a function.
+;;
+;; - The syntax of `map` is:
+;;
+;;   (map your-function input-collection)
+;;
+;;   Where 'your-function' must accept exactly one argument, because
+;;   it must transform only one item of the input at a time.
 
 
 ;; EXERCISE:
 ;;
-;; What should this return?
-;; First predict the answer, then evaluate to confirm.
+;; What should the following `map` expression return?
+;; - First predict the answer, then evaluate to confirm.
+;; - Hint: mentally apply the `even?` function to each item, one by one,
+;;   and build up a collection of results of each function application.
+;; - And ignore the [] v/s () subtlety of input v/s output display.
+;;   Just predict the sequence of output items, in the correct order.
+
 (map even? [1 2 3 4 5 6])
-;; Hint: mentally apply the `even?` function to each item, one by one,
-;; and build up a collection of results of each function application.
 
 
 ;; How about this?
@@ -198,7 +223,7 @@
 
 (map (fn [x] x) [1 2 3 4 5 6])
 
-;; Our anonymous "identity" function is a drop-in replacement
+;; Nice! Our anonymous "identity" function is a drop-in replacement
 ;; for `identity`, as well as `same`.
 
 
@@ -213,23 +238,23 @@
 
 ;; This is a Clojure vector... of Clojure hash-maps.
 
-[{:name "Mercury" :moons 0}
- {:name "Venus"   :moons 0}
- {:name "Earth"   :moons 1}
- {:name "Mars"    :moons 2}] ; (Yes we can do this. More on this later!)
+[{:pname "Mercury" :moons 0}
+ {:pname "Venus"   :moons 0}
+ {:pname "Earth"   :moons 1}
+ {:pname "Mars"    :moons 2}] ; (Yes we can do this. More on this later!)
 
 
 ;; Let's name our collection of planets as, um... `planets`
 
-(def planets [{:name "Mercury" :moons 0}
-              {:name "Venus"   :moons 0}
-              {:name "Earth"   :moons 1}
-              {:name "Mars"    :moons 2}])
+(def planets [{:pname "Mercury" :moons 0}
+              {:pname "Venus"   :moons 0}
+              {:pname "Earth"   :moons 1}
+              {:pname "Mars"    :moons 2}])
 
 
 ;; Recall that we can query a map, like this:
 
-(:name {:name "Mercury" :moons 0})
+(:pname {:pname "Mercury" :moons 0})
 
 ;; That is, a keyword _behaves like a function_ of a hash-map.
 
@@ -240,9 +265,10 @@
 ;; - What should the following map expression return?
 ;; - Predict the answer, and then evaluate to confirm.
 
-(map :name planets)
+(map :pname planets)
 
-;; (map :name over `planets`, which is vector of planet hash-maps)
+;; Read as:
+;; "map :pname over `planets`, which is vector of planet hash-maps"
 
 
 
@@ -258,11 +284,11 @@
   (> (:moons planet)
      0))
 
-(planet-has-moons? {:name "Mercury" :moons 0})
+(planet-has-moons? {:pname "Mercury" :moons 0})
 
-(planet-has-moons? {:name "Earth" :moons 1})
+(planet-has-moons? {:pname "Earth" :moons 1})
 
-(planet-has-moons? {:name "Mars" :moons 2})
+(planet-has-moons? {:pname "Mars" :moons 2})
 
 
 ;; EXERCISE
@@ -304,7 +330,7 @@
 ;;     input collection to an output collection, by way of a function.
 
 
-;; DO MORE WITH LESS:
+;; "Do more with less":
 ;; - Even the most simple functions can be general-purpose
 ;; - Clojure keywords behave like functions of hash-maps
 ;; - Since keywords can query hash-maps, we can completely avoid writing
