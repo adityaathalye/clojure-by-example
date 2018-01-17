@@ -11,7 +11,7 @@
 
 ;; Our Earth
 
-;; "name"   "Earth"
+;; "pname"  "Earth"
 ;; "mass"   1 ; if Earth mass is 1, Jupiter's mass is 317.8 x Earth
 ;; "radius" 1 ; if Earth radius is 1, Jupiter's radius is 11.21 x Earth
 ;; "moons"  1
@@ -32,10 +32,10 @@
 ;; If we put curly braces in the right places, it becomes a
 ;; Clojure "hash-map":
 
-{"name" "Earth"
- "mass" 1
+{"pname"  "Earth"
+ "mass"   1
  "radius" 1
- "moons" 1
+ "moons"  1
  "atmosphere" {"nitrogen"     78.08
                "oxygen"       20.95
                "CO2"           0.40
@@ -53,7 +53,7 @@
 
 
 (def earth
-  {"name" "Earth"
+  {"pname" "Earth"
    "mass" 1
    "radius" 1
    "moons" 1
@@ -71,6 +71,9 @@
 ;; Evaluation will attach (or 'bind') the hash-map to the symbol
 ;; we have called `earth`.
 
+earth ; evaluate and check the hash-map
+
+
 
 ;; _Now_ let's query the 'earth' global...
 
@@ -83,7 +86,7 @@
 ;;
 ;; Try to predict, before you evaluate.
 
-(get earth "name") ; <- place cursor after closing paren and evaluate.
+(get earth "pname") ; <- place cursor after closing paren and evaluate.
 
 
 
@@ -99,6 +102,8 @@
 ;;
 ;; What does the atmosphere contain?
 ;; - Type your expression below:
+;;
+;; ('FIX 'FIX 'FIX)
 
 
 ;; Lesson:
@@ -122,19 +127,21 @@
 ;; EXERCISE:
 ;;
 ;; Now, try to go even deeper, to find how much argon we have?
-
+;; - Hint: now you have to replace 'FIX with a nested expression
+;;
 ;; (get 'FIX "argon")
 
 
 
 ;; Lesson:
-;; - You can put expressions inside expressions and evaluate the
-;;   whole thing as one expression.
+;; - You can put s-expressions inside s-expressions and evaluate the
+;;   whole thing as one s-expression.
 
-;; Note:
-;; - We may choose to indent a deeply nested expression, for clarity.
-;;   (Ask your instructor to demonstrate.)
-
+;; Notes:
+;; - You may choose to indent a deeply nested s-expression, for clarity.
+;; - For now, indent or don't indent, as per your comfort level.
+;; - Later, learn about generally-accepted Clojure code style.
+;;   (https://github.com/bbatsov/clojure-style-guide)
 
 
 ;; A Simple "Function"
@@ -178,7 +185,7 @@
 ;; - that represents the same data about the Earth,
 ;; - but with keywords as keys, instead of strings
 ;; - to let us super-easily query the hash-map, using just keywords
-(def earth-alt {:name "Earth"
+(def earth-alt {:pname "Earth"
                 :mass 1
                 :radius 1
                 :moons 1
@@ -195,7 +202,7 @@
 ;;
 ;; What will these return?
 
-(:name earth-alt)
+(:pname earth-alt)
 
 (:mass earth-alt)
 
@@ -210,15 +217,16 @@
 ;; EXERCISE:
 ;;
 ;; What are the other gases, in the atmosphere?
-;; Hint: Remember, we can nest expressions inside expressions.
-
+;; - Hint: Remember, we can nest s-expressions inside s-expressions.
+;; - Replace each 'FIX with the appropriate value or s-expression.
+;;
 ;; ('FIX 'FIX)
 
 
 ;; EXERCISE:
 ;;
 ;; How much argon is present in the atmosphere?
-;; Hint: once again, more nested expressions.
+;; Hint: once again, 'FIX with value(s) or nested s-expression(s).
 
 ;; ('FIX 'FIX)
 
@@ -313,9 +321,10 @@
 ;; Basic Data Modeling:
 
 ;; We rarely use vectors to model objects like the Earth.
-;; A hash-map is almost always the right way to model an object.
-;; the thing we need to query.
-
+;; In Clojure, a hash-map is almost always the best way to model
+;; an object that we need to query.
+;;
+;; But why?
 
 ;; What if we model the earth as a vector, instead of a hash-map?
 (def earth-as-a-vector
@@ -327,18 +336,18 @@
 ;; Now, how do we query Earth?
 
 
-(defn get-earth-name [] ; zero arguments means we don't need to pass it anything
-  (get earth-as-a-vector 0))
+(defn get-earth-name [] ; empty vector means zero arguments
+  (nth earth-as-a-vector 0))
 
-(get-earth-name)
+(get-earth-name) ; call with zero arguments
 
 (defn get-earth-radius []
-  (get earth-as-a-vector 1))
+  (nth earth-as-a-vector 1))
 
 (get-earth-radius)
 
 (defn get-earth-moons []
-  (get earth-as-a-vector 2)) ; Uh, was it 2 or 3?
+  (nth earth-as-a-vector 2)) ; Uh, was it 2 or 3?
 
 (get-earth-moons) ; did this return Mass, or Moons?
 
@@ -346,7 +355,24 @@
 
 
 ;; Further, our custom "getter" functions for Earth's properties,
-;; are useless for other planets we may wish to define.
+;; are practically useless for other planets we may wish to also define
+;; as vectors.
+;;
+;; Why?
+;;
+;; Property positions for other planets may differ from earth.
+;; And in vector look-up, position matters.
+;;
+;; Said another way: "Positional semantics do not scale"
+;;
+;; Consider the function below:
+;;
+(defn get-planet-prop
+  "A function with a dangerous, brittle assumption about
+  planetary properties."
+  [planet-as-vector prop-position]
+  (nth planet-as-vector
+       prop-position))
 
 
 ;; Lesson: Doing More With Less:
@@ -372,14 +398,17 @@
 ;; EXERCISE:
 ;;
 ;; Define another planet `mercury`, using keywords as keys.
+;; - Ensure all keys are keywords
+;; - Ensure braces {} are in the right places, to nest data correctly.
+;;
 ;; Use the information below.
 ;;
 #_(;; FIXME
-   "Mercury"    ; has...
+   pname "Mercury" ; has...
    moons 0
-   mass 0.0553  ; recall we assume Earth mass is 1
-   radius 0.383 ; recall we assume Earth radius is 1
-   atmosphere   ; % of total volume
+   mass 0.0553    ; recall we assume Earth mass is 1
+   radius 0.383   ; recall we assume Earth radius is 1
+   atmosphere     ; % of total volume
       oxygen      42.0
       sodium      29.0
       hydrogen    22.0
@@ -403,10 +432,20 @@
 ;;
 ;; Write a custom function to do a two-level deep query on `mercury`.
 ;; - It should be able to query earth, and earth-alt as well.
-;; Type your solution below:
+;; - name it `get-level-2`
+;;
+;; Fix the function below:
 
+#_(defn get-level-2
+    ['FIX ...]
+    'FIX)
 
+;; Uncomment and evaluate to check you get the correct values
+#_(get-level-2 earth     "atmosphere" "oxygen")
 
+#_(get-level-2 earth-alt :atmosphere :oxygen)
+
+#_(get-level-2 mercury   :atmosphere :oxygen)
 
 
 ;; RECAP:
