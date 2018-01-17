@@ -19,7 +19,7 @@
 
 
 ;; Recall: Our little "helper" function, to check if a planet has moons.
-(defn planet-has-moons?
+(defn planet-with-moons?
   "Given a 'planet' (assume it's a hash-map), return true if
   it has at least one moon."
   [planet]
@@ -35,7 +35,7 @@
 
 ;; But what do we do with a bunch of boolean results?
 
-(map planet-has-moons? planets)
+(map planet-with-moons? planets)
 
 
 ;; More usefully, I would like to know _which_ planets have moons.
@@ -48,22 +48,22 @@
 ;;
 ;; Predict the result of this expression:
 
-(filter planet-has-moons?
+(filter planet-with-moons?
         planets)
 
 
 ;; Can we do the opposite?
 
-(filter (fn [p] (not (planet-has-moons? p)))
+(filter (fn [p] (not (planet-with-moons? p)))
         planets)
 
 
 ;; EXERCISE
 ;;
-;; You can define new "helper" function, in terms of earlier helper
+;; You can define a new "helper" function, in terms of earlier helper
 ;; functions... Fix the function body, and make it work.
 
-(defn planet-without-moon?
+(defn planet-without-moons?
   "Planets without moons are exactly opposite to planets with moons."
   [FIX]
   FIX)
@@ -80,39 +80,32 @@
 ;; Can we write a function to filter planets into two groups?
 ;; - planets with moons, and
 ;; - planets without moons?
-;;
-;; We will probably need to look up the groups separately later.
-;;
-;; So?
-;;
-;; We should model this as a hash-map. Something nice, like this...
-;;
-;; {:planets-with-moons    [planet-X-hash-map p-Y-hash-map ...]
-;;  :planets-without-moons [planet-A-hash-map p-B-hash-map ...]}
-
 
 ;; EXERCISE:
 ;;
-;; Will this work? Why? Take a guess... and then evaluate to check.
-
-{:planets-with-moons    (filter planet-has-moons? planets)
- :planets-without-moons (filter planet-without-moon? planets)}
+;; Will this work? Why?
+;; - Take a guess... and then evaluate to check.
+;;
+{:planets-with-moons    (filter planet-with-moons? planets)
+ :planets-without-moons (filter planet-without-moons? planets)}
 
 
 ;; Note: Do More With Less
 ;;
 ;; - Clojure lets us simply write down the structure of hash-maps,
-;;   even if some values need to be computed.
+;;   even if some values need to be computed. No special constructor
+;;   required.
 ;;
-;; - If an "un-evaluated expression" like (filter ...) exists, and if we
-;;   evaluate the hash-map, Clojure will put the return value of the
-;;   un-evaluated expression in the hash-map, where the expression was.
+;; - If an s-expression like (filter ...) is associated with a key,
+;;   you may imagine that Clojure will replace the s-expression
+;;   with the result of evaluating that expression, if we try to
+;;   evaluate the whole hash-map at one go.
 ;;
-;; By the way it's not just hash-maps, this works too, for
-;; the same reason:
+;; By the way it's not just hash-maps, this works for vectors too,
+;; for the same reason:
 
-[(filter planet-has-moons? planets)
- (filter planet-without-moon? planets)]
+[(filter planet-with-moons?     planets)
+ (filter planet-without-moons?  planets)]
 
 
 ;; EXERCISE:
@@ -130,15 +123,14 @@
 ;; Use `group-planets-by-moons` to group planets.
 ;; Write your solution below:
 
-
+#_('FIX 'FIX)
 
 ;; If you did it right, this is what happened:
 ;;
 ;; - When we called the function with `planets`, it did this:
-;;   - evaluated each filter one by one
+;;   - evaluated each filter expression one by one
 ;;   - put the results in the respective places in the hash-map
 ;;   - returned the whole hash-map
-
 
 
 ;; Now we can further find...
@@ -205,8 +197,11 @@
 ;; `reductions` is a convenience function that helps us visualize
 ;; the "accumulator" at each step of the `reduce` computation:
 
-(reductions + 0 (map :moons planets))
+(reductions + 0 [0 0 1 2]) ; compare with the table
 
+(reductions + 0 (map :moons planets)) ; calculate total number of moons
+
+(reductions + 2 (map :moons planets)) ; accumulator can be any number
 
 
 ;; Lesson-end Exercises:
@@ -224,14 +219,14 @@
 ;; EXERCISE:
 ;;
 ;; Calculate the total mass of all `planets`
-;; Write your solution below:
-
+;; - Hint: this will be a one-liner s-expression
+;; - Write your solution below:
 
 
 ;; EXERCISE:
 ;;
 ;; Count the number of `planets` that have moons.
-;; - Reuse the `planet-has-moons?` function that we already defined.
+;; - Reuse the `planet-with-moons?` function that we already defined.
 ;; - Use the `count` function to find the counts.
 
 (count [42 43 44 45]) ; try this example
@@ -243,7 +238,7 @@
 ;; EXERCISE:
 ;;
 ;; Calculate the total mass of planets having moons.
-;; - Reuse the `planet-has-moons?` function that we already defined.
+;; - Reuse the `planet-with-moons?` function that we already defined.
 
 
 
@@ -283,11 +278,11 @@
 ;; Uncomment and fix:
 #_(defn planetary-stats
     [pred-fn given-planets]
-    ;; `let` is a way to define ("bind") function-local variables.
+    ;; `let` is a way to define ("bind") function-local names to values
     (let [filtered-planets 'FIX]
       {:count 'FIX
-       'FIX1    'FIX
-       'FIX2    'FIX}))
+       :names  'FIX
+       :total-mass  'FIX}))
 
 
 
@@ -309,24 +304,26 @@
 ;; - planets without moons, using `complement`:
 ;;   compare, understand, use:
 
-(planet-has-moons?              {:name "Earth" :moons 1})
+(planet-with-moons?              {:name "Earth" :moons 1})
 
-((complement planet-has-moons?) {:name "Earth" :moons 1})
+((complement planet-with-moons?) {:name "Earth" :moons 1})
 
-;; Type your solution here:
+;; Fix the expression below:
 
-
+#_(planetary-stats
+   'FIX
+   planets)
 
 
 ;; EXERCISE:
 ;;
 ;; Calculate `planetary-stats' for:
 ;;
-;; - planets massier than the earth:
+;; - planets with more mass than the earth:
 
 
 
-;; - planets less massier than the earth, using `comp`:
+;; - planets with less mass than the earth, using `comp`:
 ;;   compare, understand, use:
 #_(massier-than-earth?            {:name "Jupiter" :mass 317.8})
 
@@ -373,8 +370,15 @@
 ;;     total mass
 
 
-;; Write the `more-planetary-stats` function below:
+;; Fix the `more-planetary-stats` function below:
 
+(defn more-planetary-stats
+  [FIX]
+  {:given-planets FIX
+   :with-moons FIX
+   :without-moons FIX
+   :massier-than-earth FIX
+   :less-massy-than-earth FIX})
 
 
 
