@@ -33,6 +33,8 @@
 :a    ; truthy
 "foo" ; truthy
 [7 3] ; truthy
+[]    ; turthy
+""    ; truthy
 
 
 ;; Truthy/Falsey are NOT Boolean
@@ -47,17 +49,18 @@
 (boolean nil) ; coerce nil to `false`
 
 (map boolean
-     [42 :a "foo" [1 2 3 4]]) ; coerce non-nils to `true`
+     [42 :a "foo" [1 2 3 4] [] ""]) ; coerce non-nils to `true`
 
 
-;; However, we normally don't need to coerce booleans, to do branching logic,
-;; as Clojure control structures understand truthy and falsey values too:
+;; However, we need not coerce truthy/falsey to booleans to do
+;; branching logic, as Clojure control structures understand
+;; truthy and falsey values too:
 
 ;; false is, well, false
 
-(if false   ; if     condition
-  :hello    ; "then" expression
-  :bye-bye) ; "else" expression
+(if false   ; if      condition
+  :hello    ; "then"  expression
+  :bye-bye) ; "else"  expression
 
 
 ;; `nil` is falsey
@@ -69,13 +72,24 @@
 
 ;; true is true, and every non-nil thing is truthy
 
-(if true  :hello :bye-bye)
+(if true
+  :hello
+  :bye-bye)
 
-(if "Oi"  :hello :bye-bye)
 
-(if 42    :hello :bye-bye)
+(if "Oi"
+  :hello
+  :bye-bye)
 
-(if [1 2] :hello :bye-bye)
+
+(if 42
+  :hello
+  :bye-bye)
+
+
+(if [1 2]
+  :hello
+  :bye-bye)
 
 
 
@@ -83,15 +97,23 @@
 ;; - when a condition is true, it evaluates the body and
 ;;   returns its value
 ;; - otherwise, it does nothing, and returns `nil`, i.e. _falsey_
+;; - you may think of `when` as half an `if`, that always returns
+;;   `nil` (falsey) when the test expression is false or falsey.
 
 (when 42
   :hello)
 
-(when false :bye-bye)
 
-(when nil :bye-bye)
+(when false
+  :bye-bye)
 
-(when (nil? nil) :bye-bye)
+
+(when nil
+  :bye-bye)
+
+
+(when (nil? nil)
+  :bye-bye)
 
 
 ;; MENTAL EXERCISES
@@ -104,7 +126,9 @@
 ;;
 ;; Predict what will happen...
 
-(map (fn [x] (if x :hi :bye))
+(map (fn [x] (if x
+               :hi
+               :bye))
      [1 2 nil 4 5 nil 7 8])
 
 
@@ -113,7 +137,9 @@
 ;;
 ;; Predict what will happen...
 
-(reduce (fn [acc x] (if x (inc acc) acc))
+(reduce (fn [acc x] (if x
+                      (inc acc)
+                      acc))
         0 ; initial accumulator
         [1 2 nil 4 5 nil 7 8])
 
@@ -134,11 +160,15 @@
 (map    identity
         [1 2 nil 4 5 nil 7 8])
 
-(filter (comp not nil?) ; recall: `comp` composes functions into a pipeline
-        [1 2 nil 4 5 nil 7 8])
-
 (filter identity
-        [1 2 nil 4 5 nil 7 8]) ;; Ha! What happened here?!
+        [1 2 nil 4 5 nil 7 8]) ; Ha! What happened here?!
+
+;; Compare the result of filter identity, with the following:
+;; - And, reason about why the two look alike.
+(filter (comp not nil?)
+        [1 2 nil 4 5 nil 7 8])
+;; Recall: `comp` composes functions into a pipeline
+
 
 
 ;; INTERLUDE...
@@ -180,11 +210,12 @@
 ;; Evil - `even?` cannot handle nothing... so, this fails:
 
 #_(filter even?
-        [1 2 nil 4 5 nil 7 8])
+          [1 2 nil 4 5 nil 7 8])
 
 ;; So... Guard functions like `even?` against the evil of nil
 
-(filter (fn [x] (when x (even? x)))
+(filter (fn [x] (when x
+                  (even? x)))
         [1 2 nil 4 5 nil 7 8])
 
 ;; `fnil` is also handy, to "patch" nil input to a function
@@ -193,7 +224,14 @@
 ((fnil even? 1) nil) ; pass 1 to `even?`, instead of nil
 ((fnil even? 2) nil) ; pass 2 to `even?`, instead of nil
 
-;; Since we want `nil` to be non-even, we can nil-patch `even?` as:
+;; What's happening here?
+;; - `fnil` takes a function f and some "fallback" value x, and returns
+;;    a function that calls f, replacing a nil first argument to f with
+;;    the supplied "fallback" value x.
+
+
+;; Suppose for some strange reason, we want to treat `nil` as non-even.
+;; We can nil-patch `even?` as:
 (filter (fnil even? 1)
         [1 2 nil 4 5 nil 7 8])
 
@@ -209,66 +247,91 @@
 ;;
 ;; - How might someone use `nil` to advantage?
 
-(def planets [{:name "Venus" :moons 0}
-              {:name "Mars" :moons 2}
-              {:name "Jupiter" :moons 69}])
+(def planets [{:pname "Venus" :moons 0}
+              {:pname "Mars" :moons 2}
+              {:pname "Jupiter" :moons 69}])
 
-;; Using `when` ... we might design a function:
 
-(defn moon-or-nothing
+;; Using `when` ...
+;;
+;; We might design a function that sends rockets to all moons of
+;; a planet only when the planet has moons. (Instead of actually
+;; sending rockets, let's just return a hash-map to express this
+;; behaviour.)
+
+
+(defn send-rockets-1
   [planet]
   ;; Recall: we can "let-bind" local variables
   (let [num-moons (:moons planet)]
     (when (> num-moons 0)
-      {:sent-rockets num-moons
-       :to-moons-of (:name planet)})))
+      {:send-rockets num-moons
+       :to-moons-of (:pname planet)})))
 
-(moon-or-nothing {:name "Venus" :moons 0})
+(send-rockets-1 {:pname "Venus" :moons 0})
+(send-rockets-1 {:pname "Mars" :moons 2})
+
+(map send-rockets-1 planets) ; see, nil rockets for Venus
 
 
-;; Later, someone may ask us...
+;; Later, someone may ask us what we did! And, we might design
+;; a function to answer their question:
 (defn good-heavens-what-did-you-do?
   [rocket-info]
   (if rocket-info ; we will treat rocket-info as truthy/falsey
     ;; do/return this if true...
     (format "I sent %d rockets to the moons of %s! Traa la laaa..."
-            (:sent-rockets rocket-info)
+            (:send-rockets rocket-info)
             (:to-moons-of rocket-info))
     ;; do/return this if false...
-    "Nothing."))
+    (format "No rockets sent to %s. Waaah!"
+            (:to-moons-of rocket-info))))
 
 
 ;; And we will answer...
 (map good-heavens-what-did-you-do?
-     (map moon-or-nothing planets))
+     (map send-rockets-1 planets))
 
 
 
-;; But suppose, using `if` ... we design a function:
+;; But suppose, using `if` ...
+;; - we re-design the function like this:
 
-(defn moon-or-bust [planet]
+(defn send-rockets-2 [planet]
   (let [num-moons (:moons planet)]
     (if (> num-moons 0)
-      {:sent-rockets num-moons
-       :to-moons-of (:name planet)}
-      "Bust!")))
+      {:send-rockets num-moons
+       :to-moons-of (:pname planet)}
+      "Do nothing.")))
 
+(send-rockets-2 {:pname "Venus" :moons 0})
+(send-rockets-2 {:pname "Mars" :moons 2})
 
-;; And later, somebody wants to know from us...
+(map send-rockets-2 planets) ; see, truthy output (string) for Venus
 
+;; Now, suppose we use `send-rockets-2`, and later somebody asks us
+;; what we did.
+;; - How do we design a function to produce the same result as we got
+;;   earlier?
+;;
 #_(defn good-heavens-what-did-you-do-again???
-     [rocket-info]
-   ;; Fix to ensure the same output as we produced earlier.
-   (if 'FIX
-     'FIX
-     'FIX))
+    [rocket-info]
+    ;; Fix to ensure the same output as we produced earlier.
+    (if 'FIX
+      'FIX
+      'FIX))
 
 
 ;; We should be able to provide the same answers as before...
 
 #_(map good-heavens-what-did-you-do-again???
-     (map moon-or-bust planets))
+       (map send-rockets-2 planets))
 
+
+;; Lesson:
+;; - Using `nil` this way can reduce the need for writing explicit
+;;   `if` conditionals. This give us more generality, because now
+;;   we don't have to keep thinking of specialized literal values.
 
 
 ;; `case` and `cond`
@@ -308,6 +371,12 @@
 ;; (Hint: is `:else` an expression or a value?)
 
 
+
+
+;; And now for something completely different.
+
+
+
 ;; Clojure hash-sets
 ;; - can be used as predicates (and often are used this way)
 
@@ -327,18 +396,18 @@
 (def colonize-it? #{"Earth" "Mars"})
 
 
-((comp colonize-it? :name) {:name "Earth"})
+((comp colonize-it? :pname) {:pname "Earth"})
 
 
-((comp colonize-it? :name) {:name "Venus"})
+((comp colonize-it? :pname) {:pname "Venus"})
 
 
-(filter (comp colonize-it? :name)
-        [{:name "Mercury"}
-         {:name "Venus"}
-         {:name "Earth"}
-         {:name "Mars"}
-         {:name "Jupiter"}])
+(filter (comp colonize-it? :pname)
+        [{:pname "Mercury"}
+         {:pname "Venus"}
+         {:pname "Earth"}
+         {:pname "Mars"}
+         {:pname "Jupiter"}])
 
 
 
@@ -350,29 +419,43 @@
 
 
 (def target-planets
-  [{:name "Mercury"
-    :mass 0.055 :radius 0.383 :moons 0
+  [{:pname "Mercury"
+    :mass 0.055
+    :radius 0.383
+    :moons 0
     :atmosphere {}} ; empty hash map means no atmosphere
 
-   {:name "Venus"
-    :mass 0.815 :radius 0.949 :moons 0
+   {:pname "Venus"
+    :mass 0.815
+    :radius 0.949
+    :moons 0
     :atmosphere {:carbon-dioxide 96.45 :nitrogen 3.45
                  :sulphur-dioxide 0.015 :traces 0.095}}
 
-   {:name "Earth" :mass 1 :radius 1 :moons 1
+   {:pname "Earth"
+    :mass 1
+    :radius 1
+    :moons 1
     :atmosphere {:nitrogen 78.08 :oxygen 20.95 :carbon-dioxide 0.4
                  :water-vapour 0.10 :argon 0.33 :traces 0.14}}
 
-   {:name "Mars" :mass 0.107 :radius 0.532 :moons 2
+   {:pname "Mars"
+    :mass 0.107
+    :radius 0.532
+    :moons 2
     :atmosphere {:carbon-dioxide 95.97 :argon 1.93 :nitrogen 1.89
                  :oxygen 0.146 :carbon-monoxide 0.056 :traces 0.008}}
 
-   {:name "Chlorine Planet"
-    :mass 2.5 :radius 1.3 :moons 4
+   {:pname "Chlorine Planet"
+    :mass 2.5
+    :radius 1.3
+    :moons 4
     :atmosphere {:chlorine 100.0}}
 
-   {:name "Insane Planet"
-    :mass 4.2 :radius 1.42 :moons 42
+   {:pname "Insane Planet"
+    :mass 4.2
+    :radius 1.42
+    :moons 42
     :atmosphere {:sulphur-dioxide 80.0 :carbon-monoxide 10.0
                  :chlorine 5.0 :nitrogen 5.0}}])
 
@@ -382,6 +465,7 @@
 ;; Define a set of `poison-gases`
 ;; - Let's say :chlorine, :sulphur-dioxide, :carbon-monoxide are poisons
 
+(def poison-gases 'FIX)
 
 ;; Is the gas poisonous?
 #_(poison-gases :oxygen)
@@ -408,8 +492,8 @@
   'FIX)
 
 
-#_(map :name
-     (filter carbon-dioxide? target-planets))
+#_(map :pname
+       (filter carbon-dioxide? target-planets))
 
 ;; EXERCISE:
 ;;
@@ -442,44 +526,45 @@
 ;;
 ;; Call it `air-too-poisonous?`.
 ;;
-;; Use the following ideas:
+;; Use the following five ideas:
 ;;
-;; - The `poison-gases` set we defined previously can be used
-;;   as a truthy/falsey predicate:
-#_(poison-gases :oxygen)
-#_(poison-gases :chlorine)
+;; [1] The `poison-gases` set we defined previously can be used
+;;   as a truthy/falsey predicate. Check:
+(poison-gases :oxygen)
+(poison-gases :chlorine)
 ;;
-;; - A hash-map is a _collection_ of key-value _pairs_ / "kv" tuples.
+;; [2] A hash-map is a _collection_ of key-value _pairs_ / "kv" tuples
 (map identity {:a 1 :b 2 :c 3}) ; see?!
 ;;
-;; - Given a `kv` pair from a hash-map, (first kv) will always be
-;;   the key part, and (second kv) will always be the value part.
+;; [3] Given a `kv` pair from a hash-map, (first kv) will always be
+;;     the key part, and (second kv) will always be the value part.
 (map first    {:a 1 :b 2 :c 3})
 (map second   {:a 1 :b 2 :c 3})
 ;;
-;; - So, we can do something like this:
+;; [4] So, we can do something like this:
 (filter (fn [kv]
-          (when (#{:a :b :c} (first kv))
+          (when (#{:a :b :c}
+                 (first kv))
             (even? (second kv))))
-        {:a 1 :b 2 :c 4 :d 8})
+        {:a 1 :b 2 :c 4 :d 8 :e 10 :f 12})
 ;;
-;; - Finally, recall that we can test for empty? collections:
+;; [5] Finally, recall that we can test for empty? collections:
 (empty? [])
 (not (empty? []))
 ;;
 ;;
-;; Now, combine these ideas to fix the function below:
+;; Now, combine ideas [1] to [5] to fix the function below:
 
 
 (defn air-too-poisonous?
   [planet]
   (let [atmosphere 'FIX]
-    ;; Repurpose, and fix the logic above to do the needful.
+    ;; Re-purpose, and fix the logic above to do the needful.
     'FIX))
 
 
 ;; Quick-n-dirty test
-#_(map :name
+#_(map :pname
        (filter air-too-poisonous? target-planets))
 
 
@@ -490,8 +575,9 @@
 
 
 (defn planet-has-some-good-conds?
-  "Given a collection of functions that check a planet for 'good conditions',
-  return true if a given planet satisfies at least one 'good condition'."
+  "Given a collection of functions that check a planet for
+  'good conditions', return true if a given planet satisfies at least
+  one 'good condition'."
   [good-condition-fns planet]
   ;;`some` takes a predicate and a collection, and returns true
   ;; as soon as it finds an item that returns true for the predicate.
@@ -504,8 +590,8 @@
 
 #_(filter (fn [planet]
             (planet-has-some-good-conds?
-              [earth? carbon-dioxide?]
-              planet))
+             [earth? carbon-dioxide?]
+             planet))
           target-planets)
 
 ;; OR we could use `partial`:
@@ -546,8 +632,8 @@
           target-planets)
 
 #_(filter (complement ; Aha! Remember `complement`?
-            (partial planet-has-no-bad-conds?
-                     [air-too-poisonous? no-atmosphere?]))
+           (partial planet-has-no-bad-conds?
+                    [air-too-poisonous? no-atmosphere?]))
           target-planets)
 
 
@@ -559,25 +645,30 @@
 ;;
 ;; Define a function that checks true/truthy for this, given
 ;; good-condition-fns, bad-condition-fns, and a planet.
+;;
+;; Re-use:
+;; - `planet-has-some-good-conds?`, and
+;; - `planet-has-no-bad-conds?`
 
 (defn habitable-planet?
-  [] ; <- Fix args
+  [good-condition-fns FIX1 FIX2] ; <- Fix args
   'FIX)
 
 
 ;; EXERCISE:
 ;;
-;; And finally, write a function that groups a given collection of
-;; planets into :habitable, and :inhospitable.
+;; And finally, re-use anything you can from the discussion so far,
+;; to write a function that groups a given collection of planets into
+;; :habitable, and :inhospitable.
 ;;
 ;; The function must internally know what functions will check for
-;; for good conditions, what functions check for bad conditions.
+;; good conditions, and what functions check for bad conditions.
 ;;
 ;; - Assume it's good to be earth, OR to have carbon-dioxide in the air.
 ;; - Assume it's bad to have no atmosphere, or to have poison gases.
 ;;
 ;; Hint: here's your chance to make good use of `let`, `partial`,
-;; and `complement`.
+;; and `complement`. And to cleanly return the grouping as a hash-map.
 
 (defn group-by-habitable
   [FIX]
@@ -588,7 +679,7 @@
 (defn colonize-habitable-planets!
   [planets]
   (let [send-rockets! (fn [p]
-                        (str "Send rockets to " (:name p) " now!"))]
+                        (str "Send rockets to " (:pname p) " now!"))]
     ((comp (partial map send-rockets!)
            :habitable
            group-by-habitable)
@@ -628,13 +719,16 @@
 ;;   - case
 ;;   - cond
 ;;   - not
-;; - "Higher Order" Functions, for convenience:
-;;   (HOFs are functions that take functions as arguments
-;;    and/or return functions.)
-;;   - comp
-;;   - complement
-;;   - partial
-;;   - fnil
+;; - "Higher Order" Functions (HOFs), for convenience.  HOFs are
+;;    functions that either take functions as arguments, or
+;;    return functions as results, or do both, i.e. take functions
+;;    as arguments _and_ return functions as results.
+;;   - We introduced these HOFs:
+;;     - comp
+;;     - complement
+;;     - partial
+;;     - fnil
+;;     - And you'll see how identity, map, reduce, filter are HOFs too!
 ;;
 ;; Core Clojure ideas:
 ;;
