@@ -3,6 +3,7 @@
 
 ;; Ex05: Lesson Goals
 ;; - This section is more conceptual, than exercise-oriented.
+;;
 ;; - Set you up with some important ideas, which we will use heavily
 ;;   in the final section (and in all our Clojure programs)
 ;;   - All values are immutable by default (and we like it this way)
@@ -11,7 +12,9 @@
 ;;   - What are "pure functions"?
 ;;   - Convenient syntax for functions with multiple arities,
 ;;     variable arities, and hash-maps or vectors as arguments.
-
+;;
+;; - Don't forget to evaluate all s-expressions that interest you,
+;;   and also feel free to write and play around with your own ones.
 
 
 
@@ -44,14 +47,17 @@ pi ; evaluate to confirm
 ;;
 ;; - We can "associate" new key-vals into an existing map
 (assoc {:a 1}
-  :b 2
-  :c 3)
+       :b 2
+       :c 3)
 ;;
 ;; - With assoc, we can also update existing key-value pairs
-(assoc {:a 1 :b 2} :b 99)
+(assoc {:a 1 :b 2}
+       :b 99)
 ;;
 ;; - And, finally, we can "dissociate" existing key-vals
-(dissoc {:a 1 :b 2 :c 3} :b :c)
+(dissoc {:a 1 :b 2 :c 3}
+        :b
+        :c)
 
 
 ;; - So suppose we define...
@@ -118,7 +124,7 @@ planets ; confirm by checking the value of this
 ;; ALL values are by definition immutable. 3.141 will always be 3.141
 ;; for ever and ever, till the end of time.
 ;;
-;; So, we use `def` to give globally-usable names to _values_ ---
+;; So, we use `def` to give globally-usable names to _values_, i.e.
 ;; immutable things that we can easily refer to again and again,
 ;; throughout our program.
 ;;
@@ -144,8 +150,11 @@ planets ; confirm by checking the value of this
 ;;   until the end of time. It _must_ be immutable.
 ;; - And oh, we also need to reuse this idea, so would you please
 ;;   give it the name `same-same`?
+;; - Imagine the horror of someone or something being allowed to
+;;   mutate the definition of your functions from underneath you,
+;;   while your program is running!
 
-;; And actually, `defn` is just a convenience wrapper over `def`,
+;; As it happens `defn` is really just a convenience wrapper over `def`,
 ;; because we can't live without defining functions, in Clojure-land.
 
 (macroexpand '(defn same [x] x)) ; yes, it is
@@ -338,16 +347,15 @@ planets ; confirm by checking the value of this
 
 ;; Suppose a function expects a two-item sequence, we can...
 
-(defn print-tuple-in-strange-ways
+(defn destructure-tuple-in-strange-ways
   [[a b]] ; expects a two-item vector
-  (println "-----------------")
-  (println b)
-  (println a)
-  (println "abba " [a b b a])
-  (println "hash b a " {:b b :a a})
-  (println b a a b a a " black sheep"))
+  [[b]
+   [a]
+   ["abba" [a b b a]]
+   {:b b :a a}
+   (str "baa " b a a " black sheep.")])
 
-(print-tuple-in-strange-ways [1 2])
+(destructure-tuple-in-strange-ways [1 2])
 
 ;; It's like visually matching shapes to shapes.
 ;; - [1 2] ; structure 1 and 2 in a vector
@@ -375,10 +383,10 @@ planets ; confirm by checking the value of this
 (reduce (fn [acc-map kv-pair]
           (assoc acc-map
                  (first kv-pair) (second kv-pair)))
-        {:a 42}
-        {:b 0 :c 7 :d 10})
+        {:a 42} ; acc-map
+        {:b 0 :c 7 :d 10}) ; a hash-map is a collection of kv pairs
 
-(reduce (fn [acc-map [k v]]
+(reduce (fn [acc-map [k v]] ; second arg is a tuple, so just destructure
           (assoc acc-map k v))
         {:a 42}
         {:b 0 :c 7 :d 10})
