@@ -1,9 +1,5 @@
 (ns clojure-by-example.ex06-full-functional-firepower)
 
-
-;; WORK IN PROGRESS
-
-
 ;; Ex06: Lesson Goals
 ;; - This is more of a code-reading section, designed to:
 ;;
@@ -289,4 +285,11 @@
 ;;   This makes it much easier to reason about most of our program,
 ;;   and to test it.
 ;;
-;; - TBD...
+;; - We could have written much more concise and well-abstracted
+;;   code, by using more Clojure features and utilities. However
+;;   this is not bad at all, and the point was to show we could
+;;   get this far quite easily, just with a handful of moving parts.
+;;
+;; - The next section will show you how to turn this file into
+;;   a complete project, that you can build and run as a
+;;   standalone executable.
