@@ -104,60 +104,84 @@ planets ; confirm by checking the value of this
 
 
 ;; On `def`:
-
-;; DO NOT use `def` to _emulate_ mutation like this:
-
-(def am-i-mutable? 3.141)
-
-#_(def am-i-mutable? 42)
-
-#_(def am-i-mutable? "LoL, No!")
-
-;; This is _not_ actually mutation.
 ;;
-;; It's repeated top-level _re-definition_ of `am-i-mutable?`.
+;; `def` creates a mutable reference. Technically, it is a way
+;; "to maintain a persistent reference to a changing value".
 ;;
-;; At each re-definition, `am-i-mutable` effectively "becomes"
-;; the new _immutable_ value.
+;; Note the difference:
+;; - We can mutate the _reference_, but not the value.
+;; - Values are by definition immutable.
 ;;
-;; "Mutable" value is actually an oxymoron. Recall, we said that
-;; ALL values are by definition immutable. 3.141 will always be 3.141
-;; for ever and ever, till the end of time.
-;;
-;; So, we use `def` to give globally-usable names to _values_, i.e.
-;; immutable things that we can easily refer to again and again,
-;; throughout our program.
-;;
-;; What's the point?
+;; Warning:
+;; - DO NOT use `def` to _emulate_ mutation.
+
+;; Firstly:
+;; - Because you'll cause errors of understanding:
+
+(def weird-pi 3.141) ; bind weird-pi to 3.141
+
+(def other-pi weird-pi) ; bind other-pi to the value of weird-pi,
+                        ; which at this point is 3.141
+
+(def weird-pi 42) ; re-bind weird-pi to some other value
+
+weird-pi ; changes to 42
+
+other-pi ; what should this be?
+
+;; See the problem?
+;; - We re-bound weird-pi to a new value, but other-pi's binding
+;;   remained constant.
+;; - Spread enough re-definitions across your program, and you'll be
+;;   in trouble; unable to reason about who's using what version
+;;   of the binding.
+
+
+;; Secondly:
+;; - It's dangerous because re-defining a var alters it globally.
+;; - Why so dangerous?
 ;;
 ;; Well, remember functions are values?
 
 (fn [x] x) ; is a value (which shall remain anonymous)
 
-
 (defn same
   [x]
-  x) ; `same` is the name of a function. Therefore `same` names a value.
+  x) ; `same` is the name of a function.
+     ; Therefore `same` names a value.
 
-
-;; So what if we...
+;; So what if we:
 (def same-same
   (fn [x] x)) ; hah!
 
-;; That is to say:
-;; - (fn [x] x) means "return the given value, unchanged", and...
-;; - It _must_ mean _exactly_ this for ever and ever,
-;;   until the end of time. It _must_ be immutable.
-;; - And oh, we also need to reuse this idea, so would you please
-;;   give it the name `same-same`?
-;; - Imagine the horror of someone or something being allowed to
-;;   mutate the definition of your functions from underneath you,
-;;   while your program is running!
-
-;; As it happens `defn` is really just a convenience wrapper over `def`,
-;; because we can't live without defining functions, in Clojure-land.
+;; As it happens:
+;; - `defn` is really just a convenience wrapper over `def`.
+;; - Because we can't live without defining functions, in Clojure-land
 
 (macroexpand '(defn same [x] x)) ; yes, it is
+
+;; So, truthfully:
+;; - `same` and `same-same` are mutable references to immutable
+;;   function definitions.
+;;
+;; Now:
+;; - This mutable binding is very useful during development.
+;; - It lets us interactively improve-and-rebind functions bit by bit.
+;; - Stay in "flow".
+;;
+;; But:
+;; - Imagine the horror of someone or something mutating the definition
+;;   of your functions from under you, while your program is running!
+;;
+;; Yet:
+;; - In extremely rare cases, the ability to re-define things in a
+;;   live production system can be incredibly useful. Read the
+;;   paragraph starting with "The Remote Agent software" on this page:
+;;   http://flownet.com/gat/jpl-lisp.html
+;;
+;; Still:
+;; - Don't try this in production, unless you really really really
+;;   know what your are doing.
 
 
 
@@ -330,7 +354,7 @@ planets ; confirm by checking the value of this
 ;; Multiple _and_ Variable arities, combined
 ;; - Guess what + actually is inside?
 ;;
-(clojure.repl/source +) ; evaluate, check the REPL/LightTable console
+#_(clojure.repl/source +) ; evaluate, check the REPL/LightTable console
 ;;
 ;; We can implement each arity as a special case, to compute results
 ;; as optimally as possible.
