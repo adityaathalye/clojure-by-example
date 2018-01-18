@@ -3,15 +3,11 @@
             [clojure.string :as cs]
             [clojure.inspector :as inspect]))
 
-(def nasa_fact_sheets_dir
-  "resources/nasa_fact_sheets/")
-
 (def planets-to-earth-ratios-table
   {:table-name :planet-to-earth-ratios
-   :table-data-file (str nasa_fact_sheets_dir
-                         "planetary_ratios_to_earth.html")
+   :table-data-file "https://nssdc.gsfc.nasa.gov/planetary/factsheet/"
    :num-cols 10
-   :num-rows 18
+   :num-rows 20
    :rows-label-path [:table :tr [:td html/first-child] :a]
    :cols-label-path [:table [:tr html/first-child] :td :a]
    :stats-path [:table :tr (html/attr= :align "center")]})
@@ -19,8 +15,7 @@
 
 (def small-worlds-table
   {:table-name :small-worlds
-   :table-data-file (str nasa_fact_sheets_dir
-                         "solar_system_small_worlds_fact_sheet.html")
+   :table-data-file "https://nssdc.gsfc.nasa.gov/planetary/factsheet/galileanfact_table.html"
    ;; Of 12 cols, 11 have data, one is empty and must be removed
    ;; prior to processing.
    :num-cols 11
@@ -32,10 +27,10 @@
 
 (defn file->html-resource
   "Given a path to a file, produce an Enlive 'html resource'."
-  [file]
+  [file-or-url]
   (html/html-resource
    (java.io.StringReader.
-    (slurp file))))
+    (slurp file-or-url))))
 
 
 (comment
@@ -166,9 +161,7 @@
   "The matrix must be a vector of vectors, where all nested vectors
   have the same number of items. "
   [matrix]
-  (let [cols (count (first matrix))]
-    (map (fn [col] (map #(nth % col) matrix))
-         (range cols))))
+  (apply map vector matrix))
 
 
 (defn planet-properties
