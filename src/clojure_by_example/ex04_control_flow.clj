@@ -284,8 +284,7 @@
             (:send-rockets rocket-info)
             (:to-moons-of rocket-info))
     ;; do/return this if false...
-    (format "No rockets sent to %s. Waaah!"
-            (:to-moons-of rocket-info))))
+    "No rockets sent. Waaah!"))
 
 
 ;; And we will answer...
