@@ -164,7 +164,7 @@
         [1 2 nil 4 5 nil 7 8]) ; Ha! What happened here?!
 
 ;; Compare the result of filter identity, with the following:
-;; - And, reason about why the two look alike.
+;; - And, reason about why they produce the same results.
 (filter (comp not nil?)
         [1 2 nil 4 5 nil 7 8])
 ;; Recall: `comp` composes functions into a pipeline
@@ -313,24 +313,30 @@
 ;; - How do we design a function to produce the same result as we got
 ;;   earlier?
 ;;
-#_(defn good-heavens-what-did-you-do-again???
-    [rocket-info]
-    ;; Fix to ensure the same output as we produced earlier.
-    (if 'FIX
-      'FIX
-      'FIX))
+(defn good-heavens-what-did-you-do-again???
+  [rocket-info]
+  ;; Fix to ensure the same output as we produced earlier.
+  (if (= rocket-info "Do nothing.")
+    "No rockets sent. Waaah!"
+    (format "I sent %d rockets to the moons of %s! Traa la laaa..."
+            (:send-rockets rocket-info)
+            (:to-moons-of rocket-info))))
 
 
 ;; We should be able to provide the same answers as before...
 
-#_(map good-heavens-what-did-you-do-again???
-       (map send-rockets-2 planets))
+(= (map good-heavens-what-did-you-do-again???
+        (map send-rockets-2 planets))
+
+   (map good-heavens-what-did-you-do?
+        (map send-rockets-1 planets)))
 
 
 ;; Lesson:
 ;; - Using `nil` this way can reduce the need for writing explicit
 ;;   `if` conditionals. This give us more generality, because now
 ;;   we don't have to keep thinking of specialized literal values.
+
 
 
 ;; `case` and `cond`
@@ -464,11 +470,13 @@
 ;; Define a set of `poison-gases`
 ;; - Let's say :chlorine, :sulphur-dioxide, :carbon-monoxide are poisons
 
-(def poison-gases 'FIX)
+(def poison-gases #{:chlorine
+                    :sulphur-dioxide
+                    :carbon-monoxide})
 
 ;; Is the gas poisonous?
-#_(poison-gases :oxygen)
-#_(poison-gases :chlorine)
+(poison-gases :oxygen)
+(poison-gases :chlorine)
 
 
 ;; EXERCISE:
@@ -478,7 +486,8 @@
 
 (defn earth?
   [planet]
-  'FIX)
+  (= (:name planet)
+     "Earth"))
 
 
 ;; EXERCISE:
@@ -488,11 +497,16 @@
 
 (defn carbon-dioxide?
   [planet]
-  'FIX)
+  ((fnil > 0) ; ensure false, when CO2 is nil
+   (:carbon-dioxide (:atmosphere planet))
+   0.1))
 
+;; Check:
+(map carbon-dioxide?
+     target-planets)
 
-#_(map :pname
-       (filter carbon-dioxide? target-planets))
+(map :pname
+     (filter carbon-dioxide? target-planets))
 
 ;; EXERCISE:
 ;;
@@ -509,10 +523,12 @@
 ;;
 ;; Type your solution below
 
-
+(defn no-atmosphere?
+  [planet]
+  (empty? (:atmosphere planet)))
 
 ;; Quick-n-dirty test
-#_(filter no-atmosphere? target-planets)
+(filter no-atmosphere? target-planets)
 
 
 
@@ -557,14 +573,17 @@
 
 (defn air-too-poisonous?
   [planet]
-  (let [atmosphere 'FIX]
+  (let [atmosphere (:atmosphere planet)]
     ;; Re-purpose, and fix the logic above to do the needful.
-    'FIX))
+    (not (empty? (filter (fn [kv]
+                           (when (poison-gases (first kv))
+                             (> (second kv) 1.0)))
+                         atmosphere)))))
 
 
 ;; Quick-n-dirty test
-#_(map :pname
-       (filter air-too-poisonous? target-planets))
+(map :pname
+     (filter air-too-poisonous? target-planets))
 
 
 
@@ -587,33 +606,36 @@
 ;; - Let's say it's good to be Earth (yay), and
 ;; - It's good to have carbon dioxide in the atmosphere.
 
-#_(filter (fn [planet]
-            (planet-has-some-good-conds?
-             [earth? carbon-dioxide?]
-             planet))
-          target-planets)
+(map :pname
+     (filter (fn [planet]
+               (planet-has-some-good-conds?
+                [earth? carbon-dioxide?]
+                planet))
+             target-planets))
 
 ;; OR we could use `partial`:
 
-#_(filter (partial planet-has-some-good-conds?
-                   [earth? carbon-dioxide?])
-          target-planets)
+(map :pname
+     (filter (partial planet-has-some-good-conds?
+                      [earth? carbon-dioxide?])
+             target-planets))
 
 ;; What does `partial` do?
 ;; - Retrieve documentation for `partial` using `clojure.repl/doc`.
 ;;   (More on "REPL" utilities later.)
 
-(clojure.repl/doc partial) ; evaluate and check the console/repl window
+#_(clojure.repl/doc partial) ; evaluate & check the console/repl window
 
 ;; Then fix these to make them work:
 
-#_((partial (fn [a b c] (+ a b c))
-            1)
-   'FIX 'FIX)
+((partial (fn [a b c] (+ a b c))
+          1)
+ 2 3)
 
-#_((partial (fn [a b c] (+ a b c))
-            1 2)
-   'FIX)
+((partial (fn [a b c] (+ a b c))
+          1
+          2)
+ 3)
 
 
 ;; EXERCISE:
@@ -623,17 +645,22 @@
 
 (defn planet-has-no-bad-conds?
   [bad-condition-fns planet]
-  'FIX)
+  ;; Compare with 'planet-has-some-good-conds?' we defined earlier
+  (not
+   (some (fn [bad-cond?] (bad-cond? planet))
+         bad-condition-fns)))
 
 ;; Quick-n-dirty test:
-#_(filter (partial planet-has-no-bad-conds?
-                   [air-too-poisonous? no-atmosphere?])
-          target-planets)
+(map :pname
+     (filter (partial planet-has-no-bad-conds?
+                      [air-too-poisonous? no-atmosphere?])
+             target-planets))
 
-#_(filter (complement ; Aha! Remember `complement`?
-           (partial planet-has-no-bad-conds?
-                    [air-too-poisonous? no-atmosphere?]))
-          target-planets)
+(map :pname
+     (filter (complement ; Aha! Remember `complement`?
+              (partial planet-has-no-bad-conds?
+                       [air-too-poisonous? no-atmosphere?]))
+             target-planets))
 
 
 
@@ -650,9 +677,18 @@
 ;; - `planet-has-no-bad-conds?`
 
 (defn habitable-planet?
-  [good-condition-fns FIX1 FIX2] ; <- Fix args
-  'FIX)
+  [good-condition-fns bad-condition-fns planet] ; <- Fix args
+  (and (planet-has-some-good-conds? good-condition-fns
+                                    planet)
+       (planet-has-no-bad-conds? bad-condition-fns
+                                 planet)))
 
+;; Quick and dirty check
+(map :pname
+     (filter (partial habitable-planet?
+                      [earth? carbon-dioxide?]
+                      [air-too-poisonous? no-atmosphere?])
+             target-planets))
 
 ;; EXERCISE:
 ;;
@@ -670,8 +706,14 @@
 ;; and `complement`. And to cleanly return the grouping as a hash-map.
 
 (defn group-by-habitable
-  [FIX]
-  'FIX)
+  [planets]
+  (let [good-conds [earth? carbon-dioxide?]
+        bad-conds  [air-too-poisonous? no-atmosphere?]
+        habitable? (partial habitable-planet?
+                            good-conds
+                            bad-conds)]
+    {:habitable    (filter habitable? planets)
+     :inhospitable (filter (complement habitable?) planets)}))
 
 
 ;; Quick-n-dirty test:
@@ -685,7 +727,7 @@
      planets)))
 
 
-#_(colonize-habitable-planets! target-planets)
+(colonize-habitable-planets! target-planets)
 
 
 
