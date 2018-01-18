@@ -1,7 +1,5 @@
 (ns clojure-by-example.utils.ex07-boldly-go)
 
-;; WORK IN PROGRESS
-
 
 ;; EX07: Lesson Goals
 ;;
