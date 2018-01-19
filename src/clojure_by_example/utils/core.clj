@@ -3,6 +3,20 @@
             [clojure.string :as cs]
             [clojure.inspector :as inspect]))
 
+;; Warning:
+;; Code here may not be "professional" grade.
+;;
+;; This is just some fun messing around with some planetary data
+;; published by NASA.
+;;
+;; Important:
+;; Be kind to their servers, if you start tinkering with this code.
+;;
+;; First download a copy of the HTML pages to local disk,
+;; and replace the URL with the absolute path to the file on disk.
+;; Everything else should work the same.
+
+
 (def planets-to-earth-ratios-table
   {:table-name :planet-to-earth-ratios
    :table-data-file "https://nssdc.gsfc.nasa.gov/planetary/factsheet/"
