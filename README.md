@@ -14,7 +14,7 @@ What could one do with just _little_ bit of Clojure?
 ## Contributions
   - If you find bugs or errors, please send a PR (but please
     don't change the course structure or pedagogy).
- 
+
 ## Workshop Goals
   - Acquire a "feel" of Clojure, for further self-study/exploration.
   - Learn how Clojurists usually think with Clojure to solve problems.
@@ -28,7 +28,7 @@ What could one do with just _little_ bit of Clojure?
   - Devolve into language wars, editor wars, syntax wars, type wars...
     (Life's too short, people.)
   - Focus too much on tooling or operational things. (At least not 
-    while there's fun to be had!) 
+    while there's fun to be had!)
 
 
 # Suggested learning mindset
@@ -68,22 +68,66 @@ Notes:
 
 Follow [Leiningen setup instructions here](https://leiningen.org/).
 
+### Fire up a REPL
+
+  - Clone this project
+  - Open your terminal, and do the following.
+  - `cd` into this project's root directory
+  - Use `lein repl` command to start a REPL with Leiningen.
+  - Wait for it... the REPL will start and print out a message with some
+    useful information
+  - Locate the `port` and `host` information in the message. We will need this information soon.
+
 Note:
   
   - [Boot](http://boot-clj.com/) should be fine too, but we have not tested this project with it.
 
 
-## Code Editor
+## Code Editor and Tooling
 
 Set up an editor and figure out how to evaluate Clojure code with it.
 
-If you aren't opinionated about your Editor, yet:
+### LightTable
 
-  - [This slick Atom setup will suffice for this workshop.](https://medium.com/@jacekschae/slick-clojure-editor-setup-with-atom-a3c1b528b722)
+We used LightTable for our workshop. We suggest you do so too, unless of course, you have already set up your favourite editor for Clojure development. Avoid [bikeshedding](http://catb.org/jargon/html/B/bikeshedding.html) editors. Just complete the workshop first!
 
-If you wish to use your favourite editor, you may find instructions
-at one of these pages. But there are only so many choices. Ultimately,
-you must pick your poison and run with it:
+  - You may install LightTable from the [official website](http://lighttable.com/).
+  - But you must have Java 8. LightTable breaks with Java 9.
+  - On Mac OS, you may have to allow running the app in your security preferences to be able to open it.
+
+Once installed:
+
+  - Use LightTable's file menu to open this project.
+  - In the left pane, navigate down to the first file `ex00...`, under the `src` folder.
+  - Under `View` menu, click `Connections`. A right pane should open.
+  - Under `Add Connection`, click `Clojure (remote REPL)` and complete the port number. Recall host:port information was printed to the terminal when you fired up a REPL in the previous section.
+  - In the `ex00..` file, scroll down a little, till you see `(+ 1 2)`.
+  - Place your cursor after the closing parenthesis `)` and hit Ctrl+Enter (Win/Linux), or Cmd+Enter (Mac).
+  - You should see `3` appear in-line. This means you successfully connected and evaluated an expression.
+  - Now you may start from the top of ex00 and work through the material.
+
+Also keep [LightTable's documentation](http://docs.lighttable.com/tutorials/full/) handy in case you need editor help, as you solve the workshop material.
+
+
+Optionally, add Parinfer for easier editing:
+
+  - In LightTable, go to View -> Plugin Manager and search for "parinfer".
+  - Install the Parinfer plugin by Maurício Szabo.
+  - Parinfer is an editing system for Clojure that makes it easy for you to move Clojure code around without unbalancing parentheses.
+  - We recommend going through the [Parinfer documentation here](https://shaunlebron.github.io/parinfer/). But don't get stuck there, just keep it handy.
+
+
+### Alternative Starter Kits:
+
+If you can't use LightTable for some reason (like can't downgrade to Java 8 from Java 9). You may try one of these. Although we haven't tested with these setups, the workshop material should work fine.
+
+  - A [snazzy setup with Atom](https://medium.com/@jacekschae/slick-clojure-editor-setup-with-atom-a3c1b528b722).
+  - Brave Clojure walks you through [a basic Emacs setup for learning Clojure](https://www.braveclojure.com/basic-emacs/).
+
+
+### Your favourite editor:
+
+You may find instructions for your favourite editor at one of these pages. But there are only so many choices. Ultimately, you must pick your poison and run with it:
 
   - ["IDEs and Editors" at dev.clojure.org](https://dev.clojure.org/display/doc/IDEs+and+Editors)
   - ["Essentials" at clojure-doc.org](http://clojure-doc.org/articles/content.html#essentials)
