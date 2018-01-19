@@ -17,5 +17,10 @@ All notable changes to this project will be documented in this file. This change
 ### Fixed
 - Fixed documentation, examples etc. based on workshop experience.
 
-[Unreleased]: https://github.com/inclojure-org/clojure-by-example/commit/b27d7f82570a51121ee39fda5db004e3b057292f
+## [Unreleased] - 2018-01-19
+### Fixed
+- Expanded setup in Readme to help more with editors and configurations.
+- Fixed project.clj to reflect the updated license
+
+[Unreleased]: https://github.com/inclojure-org/clojure-by-example/commit/035aa1e7f9c92ae04f639862e71b7148ac58864f
 
