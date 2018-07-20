@@ -1,6 +1,6 @@
 # Clojure By Example
 
-What could one do with just _little_ bit of Clojure?
+What could one do with just a _little_ bit of Clojure?
 
 ## Intended usage
   - Support a 1-day guided workshop for programmers new to Clojure (not absolute programming beginners).
@@ -27,7 +27,7 @@ What could one do with just _little_ bit of Clojure?
   - Try to fully cover Clojure primitives/features. (That's homework!)
   - Devolve into language wars, editor wars, syntax wars, type wars...
     (Life's too short, people.)
-  - Focus too much on tooling or operational things. (At least not 
+  - Focus too much on tooling or operational things. (At least not
     while there's fun to be had!)
 
 
@@ -35,7 +35,7 @@ What could one do with just _little_ bit of Clojure?
   - Think of this as an exercise in "constrained creativity".
   - Ignore details, achieve much with as little know-how as possible.
   - Focus on what things do; not what they are, or why they are.
-  - Inform your _intuition for doing things_, and then use that to 
+  - Inform your _intuition for doing things_, and then use that to
     dive deeper into all the juicy details at your own pace, later.
 
 Take what is useful, discard the rest.
@@ -43,19 +43,19 @@ Take what is useful, discard the rest.
 
 # Setup Instructions
 
-It's a liiitle bit of work. But not too bad. 
+It's a liiitle bit of work. But not too bad.
 
-Just do the follwing one by one, and you should be fine.
+Just do the following one by one, and you should be fine.
 
 ## Java 8
 
 You will need Java to work with this Clojure workshop content.
 
-First, make sure you have Java 8. 
+First, make sure you have Java 8.
 
-  - Run `java -version` in your terminal. 
-  - If Java is not installed, please [download and install Java 8 from here](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html). 
-  - Once you are done, `java -version` should show you a Java 1.8.x version. 
+  - Run `java -version` in your terminal.
+  - If Java is not installed, please [download and install Java 8 from here](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html).
+  - Once you are done, `java -version` should show you a Java 1.8.x version.
 
 Notes:
 
@@ -79,7 +79,7 @@ Follow [Leiningen setup instructions here](https://leiningen.org/).
   - Locate the `port` and `host` information in the message. We will need this information soon.
 
 Note:
-  
+
   - [Boot](http://boot-clj.com/) should be fine too, but we have not tested this project with it.
 
 
@@ -160,6 +160,6 @@ Live long, and prosper.
 
 ## Copyright and License
 
-Copyright © 2017-2018 [IN/Clojure](http://inclojure.org/). 
+Copyright © 2017-2018 [IN/Clojure](http://inclojure.org/).
 
 Distributed under the [MIT license](https://github.com/inclojure-org/clojure-by-example/blob/master/LICENSE).
