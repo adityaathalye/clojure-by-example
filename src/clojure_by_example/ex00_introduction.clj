@@ -177,7 +177,7 @@ reduce                                  ; transform a collection
 ;;[1] [2]   [3]              [4]
 (defn hie [person message] (str "Hie, " person " : " message)) ; [5]
 ;; Where:
-;; - [1] `defn` is a Clojure built-in function
+;; - [1] `defn` is a Clojure built-in primitive
 ;;   - Notice, it's at the 1st position, and
 ;;   - 2-4 are all arguments to defn
 ;; Further:
