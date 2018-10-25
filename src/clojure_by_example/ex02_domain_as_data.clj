@@ -1,7 +1,7 @@
-(ns clojure-by-example.ex01-domain-as-data)
+(ns clojure-by-example.ex02-domain-as-data)
 
 
-;; Ex01: LESSON GOAL:
+;; Ex02: LESSON GOAL:
 ;; - Model and query things using pure data
 ;; - See how to "de-structure" data (it's a powerful, flexible lookup mechanism)
 ;; - Leverage de-structuring to design a self-documenting function API
