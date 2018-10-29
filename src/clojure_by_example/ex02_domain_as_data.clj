@@ -1,10 +1,8 @@
 (ns clojure-by-example.ex02-domain-as-data)
 
-
 ;; Ex02: LESSON GOAL:
 ;; - Model and query things using pure data
-;; - See how to "de-structure" data (it's a powerful, flexible lookup mechanism)
-;; - Leverage de-structuring to design a self-documenting function API
+;; - Realize the flexibility and power of collections
 
 
 ;; Our Earth
@@ -123,154 +121,88 @@
                      planets)))
 
 
-;; "De-structuring"
+;; Collections like Maps, Vectors, and Sets can behave like functions
+;; - We normally don't use Vectors and Maps like this, but
+;;   we often use sets as predicate functions:
 
-;; - Clojure lets us reach into data structures in arbitrary ways,
-;;   and extract multiple values in one go
-;;
-;; - We use this for clean lookups in `let` bindings, and
-;;   in function signatures, to design expressive APIs.
+({:a "a", :b "b", :c "c"} :c)           ; key-value lookup
 
+(["a" "b" "c"] 0)                       ; index lookup
 
-;; Positional De-structuring
-;;
-;; - Pull apart sequential, ordered data structures like
-;;   lists, vectors, and any other sequence with linear access
-;;
-;; - Follow the structure of the collection, and mechanically
-;;   bind values to symbols by position.
+(#{"a" "b" "c"} "b")                    ; set membership
 
 
-;; Instead of looking up values by index position:
-(str "The first two planets: "
-     (:pname (get planets 0)) " and "
-     (:pname (get planets 1)) ".")
+(def poison-gas?
+  "Does the given gas belong to a set of known poison gases?"
+  #{:carbon-monoxide, :chlorine
+    :sulphur-dioxide, :hydrogen-chloride})
+
+(poison-gas? :oxygen)                   ; falsey
+(poison-gas? :chlorine)                 ; truthy
 
 
-;; We can bind symbols by position (match structure to structure):
-(let [[m, v] planets]
-  (str "The first two planets: "
-       (:pname m) " and "
-       (:pname v) "."))
+;; Collections are "open", i.e. very flexible
+;; - We can make collections out of anything
+
+;; Recall:
+(def a-bunch-of-values
+  [nil, false,                       ; falsey
+   42, :a, "foo", true,              ; truthy
+   {:a 1, :b 2}, [1 2 3 4],          ; truthy
+   '(), {}, [], ""])                 ; truthy
+
+(map boolean a-bunch-of-values)
 
 
-;; Use underscores `_` to mark values we don't care for.
-(let [[_, _, e] planets]
-  (str (:pname e)
-       " is the third rock from the Sun."))
+;; And since functions are values too:
+(map (fn [f] (f 42))
+     [str identity inc dec (fn [x] x)])
 
 
-;; Use `:as` to also alias the whole structure.
-(let [[_, _, e :as planet-names] (map :pname planets)]
-  {:useless-trivia (str e " is the third rock from the Sun.")
-   :planet-names   planet-names})
+;; We use the flexibility of collections, to model
+;; real-world objects and logic as we please
 
 
-;; "Associative" De-structuring
-;;
-;; - Syntax to reach into associative data structures
-;;   (having key-value semantics), in arbitrary ways.
-;;
-;; -  Note: Clojure "Records" and vectors are associative too
-;;
-;; - Follow the structure of the collection, and mechanically
-;;   bind values to symbols by key name.
+;; Predicates and operations
+{:number-checks [even? pos? integer? (fn [x] (> x 42))]
+ :number-ops    [str identity inc dec (fn [x] x)]}
 
 
-;; Instead of looking up values like this:
-(:pname earth-alt)
-
-;; We can follow the map's structure like this:
-(let [{p :pname} earth-alt]
-  p)
-
-;; Compose it with positional destructuring:
-(let [[_, _, {e :pname}] planets]
-  (str e " is the third rock from the Sun."))
+;; A data table:
+[[:name :age :country]
+ ["Foo" 10   "India"]
+ ["Bar" 21   "Australia"]
+ ["Baz" 18   "Turkey"]
+ ["Qux" 42   "Chile"]]
 
 
-;; And instead of doing lookups one at a time:
-(str (:pname earth-alt) " has "
-     (:moons earth-alt) " moon, "
-     (:oxygen (:atmosphere earth-alt))  "% Oxygen, "
-     (:argon (:atmosphere earth-alt))  "% Argon, and "
-     (:traces (:atmosphere earth-alt))  "% trace gases.")
+;; HTML (ref: Hiccup templates)
+[:div {:class "wow-list"}
+ [:ul (map (fn [x] [:li x])
+           [1 2 3 4])]]
 
 
-;; We can arbitrarily de-structure maps, directly:
-(let [{p :pname
-       m :moons
-       {traces :traces
-        Ar :argon
-        O2 :oxygen} :atmosphere} earth-alt]
-  (str p " has "
-       m " moon, "
-       O2 "% Oxygen, "
-       Ar "% Argon, and "
-       traces "% trace gases."))
+;; Musical patterns (ref: github.com/ssrihari/ragavardhini)
+{:arohanam [:s :r3 :g3 :m1 :p :d1 :n2 :s.],
+ :avarohanam [:s. :n2 :d1 :p :m1 :g3 :r3 :s]}
 
 
-;; The `:keys` form lets us de-structure more concisely:
-;; - Note: in this style, we must exactly match spellings of
-;;   symbol names, with spellings of the keys we wish to bind.
-(let [{:keys [pname moons]
-       {:keys [oxygen argon traces]} :atmosphere}
-      earth-alt]
-  (str pname " has "
-       moons " moon, "
-       oxygen "% Oxygen, "
-       argon "% Argon, and "
-       traces "% trace gases."))
+;; DB queries (ref: Datomic)
+(comment
+  [:find ?name ?duration
+   :where [?e :artist/name "The Beatles"]
+   [?track :track/artists ?e]
+   [?track :track/name ?name]
+   [?track :track/duration ?duration]])
 
 
-;; More powerfully, the `:keys` form lets us:
-;; - extract multiple values,
-;; - define fallbacks for missing values, _and_
-;; - alias the original input.
-;; All in one shot:
-
-(defn summarise-planet
-  [{:keys [pname moons]
-    {:keys [oxygen argon traces]
-     :or {oxygen "unknown"
-          argon "unknown"
-          traces "unknown"}} :atmosphere
-    :as planet}]
-  {:summary (str pname " has "
-                 moons " moon(s), "
-                 oxygen " % O2, "
-                 argon " % Argon, and "
-                 traces" % of trace gases.")
-   :planet planet})
-
-(summarise-planet earth-alt)
-
-(summarise-planet {:pname "Mercury", :moons 0, :mass 0.0533})
-
-(map summarise-planet
-     planets)
+;; Starfleet mission configurations
+{:inhabit {:starships 5, :battle-cruisers 5,
+           :orbiters 5,  :cargo-ships 5,
+           :probes 30}
+ :colonise {:starships 1, :probes 50}
+ :probe {:orbiters 1, :probes 100}
+ :observe {:orbiters 1, :probes 10}}
 
 
-;; Self-documenting function API:
-;;
-;; Last, but not least, de-structuring function arguments
-;; automatically gives us self-documenting function signatures.
-
-#_(clojure.repl/doc summarise-planet) ; Evaluate this in the REPL
-
-#_(meta #'summarise-planet)
-
-;; RECAP:
-;;
-;; - hash-maps let us conveniently represent objects we wish to
-;;   model and query
-;; - We can query hash-maps variously with keywords, `get`, and `get-in`
-;; - If we use keywords as keys in hash-maps, querying is dead-simple
-;; - We can define our own functions with `defn`, using this syntax:
-;;
-;;   (defn function-name
-;;         [arg1 arg2 arg3 ... argN]
-;;         (body of the function))
-;;
-;; - Using general-purpose data structures, and writing general-purpose
-;;   functions lets us do more with less
+;; Only limited by your imagination!
