@@ -119,7 +119,7 @@ p/target-planets
        (filter surface-temp-tolerable? p/target-planets))
 
 
-(defn air-too-poisonus?
+(defn air-too-poisonous?
   "The atmosphere is too poisonous, if the concentration of
   any known poison gas exceeds 1.0% of atmospheric composition."
   [planet]
@@ -132,7 +132,7 @@ p/target-planets
 
 
 (map :pname
-     (filter air-too-poisonus? p/target-planets))
+     (filter air-too-poisonous? p/target-planets))
 
 ;; Note: a hash-map is a collection of key-value pairs
 (map identity
@@ -163,7 +163,7 @@ p/target-planets
   "A collection of functions that tell us about the
   fatality of planetary conditions."
   [(complement atmosphere-present?)
-   air-too-poisonus?])
+   air-too-poisonous?])
 
 
 (defn conditions-met
