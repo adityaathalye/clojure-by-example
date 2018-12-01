@@ -74,7 +74,7 @@ p/target-planets
 
 (defn atmosphere-present?
   [planet]
-  (not-empty (:atmosphere planet)))
+  (not (empty? (:atmosphere planet))))
 
 #_(map :pname
        (filter atmosphere-present? p/target-planets))
@@ -126,9 +126,10 @@ p/target-planets
   (let [gas-too-poisonous? (fn [gas-key-pct-pair]
                              (and (poison-gas? (gas-key-pct-pair 0))
                                   (>= (gas-key-pct-pair 1) 1.0)))]
-    (not-empty
-     (filter gas-too-poisonous?
-             (:atmosphere planet)))))
+    (not
+     (empty?
+      (filter gas-too-poisonous?
+              (:atmosphere planet))))))
 
 
 (map :pname
