@@ -142,7 +142,7 @@
 
 
 ;; Collections are "open", i.e. very flexible
-;; - We can make collections out of anything
+;; - We can make collections out of almost anything
 
 ;; Recall:
 (def a-bunch-of-values
@@ -154,7 +154,8 @@
 (map boolean a-bunch-of-values)
 
 
-;; And since functions are values too:
+;; And since functions are values too, we can potentially use
+;; collections of functions like this:
 (map (fn [f] (f 42))
      [str identity inc dec (fn [x] x)])
 
@@ -188,12 +189,11 @@
 
 
 ;; DB queries (ref: Datomic)
-(comment
-  [:find ?name ?duration
+#_[:find ?name ?duration
    :where [?e :artist/name "The Beatles"]
    [?track :track/artists ?e]
    [?track :track/name ?name]
-   [?track :track/duration ?duration]])
+   [?track :track/duration ?duration]]
 
 
 ;; Starfleet mission configurations
