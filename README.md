@@ -59,7 +59,7 @@ First, make sure you have Java 8.
 
 Notes:
 
-  - If you have Java 9, that should be OK too.
+  - If you have Java 9+, or Open JDK 9+ that should be OK too.
   - The LightTable editor is known to break with Java 9. Use Java 8 instead.
   - We have not tested this project with Java 7.
 
@@ -87,39 +87,38 @@ Note:
 
 Set up an editor and figure out how to evaluate Clojure code with it.
 
-### LightTable
+### IntelliJ + Cursive IDE
 
-We used LightTable for our workshop. We suggest you do so too, unless of course, you have already set up your favourite editor for Clojure development. Avoid [bikeshedding](http://catb.org/jargon/html/B/bikeshedding.html) editors. Just complete the workshop first!
+We support IntelliJ + Cursive IDE in the classroom for this workshop. We suggest you use this setup, unless of course, you have already configured your favourite editor for Clojure development. Avoid [bikeshedding](http://catb.org/jargon/html/B/bikeshedding.html) editors. Just complete the workshop first!
 
-  - You may install LightTable from the [official website](http://lighttable.com/).
-  - But you must have Java 8. LightTable breaks with Java 9.
-  - On Mac OS, you may have to allow running the app in your security preferences to be able to open it.
+  - Download and Install [IntelliJ Community Edition](https://www.jetbrains.com/idea/download/)
+  - Install and configure the Cursive plugin for IntelliJ by followint the [official Cursive user guide](https://cursive-ide.com/userguide/).
 
 Once installed:
 
-  - Use LightTable's file menu to open this project.
-  - In the left pane, navigate down to the first file `ex00...`, under the `src` folder.
-  - Under `View` menu, click `Connections`. A right pane should open.
-  - Under `Add Connection`, click `Clojure (remote REPL)` and complete the port number. Recall host:port information was printed to the terminal when you fired up a REPL in the previous section.
-  - In the `ex00..` file, scroll down a little, till you see `(+ 1 2)`.
-  - Place your cursor after the closing parenthesis `)` and hit Ctrl+Enter (Win/Linux), or Cmd+Enter (Mac).
-  - You should see `3` appear in-line. This means you successfully connected and evaluated an expression.
+  - Launch IntelliJ and select "Import Project" from the opening splash screen.
+  - OR use IntelliJ's file menu to open this project via File > New > Project From Existing Sources
+  - Select this project's main directory; click OK
+  - The "Import Project" dialog box should open
+  - Select Leiningen under "Import project from external model"; click Next
+  - Click Next again in the following screen that shows "Root Directory"; wait for it...
+  - Again, click Next in the screen that says "Select Leiningen projects to import"
+  - And again, click Next in the "Please select project SDK" screen (ensure you select JDK version 1.8 or higher)
+  - Click "Finish", and wait for IntelliJ to set up the project
+  - In the left pane, navigate down to the `project.clj` file, under the project's root folder.
+  - Right click on `project.clj` and select the option that says "Run REPL for ..."
+  - A right pane should open, with a REPL session.
+  - Now, open the `ex00..` file under the `src` folder, scroll down a little, till you see `(+ 1 2)`.
+  - Place your cursor after the closing parenthesis `)`, then right-click to open the context menu, and click on REPL > "Send '(+ 1 2)' to the REPL.
+  - You should see '(+ 1 2)' appear in the REPL window, followed by `3`. This means you successfully evaluated an expression in the REPL.
   - Now you may start from the top of ex00 and work through the material.
 
-Also keep [LightTable's documentation](http://docs.lighttable.com/tutorials/full/) handy in case you need editor help, as you solve the workshop material.
-
-
-Optionally, add Parinfer for easier editing:
-
-  - In LightTable, go to View -> Plugin Manager and search for "parinfer".
-  - Install the Parinfer plugin by Maurício Szabo.
-  - Parinfer is an editing system for Clojure that makes it easy for you to move Clojure code around without unbalancing parentheses.
-  - We recommend going through the [Parinfer documentation here](https://shaunlebron.github.io/parinfer/). But don't get stuck there, just keep it handy.
+Also keep the Cursive user guide handy, in case you need editor help, as you solve the workshop material. In particular, the [Paredit guide](https://cursive-ide.com/userguide/paredit.html) may be useful, if you stumble when editing Clojure code.
 
 
 ### Alternative Starter Kits:
 
-If you can't use LightTable for some reason (like can't downgrade to Java 8 from Java 9). You may try one of these. Although we haven't tested with these setups, the workshop material should work fine.
+If you can't use IntelliJ for some reason, you may try one of these. Although we haven't tested with these setups, the workshop material should work fine.
 
   - A [snazzy setup with Atom](https://medium.com/@jacekschae/slick-clojure-editor-setup-with-atom-a3c1b528b722).
   - Brave Clojure walks you through [a basic Emacs setup for learning Clojure](https://www.braveclojure.com/basic-emacs/).
