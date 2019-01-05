@@ -66,23 +66,30 @@
                 :argon 0.33
                 :traces 0.14}})
 
+;; EXERCISE
 ;; `get` and `get-in` work as expected
+;; - Use `get` to extract :traces from `earth-alt`'s atmosphere
+;; - The use `get-in` to do the same
 
-(get (get earth-alt :atmosphere)
-     :traces)
+#_(get 'FIX
+       'FIX)
+
+#_(get-in 'FIX 'FIX)
 
 
-(get-in earth-alt [:atmosphere :traces])
-
-
-;; BUT, unlike plain old strings, keywords also behave as _functions_
-;; of hash-maps, and can look themselves up in hash-maps.
+;; BUT, unlike plain old strings, keywords also behave as
+;; _functions_ of hash-maps, and can look themselves up
+;; in any given hash-map.
 
 ;; ("pname" earth)  ; Will FAIL!
 
 (:pname earth-alt) ; Works!
 
-(:argon (:atmosphere earth-alt))
+
+;; EXERCISE
+;; Extract `:argon` from the `:atmosphere` of `earth-alt`
+
+('FIX ('FIX earth-alt))
 
 
 ;; Which means we can use keywords in this manner:
@@ -103,42 +110,64 @@
      planets)
 
 
-;; Find planets with less mass than the Earth
+;; EXERCISE
+;; `filter` out planets with less `:mass` than the Earth
 
 (defn less-mass-than-earth?
   [planet]
-  (< (:mass planet) 1))
+  (< ('FIX planet) 1))
 
-(filter less-mass-than-earth?
-        planets)
-
-
-;; Compute total mass of planets having
-;; less mass than the Earth:
-(reduce + 0
-        (map :mass
-             (filter less-mass-than-earth?
-                     planets)))
+('FIX 'FIX 'FIX)
 
 
-;; Collections like Maps, Vectors, and Sets can behave like functions
-;; - We normally don't use Vectors and Maps like this, but
-;;   we often use sets as predicate functions:
+;; EXERCISE
+;; Recall how to use `filter`, `map`, and `reduce`:
+(filter even? [1 2 3 4])
+(map    inc   [1 2 3 4])
+(reduce + 0   [1 2 3 4])
+;; Use these to compute the total `:mass` of planets
+;; having less mass than the Earth.
 
-({:a "a", :b "b", :c "c"} :c)           ; key-value lookup
 
-(["a" "b" "c"] 0)                       ; index lookup
 
-(#{"a" "b" "c"} "b")                    ; set membership
+;; Maps, Vectors, and Sets also behave like functions!
+;; - We don't normally use maps and vector in the function
+;;   position to perform lookups (there are a few problems
+;;   with doing so), but we often use _well-defined_ sets as
+;;   predicate functions, to test for set membership.
+
+;; Maps can "self-look-up" keys
+
+({:a "a", :b "b"} :a)
+
+;; Vectors can "self-look-up" by index position
+
+(["a" "b" "c"] 0)
+
+;; Sets can self-test set membership
+
+(#{"a" "b" "c"} "b")   ; truthy: return set member if it exists
+(#{"a" "b" "c"} "boo") ; falsey: return `nil` if it doesn't
+
+;; Lists do NOT behave like functions
+
+#_('("a" "b" "c") 0)   ; FAIL
+
+
+;; EXERCISE
+;; Define a predicate `poison-gas?` which returns the
+;; poison gas if it belongs to a set of known poison gases,
+;; or `nil` (falsey) otherwise. These are some known poison gases:
+:carbon-monoxide, :chlorine, :helium
+:sulphur-dioxide, :hydrogen-chloride
 
 
 (def poison-gas?
   "Does the given gas belong to a set of known poison gases?"
-  #{:carbon-monoxide, :chlorine
-    :sulphur-dioxide, :hydrogen-chloride})
+  'FIX)
 
-(poison-gas? :oxygen)                   ; falsey
 (poison-gas? :chlorine)                 ; truthy
+(poison-gas? :oxygen)                   ; falsey
 
 
 ;; Collections are "open", i.e. very flexible
@@ -160,8 +189,9 @@
      [str identity inc dec (fn [x] x)])
 
 
-;; We use the flexibility of collections, to model
-;; real-world objects and logic as we please
+;; Domain Modeling in Clojure
+;; - We use the flexibility of collections, to model
+;;   real-world objects and logic as we please
 
 
 ;; Predicates and operations
