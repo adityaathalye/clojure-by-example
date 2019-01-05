@@ -5,6 +5,17 @@
 ;;   are the bedrock upon which Clojure programs are built
 ;; - Drill how to use functions, and how lexical scope works
 ;; - Get comfortable with how functions compose together
+;; - At every step, further drill the interactive REPL workflow.
+;;   Figure out how to take advantage of the immediate feedback
+;;   that the live REPL gives you. Treat each exercise as a
+;;   tiny experimental setup. Run small experiments that will
+;;   help you discover answers...
+;;   -> Read the exercise
+;;   -> Make a testable guess (hypothesis)
+;;   -> Evaluate your solution (test your hypothesis)
+;;   -> Compare your guess with the solution
+;;   -> If it differs, update your guess (or fix the solution) and redo
+;;   That is, try to use the Scientific Method to solve exercises.
 
 
 ;; Basic Function Syntax
@@ -49,9 +60,10 @@
 
 (same  {:pname "Earth" :moons 1})
 
-
+;; EXERCISE
 ;; How about the anonymous version of `same`?
-;; - What's the evaluation model?
+;; - What's the evaluation model? Think before you tinker.
+;; - Form your hypothesis -> Test it -> Learn from the feedback
 
 ((fn [x] x)  42)
 
@@ -60,7 +72,12 @@
 ((fn [x] x)  {:pname "Earth" :moons 1})
 
 
-;; What should happen here?
+;; EXERCISE
+;; Fix the the following s-expr, so that it evaluates to true.
+;; - First predict the solution in your head.
+;; - Then replace 'FIX with your solution and evaluate to confirm.
+;; - Think about the little experiment you just performed, and
+;;   form a theory about why the solution worked
 (= 'FIX
    (same same)
    ((fn [x] x) same))
@@ -72,37 +89,89 @@
 ;; - is extremely general (accepts any value)
 ;; - is surprisingly useful, as we will discover later
 
-;; Fix this to prove `identity` and `same` are the same:
+;; EXERCISE
+;; Fix this to prove `identity`, `same`, and the anonymous
+;; version of `same`, all do the exact same thing:
 ;; - Note: Functions are values and can therefore be compared.
 ;;
 (= identity
-   (same       identity)
-   ((fn [x] x) identity)
-   (identity   identity))
+   ('FIX identity)
+   ('FIX identity)
+   ('FIX identity))
 ;;
 ;; Now, evaluate this in the REPL to _see_ the truth:
-;; (clojure.repl/source identity)
+;;
+#_(clojure.repl/source identity)
+;;
+(comment
+  ;; This is another example of what "dynamic" means.
+  ;; We can not only can we interact live with small bits of
+  ;; our Clojure programs, we can also examine many aspects
+  ;; of our programs at run time. The clojure.repl namespace
+  ;; is one tool at our disposal. Try these in the REPL:
+  #_(clojure.repl/dir clojure.repl)
+  #_(clojure.repl/doc clojure.repl)
+  )
 
 
+;; "Higher order" functions (HoFs):
 
-;; And to round it up... functions can accept, as well as
-;; return functions.
+;; Functions that:
+;; - *accept* functions as arguments
+;;   and/or
+;; - *return* functions as results
+;; are called "higher order" functions.
+
+
+;; EXERCISE
+;; Have we seen HoFs so far? If yes, list them out below.
+
+
+;; EXERCISE
+;; Write a zero-argument function that returns the `identity` function
 
 (defn gen-identity
   [] ; zero arguments
-  identity)
+  'FIX)
 
+;; EXERCISE
+;; Fix this function so that it returns a function that _behaves_
+;; like the identity function (don't return `same`, or `identity`).
+
+(defn gen-identity-v2
+  []
+  'FIX)
+
+;; EXERCISE
+;; Replace 'FIX1 with a call to the `gen-identity` function,
+;; and 'FIX2 with a call to the `gen-identity-v2` function,
+;; such that the following evaluates to true.
 
 (= identity
-   (gen-identity))
+   'FIX1
+   'FIX2)
 
+
+;; Composing Logic with Higher-order Functions (HoFs):
+(comment
+  ;; Clojure programmers often write simple functions that
+  ;; each do one task well, and use higher order functions
+  ;; to "compose" these in creative ways, to produce more
+  ;; useful pieces of logic.
+  ;;
+  ;; We treat "simple" functions as building blocks, and
+  ;; HoFs as versatile mini-blueprints that help us organize
+  ;; and glue together the simple functions.
+  )
+
+;; EXERCISE
+;; Reason about why this is working:
 
 (defn selfie
   "Given a function `f`, return the result of
   applying `f` to itself."
   [f]
   (f f))
-
 
 (= 42
    (identity 42)
@@ -111,27 +180,56 @@
    ((selfie (selfie (selfie identity))) 42)) ; ad-infinitum
 
 
-;; Compose (chain) functions with `comp`
-((comp inc inc inc) 39)
-
-;; Negate predicates with `complement`
-((complement string?) "hi")
-
-;; Use `fnil` to "nil-patch" functions that cannot sanely handle nil (null) inputs
-#_(+ nil 1) ; FAIL
-((fnil + 0) nil 1) ; OK
-
-;; Juxtapose functions with `juxt` (place results "side-by-side")
-((juxt inc identity dec) 42)
+;; Let's play with a couple of nifty HoFs built into Clojure
+;; - `comp`
+;; - `complement`
 
 
+;; EXERCISE
+;; Use `(comp vec str inc)` to make the following true
+;; - `comp` accepts any number of functions as arguments,
+;;   and returns a function that behaves as a pipeline
+;;   (or chain) of the given functions
 
-;; Lexical Scope in Clojure
+(= [\4 \2]
+   (vec (str (inc 41)))
+   ('FIX 'FIX))
 
+(comment
+  ;; Reason about the order of evaluation and how inputs
+  ;; and outputs should connect, for `comp` chains to
+  ;; work correctly.
+  ;;
+  ;; To see if you reasoned correctly, try each of
+  ;; seq, str, inc independently:
+  (inc 41)                ; increment a number
+  (str 42)                ; turn the input into a string
+  (seq "42")              ; turns a string into a character sequence
+  )
+
+
+;; EXERCISE
+;; Use `(complement string?)` to make the following true
+;; - `complement` accepts a "predicate" function, and returns a
+;;   function that does the opposite of the given "predicate"
+(= (not (string? "hi"))
+   ('FIX 'FIX))
+
+(comment
+  ;; "Predicate" is just a term we use to conveniently describe
+  ;; any function that returns a truthy/falsey value, i.e.
+  ;; any function that is used to test for some condition.
+  ;; These so-called "predicates" are not inherently special.
+)
+
+
+
+;; "Lexical Scope" in Clojure
+;; - Develop an intuition for what "Lexical scope" might mean
+;;   by reasoning about the following exercises.
 
 ;; EXERCISE:
-;; Reason about the following expressions.
-;; - Mentally evaluate and predict the results; then check.
+;; Mentally evaluate and predict the results; then check.
 
 (def x 42)      ; Bind `x` to 42, globally ("top-level" binding)
 
@@ -139,11 +237,15 @@
 
 ((fn [x] x)  x) ; also returns 42, but how?
 
-(let [x 10]     ; we use `let` to bind things locally
-  (+ x 1))
+(let [x 10]     ; We use `let` to bind things locally.
+  x)            ; This evaluates to the value of the "let-bound" `x`.
+
+(+ (let [x 10]
+     x)
+   x)           ; So, this whole thing should evaluate to what?
 
 
-;; EXERCISE:
+;; EXERCISE
 ;; Read carefully, and compare these three function variants:
 
 (defn add-one-v1
@@ -171,9 +273,11 @@
 (add-one-v3  x) ; should evaluate to what?
 
 
-;; `let`
-;; - Mentally evaluate these, predict the results,
+;; EXERCISE
+;; - Mentally evaluate the following, predict the results,
 ;;   and try to infer the scoping rule.
+;; - Then evaluate each expression to see if your
+;;   mental model agrees with the result you see.
 ;; - Start with any `x`, and mechanically work
 ;;   your way around.
 
@@ -189,39 +293,72 @@
 ((let [x 10]  (fn [x] x))  x)
 
 
+(comment
+  ;; Strict lexical scope greatly simplifies our life, because
+  ;; it allows us to mechanically work out where a value originated.
+  ;; - Start at the place of reference of the value.
+  ;; - Then "walk" outwards, until you meet the very first let binding,
+  ;;   or argument list, or def, where the value was bound.
+  ;; - Now you know where the value came from.
+  ;;
+  ;; This also helps reduce our mental burden of inventing new names
+  ;; to refer to things, because we can re-use a name within a
+  ;; limited scope, and be certain that it will not destroy
+  ;; anything with the same name outside the given scope.
+  )
 
-;; Function Closure:
-;; - Read carefully and work out what gets bound to `scale-by-PI`.
+
+;; Function "Closure"
+;; - This is a way for a function to capture and "close over"
+;;   any value available at the time the function is defined
+
+(def PI 3.141592653589793)
+
+(defn scale-by-PI
+  [n]
+  (* n PI)) ; PI is captured within the body of `scale-by-PI`
+
+(scale-by-PI 10)
+
+
+;; A more general way to "scale by":
+;; - Thanks to lexical scope + the function closure property
 
 (defn scale-by
   "Given a number `x`, return a function that accepts
   another number `y`, and scales `y` by `x`."
   [x]
-  (fn [y] (* y x)))
-
-(def PI 3.141592653589793)
-
-((scale-by PI) 10)
+  (fn [y] (* y x))) ; whatever is passed as `x` is captured
+                    ; within the body of the returned function
 
 
-;; Achieve the same with `partial` application
-(def scale-by-PI (partial * PI))
+;; EXERCISE
+;;
+#_(= (scale-by-PI 10)
+     ('FIX 10)
+     (* PI 10))
 
-(scale-by-PI 10)
+(comment
+  ;; BONUS EXERCISES
+  ;; Define a few scaling functions, in terms of `scale-by`
+  ;;
+  (def scale-by-PI-v2
+    'FIX)
+
+  (def quadruple
+    "4x the given number."
+    'FIX)
+
+  (def halve
+    'FIX))
 
 
-;; Strict lexical scope allows us to mechanically work out
-;; where a value originated.
-;; - Start at the place of reference of the value.
-;; - Then "walk" outwards, until you meet the very first let binding,
-;;   or argument list, or def, where the value was bound.
-;; - Now you know where the value came from.
-
-
-
-;; Sequences (or Collections), and operations on Sequences
+;; Sequences (or Collections)
+;;
+;; - and operations on Sequences
 ;; - Clojure provides _many_ sequence functions.
-;;   Here are some important ones:
+;;   Here are some important ones: `map`, `filter`, and `reduce`
+;; - Observe that all these functions are HoFs!
 
 map
 ;; Basic Syntax:
@@ -313,14 +450,10 @@ reduce
 
 
 
-;; RECAP:
-;;
-;; - All Clojure code is a bunch of "expressions"
-;;   (literals, collections, s-expressions)
-;;
-;; - All Clojure expressions evaluate to a return value
-;;
-;; - All Clojure code is written in terms of its own data structures
-;;
-;; - All opening braces or parentheses must be matched by closing
-;;   braces or parentheses, to create legal Clojure expressions.
+;; RECAP
+;; - Acquire a "scientific experimentation" mindset when
+;;   interactively developing and debugging Clojure code
+;;   ... The REPL is your friend.
+;; - Learn to use lexical scope and function closures effectively.
+;; - Learn to define small "single purpose" functions, such that
+;;   you can compose them together to produce higher order logic.
