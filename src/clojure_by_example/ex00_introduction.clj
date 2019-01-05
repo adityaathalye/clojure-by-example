@@ -234,3 +234,16 @@ same  ; is defined in the current ns
   ;;       the function definition
   ;; - [5] the whole thing itself is a Clojure s-expression!
   )
+
+
+;; RECAP:
+;;
+;; - All Clojure code is a bunch of "expressions"
+;;   (literals, collections, s-expressions)
+;;
+;; - All Clojure expressions evaluate to a return value
+;;
+;; - All Clojure code is written in terms of its own data structures
+;;
+;; - All opening braces or parentheses must be matched by closing
+;;   braces or parentheses, to create legal Clojure expressions.
