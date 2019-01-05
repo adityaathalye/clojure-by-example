@@ -4,7 +4,7 @@
   :license {:name "MIT"
             :url "https://opensource.org/licenses/MIT"}
   ;; Requirements: Java 8 or higher (recommended: Java 8 or Java 11)
-  :dependencies [[org.clojure/clojure "1.10.0-RC2"]]
+  :dependencies [[org.clojure/clojure "1.10.0"]]
   :profiles {:dev {:dependencies [[org.clojure/data.json "0.2.6"]
                                   [enlive "1.1.6"]
                                   [rewrite-clj "0.6.1"]]}})
