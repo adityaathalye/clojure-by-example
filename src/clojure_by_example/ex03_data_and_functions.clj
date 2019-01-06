@@ -4,9 +4,79 @@
 
 
 ;; Ex03: LESSON GOALS
-;; - Use stuff we've seen so far to build purely functional logic
-;;   to process a bunch of planets
+;; - Primarily, a code reading exercise
+;; - Explore various bits and bobs of the solution interactively
+;;   using the live environment at your disposal
+;; - Get some ideas of how to take just a handful of pieces,
+;;   and build sophisticated logic with them
+;; - We use only the concepts and standard library functions
+;;   we've seen so far, to build purely functional logic
+;;   in order to process a bunch of planets:
+;;
+;;   - Standard Library (about 20 functions):
+;;     `def`, `defn`, `let` -- to define/name simple data and small functions
+;;     `get`, `get-in`, `assoc` -- to query and associate data
+;;     `map`, `filter`, `reduce` -- to operate on collections
+;;     `if`, `when`, `cond` -- to decide things
+;;     `not`, `and`, `empty?`, `<=`, `count` -- for logic and quantities
+;;     `comp`, `complement` -- to glue higher-order logic
+;;
+;;   - Concepts:
+;;     - Compute only with pure functions:
+;;       - Build higher-order logic with higher order functions
+;;       - Lexical scope and function closures for
+;;     - Collections as functions:
+;;       - Keywords as functions of hash-maps
+;;       - Well-defined Sets as predicates --- tests of set membership
+;;     - Hash-maps and collections to model domain entities:
+;;       - A planet, or atmospheric tolerances, or decision tables,
+;;         or collections of analysis criteria
+;;     - Truthy / Falsey logic:
+;;       - Instead of only Boolean true/false
+;;     - Namespaces:
+;;       - Making use of things defined elsewhere
+;;
+;;   - Workflow:
+;;     - Apply the Scientific Method to design, debug, and to understand
+;;     - Run small fast experiments via the REPL
+;;     - Preserve your experiments in-line within your codebase itself
+;;
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Let's colonize planets!
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(comment
+  ;; BACKGROUND
+  ;;
+  ;; The Office of Interstellar Affairs (OIA) is pushing hard
+  ;; for all-out space exploration and colonization.
+  ;;
+  ;; The OIA intends to issue "mission directives"...
+  ;;
+  ;; They wish humanity to :inhabit, or :colonise, or :probe,
+  ;; or :observe a given planet based on their analysis of
+  ;; available planetary data.
+  ;;
+  ;; For a given "mission directive", like :probe, the OIA
+  ;; intends to dispatch a collection of vessels.
+
+  ;; GOAL
+  ;;
+  ;; Prototype a bit of planetary analysis logic, using criteria
+  ;; that interest the OIA, such that they will be able to decide
+  ;; what to do about a given planet.
+  ;;
+  ;; Criteria include questions like:
+  ;; - co2-tolerable?
+  ;; - gravity-tolerable?
+  ;; - surface-temp-tolerable?
+  ;;
+  ;; How a planet stands up to such questions will let us assess
+  ;; whether it is habitable? or colonisable? or observe-only?.
+  ;;
+  ;; Once we deliver the OIA our assessment, they may choose to
+  ;; dispatch one or more kinds of Starfleet vessels to the planet.
+  )
 
 ;; Here are some target planets:
 clojure-by-example.data.planets/target-planets
@@ -18,16 +88,11 @@ p/target-planets
 
 
 
-;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Let's colonize planets!
-;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
 (def starfleet-mission-configurations
-  "Associate mission directives and mission configurations of Starfleet vessels.
-
-  The Office of Interstellar Affairs (OIA) issues mission directives
-  based on its analysis of planets."
+  "Associate 'mission directives' like :inhabit, :colonise, :probe,
+  and 'mission configurations' of Starfleet vessels. e.g. If our
+  analysis of a planet says :probe, then we would send 1 'Orbiter'
+  class Starship carrying a complement of 100 autonomous probes."
 
   {:inhabit {:starships 5, :battle-cruisers 5,
              :orbiters 5,  :cargo-ships 5,
@@ -178,8 +243,7 @@ p/target-planets
 
 (defn planet-meets-no-condition?
   [conditions planet]
-  ((comp zero? count conditions-met)
-   conditions planet))
+  (empty? (conditions-met conditions planet)))
 
 
 (def planet-meets-any-one-condition?
@@ -268,5 +332,4 @@ p/target-planets
            :mission-vessels   (mission-directive starfleet-mission-configurations))))
 
 
-#_(map (juxt :pname assign-vessels)
-       p/target-planets)
+#_(map assign-vessels p/target-planets)
