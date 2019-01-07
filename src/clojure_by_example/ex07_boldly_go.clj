@@ -24,7 +24,7 @@
 ;;     lein new planet_coloniser
 ;;
 ;;
-;; * Open the directory in LightTable and observe its structure.
+;; * Open the directory in your IDE and observe its structure.
 ;;
 ;;
 ;; * Create a `utils` directory in which to put I/O utility functions.
@@ -34,7 +34,7 @@
 ;;   - Terminal:
 ;;     mkdir src/planet_coloniser/utils
 ;;
-;;   - Or, LightTable:
+;;   - Or, in your IDE:
 ;;     - right-click on src/planet_coloniser, and create new folder
 ;;
 ;;
@@ -42,7 +42,7 @@
 ;;   - `ingest.clj` and
 ;;   - `export.clj`
 ;;
-;;   - Again, you can right-click on your `utils` dir in LightTable,
+;;   - Again, you can right-click on your `utils` dir in your IDE,
 ;;     and create New File from the pop-up menu.
 ;;
 ;;
@@ -53,7 +53,11 @@
 ;;   (ns planet-coloniser.utils.ingest)
 ;;
 ;;   - Observe the dir name is planet_coloniser, but the ns
-;;     declaration has planet-coloniser. Why?
+;;     declaration has planet-coloniser. This is the convention:
+;;     - hyphens separate words in ns names
+;;     - dots separate directories and files in ns names
+;;     - underscores from dir or file names become hyphens in ns names
+;;     - and ns names are all lower case
 ;;
 ;;   - Copy-paste the "input" function definitions from ex06,
 ;;     below the ns declaration.
@@ -66,7 +70,7 @@
 ;;
 ;;   - Inside `project.clj`, update :dependencies value to look like:
 ;;
-;;    :dependencies [[org.clojure/clojure "1.8.0"     ; pre-existing
+;;    :dependencies [[org.clojure/clojure "1.10.0"    ; latest as of 01 Jan 2019
 ;;                   [org.clojure/data.json "0.2.6"]] ; add for `ingest`
 ;;
 ;;   - Inside `injest.clj`, update the ns declaration to look like:
@@ -112,28 +116,27 @@
 ;;   (:gen-class) ; add this, and the :require expression below:
 ;;   (:require [planet-coloniser.sensor-processor :as sensproc]
 ;;             [planet-coloniser.utils.ingest :as ingest]
-;;             [planet-coloniser.utils.export :as export]
-;;             [clojure.walk :as cwalk]))
+;;             [planet-coloniser.utils.export :as export]))
 ;;
 ;;  - Copy `ingest-export-sensor-data!` from ex06
 ;;
 ;;  - Rename it to `-main`.
 ;;
 ;;  - Now, make the body of `-main` look like the function below:
-;;    - notice prefixes to functions, like cwalk/, export/, ingest/
+;;    - notice prefixes to functions, like export/, ingest/, sensproc/
 ;;    - Why do we do this?
 ;;
 ;; (defn -main
 ;;   [data-dir source-data-files dest-data-file]
-;;   (let [source-data-files
-;;         (cwalk/keywordize-keys
-;;          (ingest/ingest-json-file data-dir
-;;                                   source-data-files))]
-;;     (export/write-out-json-file
-;;      data-dir
-;;      dest-data-file
-;;      (sensproc/denormalized-planetary-data
-;;       (ingest/gather-all-sensor-data! data-dir source-data-files)))))
+;;   (let [source-data-files (ingest/ingest-json-file! data-dir
+;;                                                     source-data-files)
+;;         export-as-json (partial export/write-out-json-file!
+;;                                 data-dir
+;;                                 dest-data-file)]
+;;     (export-as-json
+;;      (sensproc/denormalise-planetary-data
+;;       (ingest/gather-all-sensor-data! data-dir
+;;                                       source-data-files)))))
 ;;
 ;;
 ;; * Let's bring in sensor data, for convenience:
