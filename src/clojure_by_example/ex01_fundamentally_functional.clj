@@ -225,11 +225,30 @@
 
 
 ;; "Lexical Scope" in Clojure
-;; - Develop an intuition for what "Lexical scope" might mean
-;;   by reasoning about the following exercises.
+;; - Lexical scope guarantees that the reference to a value will be
+;;   "enclosed" in the scope in which it is being used.
+
+(comment
+  ;; Strict lexical scope greatly simplifies our life, because
+  ;; it allows us to mechanically follow code, and determine
+  ;; where a value originated.
+  ;; - Start at the place of reference of the value.
+  ;; - Then "walk" outwards, until you meet the very first let binding,
+  ;;   or arg-list, or def, where the value was bound.
+  ;; - Now you know where the value came from.
+  ;;
+  ;; This also helps reduce our mental burden of inventing
+  ;; new names to refer to things, because we can re-use
+  ;; a name within a limited scope, and be certain that
+  ;; it will not destroy anything with the same name outside
+  ;; the given scope.
+  )
 
 ;; EXERCISE:
-;; Mentally evaluate and predict the results; then check.
+;; - Develop an intuition for what "Lexical scope" might mean
+;;   by reasoning about the following exercises.
+;;
+;; - Mentally evaluate and predict the results; then check.
 
 (def x 42)      ; Bind `x` to 42, globally ("top-level" binding)
 
@@ -291,21 +310,6 @@
 
 
 ((let [x 10]  (fn [x] x))  x)
-
-
-(comment
-  ;; Strict lexical scope greatly simplifies our life, because
-  ;; it allows us to mechanically work out where a value originated.
-  ;; - Start at the place of reference of the value.
-  ;; - Then "walk" outwards, until you meet the very first let binding,
-  ;;   or argument list, or def, where the value was bound.
-  ;; - Now you know where the value came from.
-  ;;
-  ;; This also helps reduce our mental burden of inventing new names
-  ;; to refer to things, because we can re-use a name within a
-  ;; limited scope, and be certain that it will not destroy
-  ;; anything with the same name outside the given scope.
-  )
 
 
 ;; Function "Closure"
