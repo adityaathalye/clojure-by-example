@@ -2,28 +2,137 @@
   (:require [clojure-by-example.data.planets :as p]))
 
 ;; EX04: Lesson Goals:
+;; - We use these conveniences for good effect in API design.
+;; - See how to allow the same function to support different arities,
+;;   as well as a variable number of arguments
 ;; - See how to "de-structure" data (it's a powerful, flexible lookup mechanism)
 ;; - Leverage de-structuring to design a self-documenting function API
 
 
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; A tiny bit of "De-structuring"
+;;
+;; Multiple arities
+;;
+;; - When we know for sure that a function must handle more than
+;;   one "arity". An "arity" is the number of arguments
+;;
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-;; If we _shape_ our domain information as a data "structure",
-;; can we use our knowledge of the shape to pull it apart;
-;; i.e. "destructure" it?
+(defn add-upto-three-nums
+  ([] 0) ; identity of addition
+  ([x] x)
+  ([x y] (+ x y))
+  ([x y z] (+ x y z)))
 
-;; Yes.
+(add-upto-three-nums)
+(add-upto-three-nums 1)
+(add-upto-three-nums 1 2)
+(add-upto-three-nums 1 2 3)
+#_(add-upto-three-nums 1 2 3 4) ; will fail
 
-;; We use destructuring:
-;; - In `let` bindings, to cleanly reach into data
-;; - In function arguments, to make the API clean and expressive
+
+;; Variable arity
+;; - When we don't know in advance how many arguments we
+;;   will have to handle, but we want to handle them all.
+
+(defn add-any-numbers
+  [& nums]
+  (reduce + 0 nums))
+
+(add-any-numbers)
+(add-any-numbers 1)
+(add-any-numbers 1 2)
+(add-any-numbers 1 2 3 4 5)
 
 
-;; Here are a couple of commonly-used ways to do it.
+;; Multiple _and_ Variable arities, combined
+;; - Guess what + actually is inside?
+;;
+#_(clojure.repl/source +) ; evaluate, check the REPL
+;;
+;; See how + tries to implement each arity as a special case,
+;; to compute results as optimally as possible? We can do
+;; such things too, in functions we define.
 
+(+)
+(+ 1)
+(+ 1 2 3 4 5 6 7 8 9 0)
+
+
+;; We can also use multiple arities to define sane fallbacks.
+
+;; EXERCISE
+;; - Recall `lower-bound`, and `upper-bound` from ex03
+;; - Refactor these to support more than one arity.
+
+(def tolerances
+  "Define low/high bounds of planetary characteristics we care about."
+  {:co2                {:low 0.1,  :high 5.0}
+   :gravity            {:low 0.1,  :high 2.0}
+   :surface-temp-deg-c {:low -125, :high 60}})
+
+(defn lower-bound
+  [tolerance-key]
+  (get-in tolerances [tolerance-key :low]))
+
+(defn upper-bound
+  [tolerance-key]
+  (get-in tolerances [tolerance-key :high]))
+
+
+;; Fix `lower-bound-v2`, to make this expression evaluate
+;; to true. Pay close attention to what should go where.
+(defn lower-bound-v2
+  "Look up the lower bound for the given tolerance key, in the
+  given map of `tolerances`. Use a globally-defined `tolerances`
+  map as a sane default if only tolerance-key is passed in."
+  ([tolerance-key]
+   (get-in tolerances
+           [tolerance-key :low]))
+  ([FIX1 FIX2]
+   'FIX))
+
+#_(= (lower-bound    :co2)
+     (lower-bound-v2 :co2)
+     (lower-bound-v2 :co2 tolerances)
+     (lower-bound-v2 :co2 {:co2 {:low 0.1}}))
+
+
+(comment
+  ;; BONUS EXERCISE
+  ;; Do the same for `upper-bound-v2`
+  #_(defn upper-bound-v2
+      'FIX
+      'FIX)
+
+  #_(= (upper-bound    :co2)
+       (upper-bound-v2 :co2)
+       (upper-bound-v2 :co2 tolerances)
+       (upper-bound-v2 :co2 {:co2 {:low 0.1}}))
+  )
+
+
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; A tiny bit of "De-structuring"
+;; - For convenient access to items in collections.
+;;
+;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(comment
+  ;; If we _shape_ our domain information as a data "structure",
+  ;; can we use our knowledge of the shape to pull it apart;
+  ;; i.e. "destructure" it?
+
+  ;; Yes.
+
+  ;; We use destructuring:
+  ;; - In `let` bindings, to cleanly reach into data
+  ;; - In function arguments, to make the API clean and expressive
+  ;;
+  ;; Here are a couple of commonly-used ways to do it.
+  )
 
 ;; "Positional" De-structuring
 ;;
@@ -104,33 +213,17 @@
 ;; - Relate it to our preferred way to model the world.
 ;; - What is the "world" here?
 ;; - What are we using to model/describe what property of what?
+;;   (Yes, that's three 'what's :-)
 
 
 ;; EXERCISE:
 ;;
 ;; - Use de-structuring to refactor the following functions
-;; that we have copied over from ex03.
+;;   that we have copied over from ex03.
 ;;
 ;; - Develop a preliminary opinion about where and when
-;; it might makes sense to de-structure, and where and when
-;; it might not.
-
-
-(def tolerances
-  "Define low/high bounds of planetary characteristics we care about."
-  {:co2                {:low 0.1,  :high 5.0}
-   :gravity            {:low 0.1,  :high 2.0}
-   :surface-temp-deg-c {:low -125, :high 60}})
-
-
-(defn lower-bound
-  [tolerance-key]
-  (get-in tolerances [tolerance-key :low]))
-
-
-(defn upper-bound
-  [tolerance-key]
-  (get-in tolerances [tolerance-key :high]))
+;;   it might makes sense to de-structure, and where and when
+;;   it might not.
 
 
 (defn atmosphere-present?
@@ -172,7 +265,7 @@
 ;; EXERCISE:
 ;; - Fix the body of the refactored function
 ;; - Carefully review the function APIs, and develop a preliminary
-;; opinion whether the refactored version is better than the original.
+;;   opinion whether the refactored version is better than the original.
 
 
 (defn surface-temp-tolerable?
@@ -212,6 +305,11 @@
 ;; RECAP:
 ;;
 ;; - We model the world by composing data structures and then use
-;; "de-structuring" to conveniently reach into those structures.
+;;   "de-structuring" to conveniently reach into those structures.
+;; - We can design function apis to accept more than one arity,
+;;   and then define custom logic for each arity.
 ;; - When, where, and how much to de-structure is a matter of
-;; taste; a design choice. There is no One True Way.
+;;   taste; a design choice. There is no One True Way.
+;; - There are _many_ many ways of de-structuring.
+;;   Here's a really nice post detailing it:
+;;   cf. http://blog.jayfields.com/2010/07/clojure-destructuring.html
