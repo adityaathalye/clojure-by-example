@@ -12,3 +12,4 @@ pom.xml.asc
 .setup.sh
 profiles.clj
 .idea
+*.iml
