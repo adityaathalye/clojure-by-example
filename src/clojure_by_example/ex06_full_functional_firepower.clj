@@ -117,8 +117,8 @@
 ;; - Document the schema as in-line comments, for this dirty prototype.
 ;;
 (def sensor-data-files
-  {;; {"Planet Name":{"radius":<num>}, ...}
-   :planets "planet_detector.json"
+  ;; {"Planet Name":{"radius":<num>}, ...}
+  {:planets "planet_detector.json"
 
    ;; {"Planet Name":<num-moons>, ...}
    :moons "moon_detector.json"
