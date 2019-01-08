@@ -11,3 +11,5 @@ pom.xml.asc
 .hg/
 .setup.sh
 profiles.clj
+.idea
+*.iml
