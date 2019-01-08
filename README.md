@@ -60,7 +60,6 @@ First, make sure you have Java 8.
 Notes:
 
   - If you have Java 9+, or Open JDK 9+ that should be OK too.
-  - The LightTable editor is known to break with Java 9. Use Java 8 instead.
   - We have not tested this project with Java 7.
 
 
@@ -92,7 +91,7 @@ Set up an editor and figure out how to evaluate Clojure code with it.
 We support IntelliJ + Cursive IDE in the classroom for this workshop. We suggest you use this setup, unless of course, you have already configured your favourite editor for Clojure development. Avoid [bikeshedding](http://catb.org/jargon/html/B/bikeshedding.html) editors. Just complete the workshop first!
 
   - Download and Install [IntelliJ Community Edition](https://www.jetbrains.com/idea/download/)
-  - Install and configure the Cursive plugin for IntelliJ by followint the [official Cursive user guide](https://cursive-ide.com/userguide/).
+  - Install and configure the Cursive plugin for IntelliJ by following the [official Cursive user guide](https://cursive-ide.com/userguide/).
 
 Once installed:
 
@@ -159,6 +158,6 @@ Live long, and prosper.
 
 ## Copyright and License
 
-Copyright © 2017-2018 [IN/Clojure](http://inclojure.org/).
+Copyright Â© 2017-2018 [IN/Clojure](http://inclojure.org/).
 
 Distributed under the [MIT license](https://github.com/inclojure-org/clojure-by-example/blob/master/LICENSE).
