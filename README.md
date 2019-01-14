@@ -1,4 +1,19 @@
-# Clojure By Example
+ - [Introduction](#introduction)
+   - [Intended usage](#intended-usage)
+   - [Contributions](#contributions)
+   - [Workshop Goals](#workshop-goals)
+   - [Workshop Anti-Goals](#workshop-anti-goals)
+- [Suggested learning mindset](#suggested-learning-mindset)
+- [Setup Instructions](#setup-instructions)
+    - [Java 8](#java-8)
+    - [Leiningen](#leiningen)
+    - [Code Editor and Tooling](#code-editor-and-tooling)
+- [Course Design Philosophy](#course-design-philosophy)
+- [Credits](#credits)
+- [Copyright and License](#copyright-and-license)
+
+
+# Introduction
 
 What could one do with just a _little_ bit of Clojure?
 
