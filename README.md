@@ -107,10 +107,13 @@ Once installed:
   - In the left pane, navigate down to the `project.clj` file, under the project's root folder.
   - Right click on `project.clj` and select the option that says "Run REPL for ..."
   - A right pane should open, with a REPL session.
-  - Now, open the `ex00..` file under the `src` folder, scroll down a little, till you see `(+ 1 2)`.
+  - Now, open the `ex00..` file under the `src` folder
+  - Use the menu under Tools > REPL to (a) Switch to the file's "namespace", and then (b) load the file into the REPL
+  - Scroll down a little, till you see `(+ 1 2)`.
   - Place your cursor after the closing parenthesis `)`, then right-click to open the context menu, and click on REPL > "Send '(+ 1 2)' to the REPL.
   - You should see '(+ 1 2)' appear in the REPL window, followed by `3`. This means you successfully evaluated an expression in the REPL.
-  - Now you may start from the top of ex00 and work through the material.
+  - Now you may start from the top of ex00 and work through the material in each "ex" file
+  - Important: For every exercise file, remember to first switch to the file's namespace, and load the file in the REPL (use the menu under Tools > REPL)
 
 Also keep the Cursive user guide handy, in case you need editor help, as you solve the workshop material. In particular, the [Paredit guide](https://cursive-ide.com/userguide/paredit.html) may be useful, if you stumble when editing Clojure code.
 
