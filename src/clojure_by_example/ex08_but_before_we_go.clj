@@ -2,16 +2,13 @@
 
 ;; But before we boldly go, here are some resources to help us on our journey!
 
-;; Communities:
-;; Clojurians Slack: http://clojurians.net/
-;; IN/Clojure Open Relay: https://open.relay-chat.com/signup_user_complete/?id=inclojure
-;; IN/Clojure Slack: https://join.slack.com/t/inclojure/shared_invite/enQtMjkzNDcyMjk1NDYwLWE4MzljNGRlZjcwZTRlYWFkODM3Mzc1NmU0M2Q3NjIxZmQ2NTYyZGU3MGVmZGJlMmFjYzBlNWM2Y2IwMjk0Y2Q
-;; Clojure Subreddit: https://www.reddit.com/r/Clojure/
+;; Check out the official website: https://clojure.org
 
-;; Books:
-;; https://www.braveclojure.com/ -- free to read online
-;; The Joy of Clojure -- http://www.joyofclojure.com/
+;; It has been accumulating many useful tutorials, guides, book references,
+;; community resources, and information about companies using Clojure.
 
+;; Also, here are a few things we really like and find useful to aid understanding
+;; at various levels; from the philosophical to the here and now:
 
 ;; Talks/Philosphy:
 ;; https://www.youtube.com/watch?v=wASCH_gPnDw -- Inside Clojure with Brian Beckman and Rich Hickey
@@ -28,7 +25,6 @@
 ;; - Aphyr's post is neat!
 ;;   - Scroll down to the "Debugging Clojure" section:
 ;;   https://aphyr.com/posts/319-clojure-from-the-ground-up-debugging
-
 
 ;; Handy REPL utils:
 ;;

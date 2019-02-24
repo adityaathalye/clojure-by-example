@@ -9,151 +9,197 @@
 
 
 ;; EX00: LESSON GOAL:
-;; - A very quick intro to Clojure syntax, just to familiarize your
-;;   eyes with it.
-;;
-;; - Don't get stuck here!
-;;   - Run through it once, try evaluating expressions of interest
-;;     and move on to EX01.
-;;   - Your eyes and brain will adjust fairly quickly, as you
-;;     work through the examples to follow.
+;; - Drill some Clojure basics, required for the sections
+;;   that follow (and generally, to help follow code
+;;   in the wild)
+;; - Familiarize one's eyes with Clojure syntax
+;; - Understand Clojure's evaluation model
+;; - Start using an interactive development workflow
+;;   right away --- this is what it means to be a
+;;   "Dynamic" programming language (not to be confused
+;;   with dynamically typed languages.)
 
 
+;; All Clojure code is composed of "expressions":
+;; - And, all Clojure expressions evaluate to a value.
 
-;; Clojure is a "Lisp"
-;; - Lisp is short for List Processing
-;; - It's just another way to design a programming language
-;;   (Ignore "But, Why?" for now... Just use it as it is, and try to
-;;    do something practical with it.)
+;; - "Atomic" literals:
+"hello"                       ; strings
+:hello                        ; keywords
+\h \e \l \l \o                ; characters
+'hello                        ; symbols
+42                            ; numbers
+22/7                          ; fractional numbers
+nil                           ; yes, nil is a value
 
+;; - Collection literals:
+[1 2 3 4 5]                   ; a vector
+{:a 1 :b 2}                   ; a hash-map (key-value pairs)
+#{1 2 3 4 5}                  ; a hash-set
+'(1 2 3 4 5)                  ; a list
 
+;; - "Built-in" functions:
++                             ; addition
+map                           ; map over a collection
+filter                        ; filter from a collection
+reduce                        ; transform a collection
 
-;; Clojure code is composed of "expressions":
+;; - "Symbolic" expressions (or "s"-expression or s-expr)
 
-;; These literal values are Clojure "expressions"
-"hello"                                 ; strings
-:hello                                  ; keywords
-'hello                                  ; symbols
-42                                      ; numbers
-22/7                                    ; fractional numbers
+(+ 1 2)                       ; a simple s-expr
 
-;; "Built-in" functions are also "expressions"
-;; - We will meet all of these again, very soon.
-+                                       ; addition
-map                                     ; map over a collection
-filter                                  ; filter from a collection
-reduce                                  ; transform a collection
-
-
-;; Collection "literals" are expressions too:
-;; - We will extensively use such "collection" data structures.
-[1 2 3 4 5]                             ; a vector
-{:a 1 :b 2}                             ; a hash-map
-#{1 2 3 4 5}                            ; a hash-set
-'(1 2 3 4 5)                            ; a list
-
-
-;; Clojure code is also composed of expressions;
-;; - we refer to them as "symbolic" expressions (or "s"-expression)
-
-(+ 1 2) ; an s-expression
-
-(+ (+ 1 2) (+ 1 2)) ; an s-expression of nested expressions
+(+ (+ 1 2) (+ 1 2))           ; an s-expr of nested s-exprs
 
 (+ (+ (+ 1 2) (+ 1 2))
-   (+ (+ 1 2) (+ 1 2))) ; an even more nested s-expression
+   (+ (+ 1 2) (+ 1 2)))       ; an even more nested s-expr
+
+(defn same
+  [x]
+  x)                          ; function definitions are also s-exprs
 
 
-;; In fact, ALL Clojure code is just "expressions"
-;; - And, all Clojure expressions evaluate to a value.
+;; Namespaces:
 ;;
-;; - All literals evaluate to themselves. They are values.
-;;   (Hence "literal": a literal is what it is. :-D)
-;;
-;; - All collection literals also evaluate to themselves.
-;;   (A literal collection is what it is, too.)
-;;
-;; - All functions are values.
-;;   (More on this a little later)
-;;
-;; - All s-expressions, however deeply nested, finally evaluate
-;;   to a return value. Expressions evaluate to either a literal,
-;;   or a collection, or a function.
+;; - are how we organize and/or modularise code
+;; - All Clojure code is defined and evaluated within namespaces
+
+
+;; EXERCISE:
+;; Evaluate the following expressions and see what you get.
+;; - First, type the expression in the REPL
+;; - Next, evaluate them straight from your codebase
+
+map   ; is defined in the `clojure.core` ns (namespace)
+
+same  ; is defined in the current ns
+
+#_(ns-name *ns*) ; What's the current ns?
+
+(comment
+  ;; PROTIP:
+  ;;
+  ;; Your IDE or text editor would have a convenient shortcut to
+  ;; evaluate any Clojure expression right from your codebase.
+  ;;
+  ;; Some editors allow you to "evaluate in-line", some would
+  ;; tell you to "send to the REPL". Consult the documentation
+  ;; that accompanies your editor's Clojure plugin, to learn
+  ;; how to do this.
+  ;;
+  ;; Make a habit of interacting "dynamically" with Clojure
+  ;; this way, right from inside your codebase; i.e. prefer
+  ;;_not_ to type things directly into the REPL.
+  )
+
 
 
 ;; Clojure expression syntax rules:
-;;
+
 ;; - Literals:
 ;;   - Just write them down
-;;
-;; - Collection Literals:
-;;   - Just write them down too, but also
-;;   - make sure opening brackets are always matched by closing brackets
-;;     [1 2 3]  is a well-formed vector representation
-;;     [1 2 3   is an "unbalanced" vector and will cause an error.
-;;
-;; - Symbolic expressions ("s-expressions"):
-;;   - Make sure the round parentheses close over the intended/required
-;;     sub-expressions
-;;     (+ 1 2)  is a well-formed expression that will be evaluated
-;;     (+ 1 2   is an "unbalanced" s-expression and will cause an error.
+
+;; - Collection literals and s-expressions:
+;;   - ABC - Always. Be. Closing. :-D
+;;   - The Clojure "Reader" (the 'R' part of the R.E.P.L)
+;;     expects each open bracket to be accompanied by a
+;;     corresponding closing bracket. i.e. all parentheses
+;;     must be "balanced".
+
+;;   [1 2 3]         ; OK
+;;   [1 2 3          ; FAIL
+
+;;   {:a 1 :b 2}     ; OK
+;;   {:a 1 :b 2      ; FAIL
+
+;;   (+ 1 2)         ; OK
+;;   (+ 1 2          ; FAIL
+
+;; - Indentation, extra spaces, and commas are just for
+;;   our reading convenience. Example: all of the following
+;;   literal maps represent the same value:
+
+{:a 1   :b 2}
+
+{:a 1,  :b 2}
+
+{:a 1,
+ :b 2}
+
+{:a 1
+ :b 2}
+
+{:a 1
+ :b
+ 2}
 
 
-;; Clojure Code Evaluation Rules:
-;;
-;; - To instruct Clojure to evaluate a list of expressions,
-;;   enclose the expressions in round parentheses.
-;;   - Recall: (+ 1 2)
-;;
-;; - The very first expression after an opening paren MUST be
-;;   a function.
-;;   - So: (1 2) will fail, because 1 is not a function
-;;
-;; - All expressions or sub-expressions that follow the first expression
-;;   will first be fully evaluated into values, and then passed to
-;;   the first expression as arguments.
-;;   - Recall: (+ (+ (+ 1 2) (+ 1 2))
-;;                (+ (+ 1 2) (+ 1 2)))
-;;
-;;   - You may mentally evaluate the above form "inside-out", like this:
-;;     - Evaluate the smallest and innermost expressions first,
-;;     - Mentally replace them with their return values
-;;     - Pass those values as arguments to the next higher expression
-;;     - Continue until you are left with a literal value.
-;;
-;;     (+ (+ (+ 1 2) (+ 1 2))
-;;        (+ (+ 1 2) (+ 1 2)))
-;;
-;;     (+ (+  3       3     )
-;;        (+  3       3     ))
-;;
-;;     (+ 6
-;;        6)
-;;
-;;     12
-;;
-;;   - Keep this evaluation model in mind, when you read Clojure code,
-;;     to figure out how the code will evaluate.
-;;
-;; - To prevent evaluation, explicitly mark an expression as a list
-;;   '(1 2) put a single quote in front of an expression to tell Clojure
-;;   you don't want it to evaluate that expression.
-;;
-;; - To comment out in-line comment text, or even an expression,
-;;   place one or more semi-colons before the text/expression.
-;;
-;; - `#_` is a clean way to comment out multi-line s-expressions
-;;   Compare this:
-#_(+ 1 2
-     3 4
-     5 6)
-;;   With this:
-;; (+ 1 2
-;;    3 4
-;;    5 6)
+
+;; Clojure Expression Evaluation Rules:
+
+;; - Wrap in parentheses to cause evaluation.
+;;   The first position is special, and must be
+;;   occupied by a function
+
+(+ 1 2)    ; OK
+;; (1 2)   ; FAIL, because 1 is not a function
+
+;; - Mentally evaluate nested expressions "inside-out".
+;;   Usually, all s-expressions--however deeply nested--evaluate
+;;   to a return value; a literal, or a collection, or a function,
+;;   or some legal object.
+
+(+ (+ (+ 1 2) (+ 1 2))
+   (+ (+ 1 2) (+ 1 2)))
+
+(+ (+  3       3     )
+   (+  3       3     ))
+
+(+ 6
+   6)
+
+12
+
+;; - _Prevent_ evaluation of s-expr by "quoting" it,
+;;   i.e. explicitly marking a list, by prefixing it
+;;   with a single quote `'`:
+
+'(+ 1 2) ; BUT the list will still remain in the evaluation path
+
+;; - Leave an s-expression in-line, but remove it from
+;;   the evaluation path, by prefixing it with `#_`:
+
+(+ 1 2 #_(+ 1 2))  ; will evaluate to 3
+
+;; - Comment out entirely, by prefixing code with one or more
+;;   semicolons, just like in-line comments.
+
+;; (+ (+ 1 2)
+;;    (+ 1 2)) ; fully commented out
 
 
-;; Why is Clojure a "List Processing" language?
+;; EXERCISE:
+;; - Now, why will the following expression fail (throw an exception)?
+;;   Make an educated guess, then try it.
+
+;; (+ 1 2 '(+ 1 2)) ; un-comment and evaluate; then comment it back
+
+
+(comment
+  ;; PROTIP:
+  ;;
+  ;; The special "#_" syntax is called a "reader macro".
+  ;;
+  ;; For now, ignore what that means, just know the effect of
+  ;; using it. You will see #_ often in code to follow.
+  ;;
+  ;; Incidentally, the single quote we used '(to mark a list)
+  ;; is also a reader macro. Many more specialized reader macros
+  ;; are available, but don't go there just yet.
+  )
+
+
+
+;; Why is Clojure a Lisp ("LISt Processing") language?
 
 '(+ 1 2) ; Recall: this is a Clojure list, that Clojure evaluates
          ; as literal data.
@@ -162,8 +208,8 @@ reduce                                  ; transform a collection
         ; as an executable list, and tries to evaluate it as code.
 
 
-;; More generally, Clojure code, like other lisps, is written
-;; in terms of its own data structures. For example:
+;; More generally, Clojure code is written in terms of Clojure's
+;; own data structures. For example:
 ;;
 ;; Here is a function definition.
 (defn hie
@@ -173,20 +219,21 @@ reduce                                  ; transform a collection
 ;; What does it look like?
 ;; - Let's flatten it into one line for illustrative purposes:
 
-
-;;[1] [2]   [3]              [4]
+;;[1] [2] [3]              [4]
 (defn hie [person message] (str "Hie, " person " : " message)) ; [5]
-;; Where:
-;; - [1] `defn` is a Clojure built-in function
-;;   - Notice, it's at the 1st position, and
-;;   - 2-4 are all arguments to defn
-;; Further:
-;; - [2] is a Clojure symbol, `hello`, which will name the function
-;; - [3] is a Clojure vector of two named arguments
-;; - [4] is a Clojure s-expression, and is treated as the body of
-;;       the function definition
-;; - [5] the whole thing itself is a Clojure s-expression!
 
+(comment
+  ;; Here:
+  ;; - [1] `defn` is a Clojure built-in primitive
+  ;;   - Notice, it's at the 1st position, and
+  ;;   - 2-4 are all arguments to defn
+  ;; Further:
+  ;; - [2] is a Clojure symbol, `hie`, which will name the function
+  ;; - [3] is a Clojure vector of two named arguments
+  ;; - [4] is a Clojure s-expression, and is treated as the body of
+  ;;       the function definition
+  ;; - [5] the whole thing itself is a Clojure s-expression!
+  )
 
 
 ;; RECAP:

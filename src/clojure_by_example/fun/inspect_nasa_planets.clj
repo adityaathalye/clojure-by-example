@@ -1,4 +1,4 @@
-(ns clojure-by-example.utils.core
+(ns clojure-by-example.fun.inspect-nasa-planets
   (:require [net.cgrand.enlive-html :as html]
             [clojure.string :as cs]
             [clojure.inspector :as inspect]))
@@ -131,7 +131,7 @@
                            (map :content)
                            flatten
                            ((partial map
-                                     (fn [s] (cs/replace s #" " ""))))
+                                     (fn [s] (cs/replace s #"ï¿½" ""))))
                            rest ; get rid of empty column's label
                            (map keywordize))
         massage-row-label #(cond (#{:a} (:tag %))
@@ -148,7 +148,7 @@
                                       (partial map massage-row-label)
                                       :content)))
         cleanup-stats (comp (partial partition num-cols)
-                            (partial filter #(not= " " %))
+                            (partial filter #(not= "ï¿½" %))
                             flatten
                             #(map :content %)
                             #(take num-stats %)

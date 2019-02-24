@@ -1,4 +1,6 @@
-(ns clojure-by-example.ex06-full-functional-firepower)
+(ns clojure-by-example.ex06-full-functional-firepower
+  (:require [clojure.data.json :as json]
+            [clojure.java.io :as io]))
 
 ;; Ex06: Lesson Goals
 ;; - This is more of a code-reading section, designed to:
@@ -115,8 +117,8 @@
 ;; - Document the schema as in-line comments, for this dirty prototype.
 ;;
 (def sensor-data-files
-  {;; {"Planet Name":{"radius":<num>}, ...}
-   :planets "planet_detector.json"
+  ;; {"Planet Name":{"radius":<num>}, ...}
+  {:planets "planet_detector.json"
 
    ;; {"Planet Name":<num-moons>, ...}
    :moons "moon_detector.json"
@@ -144,11 +146,12 @@
 
 ;; ---------------------- Input Boundary begins ------------------------
 
-(defn ingest-json-file
+(defn ingest-json-file!
   [dir-path file-name]
   (let [file-path (str dir-path file-name)]
-    (with-open [reader (clojure.java.io/reader file-path)]
-      (clojure.data.json/read reader))))
+    (with-open [reader (io/reader file-path)]
+      (json/read reader
+                 :key-fn keyword))))
 
 
 (defn gather-all-sensor-data!
@@ -159,8 +162,8 @@
   (let [ingest-sensor-data
         (fn [out-map [sensor-key sensor-file]]
           (assoc out-map
-                 sensor-key (ingest-json-file data-dir
-                                              sensor-file)))]
+                 sensor-key (ingest-json-file! data-dir
+                                               sensor-file)))]
     (reduce ingest-sensor-data
             {} ; out-map starts empty
             sensor-files-map)))
@@ -200,26 +203,24 @@
           atmosphere))
 
 
-(defn denormalise-planetary-data
+(defn denormalise-planetary-data*
   "Given a hash-map of planetary data (keyed by planet names),
   return just the planetary data, with the planet's names added in.
 
   Also ensure all keys are keywordized, for convenient look-ups."
   [planets]
   (map (fn [[pname pdata]]
-         (let [keywordized-pdata (clojure.walk/keywordize-keys
-                                  pdata)]
-           (assoc keywordized-pdata
-                  :name pname)))
+         (assoc pdata
+                :name (name pname)))
        planets))
 
 
-(defn denormalised-planetary-data
+(defn denormalise-planetary-data
   "Given all sensor data, produce a collection of denormalized
   planetary data."
   [{:keys [planets atmosphere moons]
     :as all-sensor-data}]
-  ((comp denormalise-planetary-data
+  ((comp denormalise-planetary-data*
          (partial add-atmosphere-data atmosphere)
          (partial add-moon-data moons))
    planets))
@@ -229,26 +230,26 @@
 
 
 ;; First try this, to check packaged data...
-#_(denormalised-planetary-data
+#_(denormalise-planetary-data
    (gather-all-sensor-data! sensor-data-dir
                             sensor-data-files))
 
 ;; Does the result look familiar?
 
 
-(defn write-out-json-file
+(defn write-out-json-file!
   [dir-path file-name data]
   (let [file-path (str dir-path file-name)]
-    (with-open [writer (clojure.java.io/writer file-path)]
-      (clojure.data.json/write data writer))))
+    (with-open [writer (io/writer file-path)]
+      (json/write data writer))))
 
 
 (defn ingest-export-sensor-data!
   [data-dir source-data-files dest-data-file]
-  (write-out-json-file
+  (write-out-json-file!
    data-dir
    dest-data-file
-   (denormalised-planetary-data
+   (denormalise-planetary-data
     (gather-all-sensor-data! data-dir source-data-files))))
 
 
@@ -268,15 +269,10 @@
 
 ;; The Planetary Data Scientists reveal their nefarious intentions:
 
-#_(clojure-by-example.ex04-control-flow/colonize-habitable-planets!
-   (denormalised-planetary-data
-    (gather-all-sensor-data! sensor-data-dir
-                             sensor-data-files)))
-;; Note:
-;; - For this to work, colonize-habitable-planets must be complete
-;; - And you should have first evaluated it, to make it unable
-;; - Which means, you have to first correctly solve ex04
-
+;; (colonize-habitable-planets! ; deviously implemented by them, elsewhere
+;;    (denormalise-planetary-data
+;;     (gather-all-sensor-data! sensor-data-dir
+;;                              sensor-data-files)))
 
 
 ;; RECAP:
