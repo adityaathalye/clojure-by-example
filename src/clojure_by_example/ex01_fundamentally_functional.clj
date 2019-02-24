@@ -78,7 +78,7 @@
 ;; - Then replace 'FIX with your solution and evaluate to confirm.
 ;; - Think about the little experiment you just performed, and
 ;;   form a theory about why the solution worked
-(= 'FIX
+(= same
    (same same)
    ((fn [x] x) same))
 
@@ -95,9 +95,9 @@
 ;; - Note: Functions are values and can therefore be compared.
 ;;
 (= identity
-   ('FIX identity)
-   ('FIX identity)
-   ('FIX identity))
+   (identity identity)
+   (same identity)
+   ((fn [x] x) identity))
 ;;
 ;; Now, evaluate this in the REPL to _see_ the truth:
 ;;
@@ -132,7 +132,7 @@
 
 (defn gen-identity
   [] ; zero arguments
-  'FIX)
+  identity)
 
 ;; EXERCISE
 ;; Fix this function so that it returns a function that _behaves_
@@ -140,7 +140,7 @@
 
 (defn gen-identity-v2
   []
-  'FIX)
+  (fn [x] x))
 
 ;; EXERCISE
 ;; Replace 'FIX1 with a call to the `gen-identity` function,
@@ -148,8 +148,8 @@
 ;; such that the following evaluates to true.
 
 (= identity
-   'FIX1
-   'FIX2)
+   (gen-identity)
+   ((gen-identity-v2) identity))
 
 
 ;; Composing Logic with Higher-order Functions (HoFs):
@@ -193,7 +193,7 @@
 
 (= [\4 \2]
    (vec (str (inc 41)))
-   ('FIX 'FIX))
+   ((comp vec str inc) 41))
 
 (comment
   ;; Reason about the order of evaluation and how inputs
@@ -213,7 +213,7 @@
 ;; - `complement` accepts a "predicate" function, and returns a
 ;;   function that does the opposite of the given "predicate"
 (= (not (string? "hi"))
-   ('FIX 'FIX))
+   ((complement string?) "hi"))
 
 (comment
   ;; "Predicate" is just a term we use to conveniently describe
@@ -255,6 +255,10 @@
 (identity x)    ; obviously returns 42
 
 ((fn [x] x)  x) ; also returns 42, but how?
+;; SOLUTION: Substitute each x mechanically...
+;; ((fn [x] x)  42) ; the "outer" `x` "resolves" to the `x` we def'd into the global scope
+;; ((fn [] 42))     ; the function call now reduces to a function with a constant return value
+;; 42               ; the final "atomic" value produced after complete evaluation
 
 (let [x 10]     ; We use `let` to bind things locally.
   x)            ; This evaluates to the value of the "let-bound" `x`.
@@ -262,7 +266,15 @@
 (+ (let [x 10]
      x)
    x)           ; So, this whole thing should evaluate to what?
-
+;; SOLUTION: Substitute each `x` mechanically
+;; (+ (let [x 10]
+;;      x)
+;;    42) ; "resolves" to the `x` in the global scope, that we bound using def
+;;
+;; (+ 10  ; "resolves" to the let-bound `x`
+;;    42)
+;;
+;; 52
 
 ;; EXERCISE
 ;; Read carefully, and compare these three function variants:
@@ -272,6 +284,22 @@
   (+ x 1)) ; which `x` will this `x` reference?
 
 (add-one-v1  1) ; should evaluate to what?
+;; SOLUTION: substitute mechanically, and narrow down scope of `x` bindings
+;;
+;; STEP 1:
+;; ((fn [x]
+;;    (+ x 1))  1)
+;;
+;; STEP 2:
+;; (let [x 1]  ; the function invocation can now be reduced to a `let`
+;;   (+ x 1))  ; with the now-known value of `x` bound in the local scope
+;;
+;; STEP 3:
+;; (+ 1 1)
+;;
+;; FINALLY:
+;; 2
+
 (add-one-v1  x) ; should evaluate to what?
 
 
@@ -280,8 +308,23 @@
   (+ x 1)) ; which `x` will this `x` reference?
 
 (add-one-v2  1) ; should evaluate to what?
-(add-one-v2  x) ; should evaluate to what?
+;; SOLUTION: substitute mechanically, and narrow down scope of `x` bindings
+;;
+;; STEP 1:
+;; ((fn [z]
+;;    (+ x 1)) 1)
+;;
+;; STEP 2:
+;; (let [z 1]
+;;   (+ x 1)) ; since `x` is not let-bound, we must try to resolve it outside the let
+;;
+;; STEP 3:
+;; (+ 42 1)  ; since `z` was not used in the `let` body, we can further reduce to this
+;;
+;; FINALLY:
+;; 43
 
+(add-one-v2  x) ; should evaluate to what?
 
 (defn add-one-v3
   [x]
@@ -338,23 +381,38 @@
 
 ;; EXERCISE
 ;;
-#_(= (scale-by-PI 10)
-     ('FIX 10)
+(comment
+  (= (scale-by-PI 10)
+     ((scale-by PI) 10)
      (* PI 10))
+  )
 
 (comment
   ;; BONUS EXERCISES
   ;; Define a few scaling functions, in terms of `scale-by`
   ;;
   (def scale-by-PI-v2
-    'FIX)
+    (scale-by PI))
+
+  (= (scale-by-PI-v2 10)
+     (scale-by-PI 10)
+     ((scale-by PI) 10)
+     (* PI 10))
 
   (def quadruple
     "4x the given number."
-    'FIX)
+    (scale-by 4))
+
+  (= (quadruple 5)
+     20)
+
 
   (def halve
-    'FIX))
+    (scale-by 1/2))
+
+  (= (halve 42)
+     21)
+)
 
 
 ;; Sequences (or Collections)
