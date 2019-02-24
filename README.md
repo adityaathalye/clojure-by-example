@@ -23,8 +23,8 @@ What could one do with just a _little_ bit of Clojure?
   - The `master` branch is heavily commented, for at-home use
   - A `solutions` branch will be available, as a companion to `master`.
     But don't peek at it in advance!
-  - Ignore the `workshop-code` branch. It is only for workshop use,
-    and subject to deletion/re-creation.
+  - You may see a `workshop-code` branch. Ignore it. It is meant only for
+    workshop use, and is subject to deletion/re-creation.
 
 ## Contributions
   - If you find bugs or errors, please send a PR (but please

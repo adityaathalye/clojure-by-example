@@ -228,7 +228,7 @@ same  ; is defined in the current ns
   ;;   - Notice, it's at the 1st position, and
   ;;   - 2-4 are all arguments to defn
   ;; Further:
-  ;; - [2] is a Clojure symbol, `hello`, which will name the function
+  ;; - [2] is a Clojure symbol, `hie`, which will name the function
   ;; - [3] is a Clojure vector of two named arguments
   ;; - [4] is a Clojure s-expression, and is treated as the body of
   ;;       the function definition

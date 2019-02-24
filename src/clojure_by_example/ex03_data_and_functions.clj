@@ -14,17 +14,17 @@
 ;;   in order to process a bunch of planets:
 ;;
 ;;   - Standard Library (about 20 functions):
-;;     `def`, `defn`, `let` -- to define/name simple data and small functions
-;;     `get`, `get-in`, `assoc` -- to query and associate data
-;;     `map`, `filter`, `reduce` -- to operate on collections
-;;     `if`, `when`, `cond` -- to decide things
-;;     `not`, `and`, `empty?`, `<=`, `count` -- for logic and quantities
-;;     `comp`, `complement` -- to glue higher-order logic
+;;     `def`, `defn`, `fn`, `let`            ; to create/name simple data and small functions
+;;     `get`, `get-in`, `assoc`              ; to query and associate data
+;;     `map`, `filter`, `reduce`             ; to operate on collections
+;;     `if`, `when`, `cond`                  ; to decide things
+;;     `not`, `and`, `empty?`, `<=`, `count` ; for logic and quantities
+;;     `comp`, `complement`                  ; to glue higher-order logic
 ;;
 ;;   - Concepts:
 ;;     - Compute only with pure functions:
 ;;       - Build higher-order logic with higher order functions
-;;       - Lexical scope and function closures for
+;;       - Lexical scope and function closures to maximize modularity
 ;;     - Collections as functions:
 ;;       - Keywords as functions of hash-maps
 ;;       - Well-defined Sets as predicates --- tests of set membership
