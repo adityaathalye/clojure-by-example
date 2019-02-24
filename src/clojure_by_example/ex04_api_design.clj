@@ -88,23 +88,45 @@
   given map of `tolerances`. Use a globally-defined `tolerances`
   map as a sane default if only tolerance-key is passed in."
   ([tolerance-key]
-   (get-in tolerances
+   (get-in tolerances ; resolves to the global `tolerances`
            [tolerance-key :low]))
-  ([FIX1 FIX2]
-   'FIX))
+  ([tolerance-key tolerances]
+   (get-in tolerances ; resolves to whatever is passed in place of `tolerances`
+           [tolerance-key :low])))
 
 #_(= (lower-bound    :co2)
      (lower-bound-v2 :co2)
      (lower-bound-v2 :co2 tolerances)
      (lower-bound-v2 :co2 {:co2 {:low 0.1}}))
 
+;; But, but... now there's repeat code in the function definition... Sacrilege!
+;; OK, since we can write recursive definitions...
+(defn lower-bound-v3
+  "Just like `lower-bound-v2`, but with code reuse by way of a recursive call."
+  ([tolerance-key]
+   ;; This simply calls the two-arg version of `lower-bound-v3`,
+   ;; and passes in `tolerances`, which, in this one-arg definition
+   ;; resolves to the global that we created using `def` (scroll up).
+   (lower-bound-v3 tolerance-key
+                   tolerances))
+  ([tolerance-key tolerances]
+   (get-in tolerances
+           [tolerance-key :low])))
+
+#_(= (lower-bound    :co2)
+     (lower-bound-v2 :co2)
+     (lower-bound-v2 :co2 tolerances)
+     (lower-bound-v2 :co2 {:co2 {:low 0.1}})
+     (lower-bound-v3 :co2)
+     (lower-bound-v3 :co2 tolerances)
+     (lower-bound-v3 :co2 {:co2 {:low 0.1}}))
 
 (comment
   ;; BONUS EXERCISE
   ;; Do the same for `upper-bound-v2`
-  #_(defn upper-bound-v2
-      'FIX
-      'FIX)
+  (defn upper-bound-v2
+    'FIX
+    'FIX)
 
   #_(= (upper-bound    :co2)
        (upper-bound-v2 :co2)
@@ -211,11 +233,40 @@
 ;; then try to recall and reinforce a key concept.
 ;; Hints:
 ;; - Relate it to our preferred way to model the world.
+;;   - We prefer to model the "world" using hash-maps and other collections.
+;;
 ;; - What is the "world" here?
+;;   - Here, our "world" is the _domain of de-structuring_, which is used to
+;;     extract information from the entities that model our _domain of planets_
+;;
 ;; - What are we using to model/describe what property of what?
-;;   (Yes, that's three 'what's :-)
-
-
+;;   - We are using hash-maps to describe the relevant information to extract
+;;     out of our domain entities, which in turn were also structured using
+;;     hash-maps. Yes, this is rather abstract... so just compare the two:
+;;
+;;   - [Exhibit A] - Hash map from the _domain of de-structuring_:
+;;
+;;     {:keys [pname mass]
+;;      :as planet}
+;;
+;;   - [Exhibit B] - Hash-map from the _domain of planets_:
+;;
+;;     {:mass 0.055,
+;;      :radius 0.383,
+;;      :atmosphere {},
+;;      :gravity 0.378,
+;;      :moons 0,
+;;      :surface-pressure 0,
+;;      :pname "Mercury",
+;;      :surface-temp-deg-c {:low -170, :high 449},
+;;      :rocky? true}
+;;
+;;   - "Exhibit B" above represents the information about a planet,
+;;
+;;   - "Exhibit A" above represents the information about the _structure_
+;;     and the _shape_ of the thing that represents a planet
+;;
+;;
 ;; EXERCISE:
 ;;
 ;; - Use de-structuring to refactor the following functions
@@ -232,8 +283,9 @@
 
 
 (defn atmosphere-present?-refactored
-  [FIXME]
-  FIXME)
+  [{:keys [atmosphere]
+    :as planet}]
+  (not (empty? atmosphere)))
 
 #_(= (map :pname
           (filter atmosphere-present? p/target-planets))
@@ -252,8 +304,13 @@
 
 
 (defn co2-tolerable?-refactored
-  [FIXME]
-  FIXME)
+  [{:keys [atmosphere]
+    :as planet}]
+  (let [co2 (:carbon-dioxide atmosphere)]
+    (when co2
+      (<= (lower-bound :co2)
+          co2
+          (upper-bound :co2)))))
 
 #_(= (map :pname
           (filter co2-tolerable? p/target-planets))
@@ -281,15 +338,25 @@
 
 
 (defn surface-temp-tolerable?-refactored
-  [{:keys [FIXME] :as planet}]
-  FIXME)
+  [{:keys [surface-temp-deg-c]
+    :as planet}]
+  (let [low (:low surface-temp-deg-c)
+        high (:high surface-temp-deg-c)]
+    (when (and low high)
+      (<= (lower-bound :surface-temp-deg-c)
+          low
+          high
+          (upper-bound :surface-temp-deg-c)))))
 
 
 (defn surface-temp-tolerable?-refactored-v2
   [{{:keys [low high]} :surface-temp-deg-c
     :as planet}]
-  'FIXME)
-
+  (when (and low high)
+    (<= (lower-bound :surface-temp-deg-c)
+        low
+        high
+        (upper-bound :surface-temp-deg-c))))
 
 #_(= (map :pname
           (filter surface-temp-tolerable?
@@ -299,6 +366,39 @@
                   p/target-planets))
      (map :pname
           (filter surface-temp-tolerable?-refactored-v2
+                  p/target-planets)))
+
+(comment
+  ;; Compare the documentation for each function variant, and
+  ;; form an opinion about which variant provides better
+  ;; self-documentation:
+
+  (clojure.repl/doc surface-temp-tolerable?)
+
+  (clojure.repl/doc surface-temp-tolerable?-refactored)
+
+  (clojure.repl/doc surface-temp-tolerable?-refactored-v2)
+  )
+
+
+;; BONUS:
+;; We could also implement a nested de-structuring for the
+;; co2-tolerable? function, like this:
+(defn co2-tolerable?-refactored-further
+  [{{:keys [carbon-dioxide]} :atmosphere
+    :as planet}]
+  (when carbon-dioxide
+    (<= (lower-bound :co2)
+        carbon-dioxide
+        (upper-bound :co2))))
+
+#_(= (map :pname
+          (filter co2-tolerable? p/target-planets))
+     (map :pname
+          (filter co2-tolerable?-refactored
+                  p/target-planets))
+     (map :pname
+          (filter co2-tolerable?-refactored-further
                   p/target-planets)))
 
 
