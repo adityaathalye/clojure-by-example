@@ -71,10 +71,10 @@
 ;; - Use `get` to extract :traces from `earth-alt`'s atmosphere
 ;; - The use `get-in` to do the same
 
-#_(get 'FIX
-       'FIX)
+#_(get (get earth-alt :atmosphere)
+       :traces)
 
-#_(get-in 'FIX 'FIX)
+#_(get-in earth-alt [:atmosphere :traces])
 
 
 ;; BUT, unlike plain old strings, keywords also behave as
@@ -89,7 +89,7 @@
 ;; EXERCISE
 ;; Extract `:argon` from the `:atmosphere` of `earth-alt`
 
-('FIX ('FIX earth-alt))
+(:argon (:atmosphere earth-alt))
 
 
 ;; Which means we can use keywords in this manner:
@@ -115,9 +115,10 @@
 
 (defn less-mass-than-earth?
   [planet]
-  (< ('FIX planet) 1))
+  (< (:mass planet) 1))
 
-('FIX 'FIX 'FIX)
+(filter less-mass-than-earth?
+        planets)
 
 
 ;; EXERCISE
@@ -128,6 +129,15 @@
 ;; Use these to compute the total `:mass` of planets
 ;; having less mass than the Earth.
 
+;; SOLUTION:
+;; Note:
+;; There are much nicer-looking ways to write the solution
+;; using concepts we do not discuss in this workshop,
+;; but the solution presented here is perfectly fine.
+(reduce + 0
+        (map :mass
+             (filter less-mass-than-earth?
+                     planets)))
 
 
 ;; Maps, Vectors, and Sets also behave like functions!
@@ -164,10 +174,13 @@
 
 (def poison-gas?
   "Does the given gas belong to a set of known poison gases?"
-  'FIX)
+  ;; SOLUTION: simply write the syntax for a literal set #{}, and
+  ;; copy paste the provided "known poison gases" within the braces.
+  #{:carbon-monoxide, :chlorine, :helium
+    :sulphur-dioxide, :hydrogen-chloride})
 
-(poison-gas? :chlorine)                 ; truthy
-(poison-gas? :oxygen)                   ; falsey
+(poison-gas? :chlorine)                 ; truthy ... this will return :chlorine
+(poison-gas? :oxygen)                   ; falsey ... this will return nil
 
 
 ;; Collections are "open", i.e. very flexible
