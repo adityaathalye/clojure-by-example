@@ -25,6 +25,8 @@ What could one do with just a _little_ bit of Clojure?
     But don't peek at it in advance!
   - You may see a `workshop-code` branch. Ignore it. It is meant only for
     workshop use, and is subject to deletion/re-creation.
+  - Incidentally, if you landed here while searching for Kim Hirokuni's
+"[Clojure By Example](https://kimh.github.io/clojure-by-example/)", well, follow the link!
 
 ## Contributions
   - If you find bugs or errors, please send a PR (but please
