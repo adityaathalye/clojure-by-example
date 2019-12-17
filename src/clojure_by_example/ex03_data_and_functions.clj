@@ -333,3 +333,46 @@ p/target-planets
 
 
 #_(map assign-vessels p/target-planets)
+
+;; Something's not right...The Office of Interstellar Affairs tells us we're not assigning vessels correctly?!
+;; We've only deployed probes and orbiters, and no other vessels?!
+
+;; We spent all this time and 300 lines of code to direct these vessels, and the orders aren't even correct!
+;; We don't even see an error message! Clearly Clojure is the worst language ever made!
+
+;; ...OR IS IT?
+
+(comment
+  ;; It's time to learn how Clojure allows us to debug and understand our programs, using nothing more
+  ;; than the REPL and our wits.
+
+  ;; Let's look at our results again, shall we? Are we really only deploying probes and orbiters?
+
+  (map assign-vessels p/target-planets)
+
+  ;; That's a bit hard to visually parse, how about this:
+
+  (map :mission-vessels (map assign-vessels p/target-planets))
+
+  ;; The OIA is right! But why is this happening?
+  ;; Either our directive to fleet mapping is wrong, or our issued directives are wrong.
+
+  starfleet-mission-configurations
+
+  ;; The configurations look fine. What about the directives?
+
+  (map :mission-directive (map assign-vessels p/target-planets))
+
+  ;; We're only probing and observing! Clearly issue-mission-directive is at fault.
+  ;; Let's take a look at its source code again.
+
+  ;; Does this mean that there are no planets which our code considers habitable or colonisable?
+
+  ;; EXERCISE:
+  ;; Check whether we have any habitable or colonisable planets according to the habitable? and colonisable? predicates.
+
+
+
+  ;;
+  )
+
