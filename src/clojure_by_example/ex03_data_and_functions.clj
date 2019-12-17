@@ -228,7 +228,7 @@ p/target-planets
 (def fatal-conditions
   "A collection of functions that tell us about the
   fatality of planetary conditions."
-  [(complement atmosphere-present?)
+  [complement atmosphere-present?
    air-too-poisonous?])
 
 
