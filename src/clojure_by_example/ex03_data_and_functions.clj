@@ -399,6 +399,10 @@ p/target-planets
 
   ;; EXERCISE: Diagnose and fix the broken conditions.
 
+  ;; Does everything work now?
+
+  (map assign-vessels p/target-planets)
+
   ;; The Clojure REPL is a powerful debugging tool that supersedes more traditional step-through debuggers
   ;; in many ways.
   ;; You can:
