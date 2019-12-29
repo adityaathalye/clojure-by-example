@@ -4,11 +4,11 @@
 
 
 ;; Ex03: LESSON GOALS
-;; - Primarily, a code reading exercise
 ;; - Explore various bits and bobs of the solution interactively
 ;;   using the live environment at your disposal
 ;; - Get some ideas of how to take just a handful of pieces,
 ;;   and build sophisticated logic with them
+;; - Debug any issues that might arise
 ;; - We use only the concepts and standard library functions
 ;;   we've seen so far, to build purely functional logic
 ;;   in order to process a bunch of planets:
@@ -371,8 +371,48 @@ p/target-planets
   ;; EXERCISE:
   ;; Check whether we have any habitable or colonisable planets according to the habitable? and colonisable? predicates.
 
+  ;; Apparently we don't!
+  ;; At the very least, the planet Earth should be both habitable and colonisable.
+  ;; At least now we know that habitable? and colonisable? are problematic. But why? Let's look at their implementation.
+  ;; We'll narrow in on habitable? for the time being, and worry about colonisable? later.
 
+  ;; A planet is habitable iff:
+  ;; 1. It has an atmosphere
+  ;; 2. The air is not too poisonous
+  ;; 3. The carbon dioxide, gravity and temperature levels are all tolerable
 
-  ;;
+  ;; The following issues are possible:
+  ;; 1. planet-meets-any-one-condition? is broken.
+  ;; 2. planet-meets-no-condition? is broken.
+  ;; 3. minimal-good-conditions is broken.
+  ;; 4. fatal-conditions is broken.
+  ;; 5. Any or all of the above.
+
+  ;; EXERCISE: Check if planet-meets-any-one-condition? works correctly.
+  ;; planet-meets-any-one-condition? accepts predicates as a parameter, and doesn't care about the predicates
+  ;; themselves. Because of this, we can simplify our debugging by using simple and obvious predicates,
+  ;; rather than using the predicates in the production code.
+
+  ;; EXERCISE: Check if planet-meets-no-condition? works correctly.
+
+  ;; If none of those work, clearly there's something wrong with our conditions themselves.
+
+  ;; EXERCISE: Diagnose and fix the broken conditions.
+
+  ;; The Clojure REPL is a powerful debugging tool that supersedes more traditional step-through debuggers
+  ;; in many ways.
+  ;; You can:
+  ;; 1. Test individual functions or constants to check if they're correct.
+  ;; 2. Redefine a function to add tracing such as print statements, or other forms of instrumentation.
+  ;; 3. Capture intermediate values such as function arguments or let bindings, and inspect them in the REPL
+  ;;    after the fact.
+  ;; 4. Fix the problem and verify that it works immediately.
+  ;; 5. Do all of the above either locally, or while connected to a remote server running in a staging or
+  ;;    production environment.
+
+  ;; We strongly recommend going through https://clojure.org/guides/repl/enhancing_your_repl_workflow#debugging-tools-and-techniques
+  ;; for more tips, tricks and resources related to debugging. The entire REPL guide is useful, but the section about debugging
+  ;; is particularly pertinent.
+
   )
 
