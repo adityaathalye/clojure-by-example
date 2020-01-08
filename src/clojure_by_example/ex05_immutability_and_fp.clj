@@ -268,3 +268,4 @@ other-pi ; what should this be?
 ;;    define functions.
 ;;
 ;; - Write pure functions as far as possible.
+;; - Try solving questions 51, 77, 60, 102, 86, 115 on 4clojure.com

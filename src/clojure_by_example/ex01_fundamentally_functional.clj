@@ -461,3 +461,5 @@ reduce
 ;; - Learn to use lexical scope and function closures effectively.
 ;; - Learn to define small "single purpose" functions, such that
 ;;   you can compose them together to produce higher order logic.
+;; - Now try solving problems 14, 15, 19, 20, 48, 45 on
+;;   on 4clojure.com
