@@ -3,6 +3,8 @@
 
 ;; IMPORTANT:
 ;; - The README file explains why this project exists.
+;; - Before reading this, try solving problems 1, 2, 3,
+;;   4, 5, 7, 8, 9, 11, 12, 13 and 47 on 4clojure.com
 ;; - Begin in this "ex00..." file, and work through it step by step.
 ;; - Once you are done with "ex00...", open the next file and repeat.
 ;; - Keep going this way, until you have worked through all the files.
@@ -247,3 +249,7 @@ same  ; is defined in the current ns
 ;;
 ;; - All opening braces or parentheses must be matched by closing
 ;;   braces or parentheses, to create legal Clojure expressions.
+;;
+;; - With this knowledge, try solving problems 6, 10, 16, 126, 161, 162
+;;   on 4clojure.com
+

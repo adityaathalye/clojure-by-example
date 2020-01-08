@@ -334,6 +334,7 @@ p/target-planets
 
 #_(map assign-vessels p/target-planets)
 
+
 ;; Something's not right...The Office of Interstellar Affairs tells us we're not assigning vessels correctly?!
 ;; We've only deployed probes and orbiters, and no other vessels?!
 
@@ -420,3 +421,5 @@ p/target-planets
 
   )
 
+;; You've come a long way. Kudos! Try solving 37, 64, 72, 21, 24, 25, 38, 29, 42,
+;; 31, 81, 107, 88, 157, 50, 46, 65 on 4clojure.com

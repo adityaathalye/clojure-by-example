@@ -236,3 +236,6 @@
 
 
 ;; Only limited by your imagination!
+
+;; Now try solving problems 17, 18, 57, 71
+;; 134, 27, 26, 39 on 4clojure.com
