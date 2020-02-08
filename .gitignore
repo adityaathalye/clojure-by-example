@@ -12,4 +12,5 @@ pom.xml.asc
 .setup.sh
 profiles.clj
 .idea
+.m2-for-inclojure
 *.iml
