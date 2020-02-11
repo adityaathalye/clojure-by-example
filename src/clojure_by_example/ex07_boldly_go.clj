@@ -1,4 +1,4 @@
-(ns clojure-by-example.utils.ex07-boldly-go)
+(ns clojure-by-example.ex07-boldly-go)
 
 
 ;; EX07: Lesson Goals
