@@ -313,6 +313,18 @@
 ;; - There are _many_ many ways of de-structuring.
 ;;   Here's a really nice post detailing it:
 ;;   cf. http://blog.jayfields.com/2010/07/clojure-destructuring.html
-;; - Try solving 35, 36, 68, 145, 52, 156, 22, 23, 32, 30, 34, 28, 33, 40,
-;;   83, 61, 99, 120, 56, 55, 43, 67, 74, 80, 69, 75 on 4clojure.com
 
+;; 4clojure Drills: Problems you could try now.
+;;
+;; - #protip: Write the solutions as proper named functions in your code base,
+;;   without code-golfing or hacks. Then translate to anonymous function form
+;;   that 4clojure requires.
+;;
+(comment
+  (map (fn [problem-no] (str "http://www.4clojure.com/problem/"
+                             problem-no))
+       [35, 36, 68, 145, 52,
+        156, 22, 23, 32, 30,
+        34, 28, 33, 40, 83,
+        61, 99, 120, 56, 55,
+        43, 67, 74, 80, 69, 75]))

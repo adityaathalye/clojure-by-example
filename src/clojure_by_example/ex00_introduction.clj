@@ -3,12 +3,11 @@
 
 ;; IMPORTANT:
 ;; - The README file explains why this project exists.
-;; - Before reading this, try solving problems 1, 2, 3,
-;;   4, 5, 7, 8, 9, 11, 12, 13 and 47 on 4clojure.com
 ;; - Begin in this "ex00..." file, and work through it step by step.
 ;; - Once you are done with "ex00...", open the next file and repeat.
 ;; - Keep going this way, until you have worked through all the files.
-
+;; - Once done with a file, read the recap and try any additional
+;;   problem sets listed there, to get more practice.
 
 ;; EX00: LESSON GOAL:
 ;; - Drill some Clojure basics, required for the sections
@@ -249,7 +248,10 @@ same  ; is defined in the current ns
 ;;
 ;; - All opening braces or parentheses must be matched by closing
 ;;   braces or parentheses, to create legal Clojure expressions.
-;;
-;; - With this knowledge, try solving problems 6, 10, 16, 126, 161, 162
-;;   on 4clojure.com
 
+;; 4clojure Drills: Problems you could try now.
+;;
+;; - With the knowledge you have so far, you can try solving these
+;;   problems at 4clojure.com: 1 to 13, and 16, 47, 126, 161, and 162
+;;   e.g. http://www.4clojure.com/problem/1
+;;   e.g. http://www.4clojure.com/problem/16

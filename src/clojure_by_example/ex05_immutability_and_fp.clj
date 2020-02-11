@@ -268,4 +268,14 @@ other-pi ; what should this be?
 ;;    define functions.
 ;;
 ;; - Write pure functions as far as possible.
-;; - Try solving questions 51, 77, 60, 102, 86, 115 on 4clojure.com
+
+;; 4clojure Drills: Problems you could try now.
+;;
+;; - #protip: Write the solutions as proper named functions in your code base,
+;;   without code-golfing or hacks. Then translate to anonymous function form
+;;   that 4clojure requires.
+;;
+(comment
+  (map (fn [problem-no] (str "http://www.4clojure.com/problem/"
+                             problem-no))
+       [51, 77, 60, 102, 86, 115]))

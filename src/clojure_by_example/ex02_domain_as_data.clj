@@ -237,5 +237,15 @@
 
 ;; Only limited by your imagination!
 
-;; Now try solving problems 17, 18, 57, 71
-;; 134, 27, 26, 39 on 4clojure.com
+;;
+;; 4clojure Drills: Problems you could try now.
+;;
+;; - #protip: Write the solutions as proper named functions in your code base,
+;;   without code-golfing or hacks. Then translate to anonymous function form
+;;   that 4clojure requires.
+;;
+(comment
+  (map (fn [problem-no] (str "http://www.4clojure.com/problem/"
+                             problem-no))
+       [17, 18, 57, 71
+        134, 27, 26, 39]))

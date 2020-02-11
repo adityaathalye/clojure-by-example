@@ -461,5 +461,15 @@ reduce
 ;; - Learn to use lexical scope and function closures effectively.
 ;; - Learn to define small "single purpose" functions, such that
 ;;   you can compose them together to produce higher order logic.
-;; - Now try solving problems 14, 15, 19, 20, 48, 45 on
-;;   on 4clojure.com
+
+;;
+;; 4clojure Drills: Problems you could try now.
+;;
+;; - #protip: Write the solutions as proper named functions in your code base,
+;;   without code-golfing or hacks. Then translate to anonymous function form
+;;   that 4clojure requires.
+;;
+(comment
+  (map (fn [problem-no] (str "http://www.4clojure.com/problem/"
+                             problem-no))
+       [14, 15, 19, 20, 48, 45]))

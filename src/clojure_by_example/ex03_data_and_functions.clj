@@ -334,7 +334,6 @@ p/target-planets
 
 #_(map assign-vessels p/target-planets)
 
-
 ;; Something's not right...The Office of Interstellar Affairs tells us we're not assigning vessels correctly?!
 ;; We've only deployed probes and orbiters, and no other vessels?!
 
@@ -403,23 +402,43 @@ p/target-planets
   ;; Does everything work now?
 
   (map assign-vessels p/target-planets)
-
-  ;; The Clojure REPL is a powerful debugging tool that supersedes more traditional step-through debuggers
-  ;; in many ways.
-  ;; You can:
-  ;; 1. Test individual functions or constants to check if they're correct.
-  ;; 2. Redefine a function to add tracing such as print statements, or other forms of instrumentation.
-  ;; 3. Capture intermediate values such as function arguments or let bindings, and inspect them in the REPL
-  ;;    after the fact.
-  ;; 4. Fix the problem and verify that it works immediately.
-  ;; 5. Do all of the above either locally, or while connected to a remote server running in a staging or
-  ;;    production environment.
-
-  ;; We strongly recommend going through https://clojure.org/guides/repl/enhancing_your_repl_workflow#debugging-tools-and-techniques
-  ;; for more tips, tricks and resources related to debugging. The entire REPL guide is useful, but the section about debugging
-  ;; is particularly pertinent.
-
   )
 
-;; You've come a long way. Kudos! Try solving 37, 64, 72, 21, 24, 25, 38, 29, 42,
-;; 31, 81, 107, 88, 157, 50, 46, 65 on 4clojure.com
+;;
+;; RECAP
+;; - Hopefully, you now have a better handle on the various aspects
+;;   of working with Clojure, listed in the exercise goals; viz.
+;;   - Reading: How to explore an unfamiliar Clojure code-base _interactively_?
+;;   - "Primitives": How to get a lot done with just 20-odd core functions?
+;;   - Concepts: What helps us model our domains and compose functional logic?
+;;   - Workflow: How to apply the scientific method to development and debugging?
+;;
+;; - REPL all the things!
+;;   Especially understand how the Clojure REPL is a powerful debugging tool
+;;   that supersedes more traditional step-through debuggers in many ways.
+;;
+;; You can:
+;; 1. Test individual functions or constants to check if they're correct.
+;; 2. Redefine a function to add tracing such as print statements, or other forms of instrumentation.
+;; 3. Capture intermediate values such as function arguments or let bindings, and inspect them in the REPL
+;;    after the fact.
+;; 4. Fix the problem and verify that it works immediately.
+;; 5. Do all of the above either locally, or while connected to a remote server running in a staging or
+;;    production environment.
+;;
+;; We strongly recommend going through https://clojure.org/guides/repl/enhancing_your_repl_workflow#debugging-tools-and-techniques
+;; for more tips, tricks and resources related to debugging. The entire REPL guide is useful, but the section about debugging
+;; is particularly pertinent.
+
+;;
+;; 4clojure Drills: Problems you could try now.
+;;
+;; - #protip: Write the solutions as proper named functions in your code base,
+;;   without code-golfing or hacks. Then translate to anonymous function form
+;;   that 4clojure requires.
+(comment
+  (map (fn [problem-no] (str "http://www.4clojure.com/problem/"
+                             problem-no))
+       [37, 64, 72, 21, 24, 25,
+        38, 29, 42, 31, 81, 107,
+        88, 157, 50, 46, 65]))
