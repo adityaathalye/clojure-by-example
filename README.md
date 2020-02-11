@@ -5,9 +5,6 @@
    - [Workshop Anti-Goals](#workshop-anti-goals)
 - [Suggested learning mindset](#suggested-learning-mindset)
 - [Setup Instructions](#setup-instructions)
-    - [Java 8](#java-8)
-    - [Leiningen](#leiningen)
-    - [Code Editor and Tooling](#code-editor-and-tooling)
 - [Course Design Philosophy](#course-design-philosophy)
 - [Credits](#credits)
 - [Copyright and License](#copyright-and-license)
@@ -64,46 +61,7 @@ It's a liiitle bit of work. But not too bad.
 
 Just do the following one by one, and you should be fine.
 
-## Java 8
-
-You will need Java to work with this Clojure workshop content.
-
-First, make sure you have Java 8.
-
-  - Run `java -version` in your terminal.
-  - If Java is not installed, please [download and install Java 8 from here](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html).
-  - Once you are done, `java -version` should show you a Java 1.8.x version.
-
-Notes:
-
-  - If you have Java 9+, or Open JDK 9+ that should be OK too.
-  - We have not tested this project with Java 7.
-
-
-## Leiningen
-
-Follow [Leiningen setup instructions here](https://leiningen.org/).
-
-### Fire up a REPL
-
-  - Clone this project
-  - Open your terminal, and do the following.
-  - `cd` into this project's root directory
-  - Use `lein repl` command to start a REPL with Leiningen.
-  - Wait for it... the REPL will start and print out a message with some
-    useful information
-  - Locate the `port` and `host` information in the message. We will need this information soon.
-
-Note:
-
-  - [Boot](http://boot-clj.com/) should be fine too, but we have not tested this project with it.
-
-
-## Code Editor and Tooling
-
-Set up an editor and figure out how to evaluate Clojure code with it.
-
-### IntelliJ + Cursive IDE
+## IntelliJ + Cursive IDE
 
 We support IntelliJ + Cursive IDE in the classroom for this workshop. We suggest you use this setup, unless of course, you have already configured your favourite editor for Clojure development. Avoid [bikeshedding](http://catb.org/jargon/html/B/bikeshedding.html) editors. Just complete the workshop first!
 
@@ -121,8 +79,7 @@ Once installed:
   - Again, click Next in the screen that says "Select Leiningen projects to import"
   - And again, click Next in the "Please select project SDK" screen (ensure you select JDK version 1.8 or higher)
   - Click "Finish", and wait for IntelliJ to set up the project
-  - In the left pane, navigate down to the `project.clj` file, under the project's root folder.
-  - Right click on `project.clj` and select the option that says "Run REPL for ..."
+  - Under `Run...` click on `Run...` and then select `REPL for clojure-by-example` (or whatever your project name happens to be).
   - A right pane should open, with a REPL session.
   - Now, open the `ex00..` file under the `src` folder
   - Use the menu under Tools > REPL to (a) Switch to the file's "namespace", and then (b) load the file into the REPL
@@ -134,16 +91,37 @@ Once installed:
 
 Also keep the Cursive user guide handy, in case you need editor help, as you solve the workshop material. In particular, the [Paredit guide](https://cursive-ide.com/userguide/paredit.html) may be useful, if you stumble when editing Clojure code.
 
+## (Optional) Java and Leiningen
+Being a JVM hosted language, Clojure requires Java to run. For the workshop, we also use a Clojure build tool called Leiningen.
+If you're using IntelliJ + Cursive for the workshop, you won't need to install Java or Leiningen separately, since Intellij will come with a JDK and Cursive will download Leiningen when you import the project.
+So just follow the IntelliJ + Cursive setup guide and you'll be good to go for the workshop.
 
-### Alternative Starter Kits:
+If you're working on a production project however, it's useful to have both Java and Leiningen separately installed.
+
+### Java
+
+  - Run `java -version` in your terminal.
+  - If Java is not installed, please [download and install Java from here](https://adoptopenjdk.net/). Any version should do.
+  - Once you are done, `java -version` should show you a Java version.
+
+Notes:
+  - We have not tested this project with Java 7.
+
+
+### Leiningen
+
+Follow [Leiningen setup instructions here](https://leiningen.org/).
+
+## Alternative Starter Kits:
 
 If you can't use IntelliJ for some reason, you may try one of these. Although we haven't tested with these setups, the workshop material should work fine.
+You'll also have to install Leiningen and Java separately.
 
   - A [snazzy setup with Atom](https://medium.com/@jacekschae/slick-clojure-editor-setup-with-atom-a3c1b528b722).
   - Brave Clojure walks you through [a basic Emacs setup for learning Clojure](https://www.braveclojure.com/basic-emacs/).
 
 
-### Your favourite editor:
+## Your favourite editor:
 
 You may find instructions for your favourite editor at one of these pages. But there are only so many choices. Ultimately, you must pick your poison and run with it:
 
