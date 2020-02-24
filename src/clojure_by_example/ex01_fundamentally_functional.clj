@@ -377,6 +377,25 @@ map
 ;;        inc inc inc   ; via `inc`
 ;;        | | | | | |
 ;;       (2 3 4 5 6 7)  ; to each item of the output coll
+;;
+;; Note: you may wonder why the result of map inc on [1 2 3 4], which is
+;; square-bracketed results in an answer that's wrapped in parens (2 3 4 5).
+;;
+;; The short answer is: Ignore this pesky detail.
+;; Think in terms of "sequence in, sequence out", instead of "this 'type' of
+;; sequence in, and the same 'type' of sequence out".
+;;
+;; The more confusing answer is: 'map' returns a "lazy" sequence, which the REPL
+;; _prints_ out visually, with round parens. 'filter' (below) does the same too.
+;;
+;; Usually we don't care if we have a vector or a list or a "lazy" sequence.
+;; What we do care is what the sequence contains, and that the thing remains
+;; sequential before/after. It only starts mattering when we definitely want
+;; a particular sequence type for the very specific performance guarantees
+;; that it provides.
+;;
+;; But really, you'll do better if you just ignore what this actually means
+;; and/or the consequences of the distinction for now.
 
 
 filter
