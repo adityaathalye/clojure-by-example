@@ -34,6 +34,9 @@ What could one do with just a _little_ bit of Clojure?
   - Learn how Clojurists usually think with Clojure to solve problems.
   - See how it's not so hard to do surprisingly powerful things with a
     mere handful of "primitive" functions, data structures, and ideas.
+  - Get you started with a good development setup and workflow that will
+    serve you well if (when) you continue to program with Clojure, as a
+    hobby, or at work!
 
 ## Workshop Anti-Goals
   - Try to explain Functional Programming theory or Clojure's innards.
