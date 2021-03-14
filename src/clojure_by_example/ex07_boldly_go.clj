@@ -76,7 +76,8 @@
 ;;   - Inside `injest.clj`, update the ns declaration to look like:
 ;;
 ;;     (ns planet-coloniser.utils.ingest
-;;       (:require [clojure.data.json]))
+;;       (:require [clojure.data.json :as json]
+;;                 [clojure.java.io :as io]))
 ;;
 ;;
 ;; * Update `export.clj`. Open the file and:
@@ -89,8 +90,9 @@
 ;;
 ;;   - Also ensure, the ns form looks like this:
 ;;
-;;     (ns planet-coloniser.utils.export
-;;       (:require [clojure.data.json])) ; we use this in export too
+;;     (ns planet-coloniser.utils.ingest
+;;       (:require [clojure.data.json :as json]
+;;                 [clojure.java.io :as io]))
 ;;
 ;;
 ;; * Create `sensor_processor.clj`, for our core "pure" logic:
