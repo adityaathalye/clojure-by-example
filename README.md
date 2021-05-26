@@ -128,9 +128,9 @@ You'll also have to install Leiningen and Java separately.
 
 You may find instructions for your favourite editor at one of these pages. But there are only so many choices. Ultimately, you must pick your poison and run with it:
 
-  - ["IDEs and Editors" at dev.clojure.org](https://dev.clojure.org/display/doc/IDEs+and+Editors)
+  - ["Clojure Tools" at clojure.org](https://clojure.org/community/tools)
   - ["Essentials" at clojure-doc.org](http://clojure-doc.org/articles/content.html#essentials)
-  - [Christopher Bui says...](https://cb.codes/what-editor-ide-to-use-for-clojure/)
+  - [Christopher Bui says...](https://web.archive.org/web/20181223213500/https://cb.codes/what-editor-ide-to-use-for-clojure/)
 
 
 # Course Design Philosophy
