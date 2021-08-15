@@ -12,7 +12,24 @@
 
 # Introduction
 
-What could one do with just a _little_ bit of Clojure?
+This workshop aims to get your brain and fingers accustomed to just enough of
+the [Clojure](https://clojure.org) programming language to start doing useful things with it.
+
+In other words, "What could one do with just a _little_ bit of Clojure?".
+
+## What is Clojure?
+
+Clojure is an interactive functional programming language that can run on many platforms
+like the [JVM](https://clojure.org/about/jvm_hosted), [.NET CLR](https://clojure.org/about/clojureclr),  [Javascript](https://clojurescript.org/) (browsers, nodeJS, React Native), as [native binaries](https://github.com/BrunoBonacci/graalvm-clojure) via Graalvm, and even as [shell scripts](https://babashka.org/)!
+
+It is [used by software teams worldwide](https://clojure.org/community/success_stories#) to deliver
+high-value software systems at giant companies like Apple, Walmart, to "decacorns"
+like GoJek, Nubank, to a wide array of startups, and one-person businesses like Partsbox.com.
+
+Its interactivity and dynamism foster a sense of playfulness that attracts all manner
+of [creative makers](http://radar.oreilly.com/2015/05/creative-computing-with-clojure.html)---hobbyist as well as serious artists and musicians.
+
+A small but vibrant [global community](https://clojure.org/community/user_groups) is [busy building amazing things](https://github.com/trending/clojure?since=monthly) with the language.
 
 ## Intended usage
   - Support a 1-day guided workshop for programmers new to Clojure (not absolute programming beginners).
