@@ -321,7 +321,7 @@
 ;;   that 4clojure requires.
 ;;
 (comment
-  (map (fn [problem-no] (str "http://www.4clojure.com/problem/"
+  (map (fn [problem-no] (str "https://4clojure.oxal.org/#/problem/"
                              problem-no))
        [35, 36, 68, 145, 52,
         156, 22, 23, 32, 30,

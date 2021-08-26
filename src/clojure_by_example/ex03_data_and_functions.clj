@@ -437,7 +437,7 @@ p/target-planets
 ;;   without code-golfing or hacks. Then translate to anonymous function form
 ;;   that 4clojure requires.
 (comment
-  (map (fn [problem-no] (str "http://www.4clojure.com/problem/"
+  (map (fn [problem-no] (str "https://4clojure.oxal.org/#/problem/"
                              problem-no))
        [37, 64, 72, 21, 24, 25,
         38, 29, 42, 31, 81, 107,

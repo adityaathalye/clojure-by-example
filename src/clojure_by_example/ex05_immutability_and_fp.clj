@@ -276,6 +276,6 @@ other-pi ; what should this be?
 ;;   that 4clojure requires.
 ;;
 (comment
-  (map (fn [problem-no] (str "http://www.4clojure.com/problem/"
+  (map (fn [problem-no] (str "https://4clojure.oxal.org/#/problem/"
                              problem-no))
        [51, 77, 60, 102, 86, 115]))

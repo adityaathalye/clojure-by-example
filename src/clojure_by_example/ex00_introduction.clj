@@ -253,5 +253,5 @@ same  ; is defined in the current ns
 ;;
 ;; - With the knowledge you have so far, you can try solving these
 ;;   problems at 4clojure.com: 1 to 13, and 16, 47, 126, 161, and 162
-;;   e.g. http://www.4clojure.com/problem/1
-;;   e.g. http://www.4clojure.com/problem/16
+;;   e.g. https://4clojure.oxal.org/#/problem/1
+;;   e.g. https://4clojure.oxal.org/#/problem/16
