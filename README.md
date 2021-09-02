@@ -83,7 +83,7 @@ Just do the following one by one, and you should be fine.
 
 ## IntelliJ + Cursive IDE
 
-We support IntelliJ + Cursive IDE in the classroom for this workshop. We suggest you use this setup, unless of course, you have already configured your favourite editor for Clojure development. Avoid [bikeshedding](http://catb.org/jargon/html/B/bikeshedding.html) editors. Just complete the workshop first!
+We support IntelliJ + Cursive IDE in the classroom for this workshop. We suggest you use this setup, unless of course, you have already configured your favourite editor for Clojure development. We've listed alternate starter kits below (VSCode, Vim, Emacs, Atom), *but* please avoid [bikeshedding](http://catb.org/jargon/html/B/bikeshedding.html) editors. Just complete the workshop first!
 
   - Download and Install [IntelliJ Community Edition](https://www.jetbrains.com/idea/download/)
   - Install and configure the Cursive plugin for IntelliJ by following the [official Cursive user guide](https://cursive-ide.com/userguide/).
@@ -137,7 +137,9 @@ Follow [Leiningen setup instructions here](https://leiningen.org/).
 If you can't use IntelliJ for some reason, you may try one of these. Although we haven't tested with these setups, the workshop material should work fine.
 You'll also have to install Leiningen and Java separately.
 
+  - [VSCode + Calva](https://calva.io/) has become a fantastic Clojure IDE!
   - A [snazzy setup with Atom](https://medium.com/@jacekschae/slick-clojure-editor-setup-with-atom-a3c1b528b722).
+  - [Vim + vim-fireplace](https://thoughtbot.com/blog/writing-clojure-in-vim) and other goodies that make Clojure/Lisp hacking fun in Vim.
   - Brave Clojure walks you through [a basic Emacs setup for learning Clojure](https://www.braveclojure.com/basic-emacs/).
 
 
