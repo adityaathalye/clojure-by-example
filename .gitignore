@@ -14,3 +14,7 @@ profiles.clj
 .idea
 .m2-for-inclojure
 *.iml
+.lsp
+.cpcache
+.clj-kondo
+.calva
