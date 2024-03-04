@@ -81,6 +81,18 @@ Take what is useful, discard the rest.
 
 Just do the following one by one, and you should be fine.
 
+## Java
+
+You need Java installed.
+
+- Run `java -version` in your terminal.
+- If Java is not installed, please [download and install Java from here](https://adoptopenjdk.net/). Any version should do.
+- Once you are done, `java -version` should show you a Java version.
+
+Notes:
+
+- We have not tested this project with Java 7.
+
 ## VSCode + Calva
 
 We support VSCode + Calva IDE in the classroom for this workshop. We suggest you use this setup, unless of course, you have already configured your favourite editor for Clojure development. We've listed alternate starter kits below (IntelliJ, Vim, Emacs, Atom), _but_ please avoid [bikeshedding](http://catb.org/jargon/html/B/bikeshedding.html) editors. Just complete the workshop first!
@@ -89,10 +101,6 @@ We support VSCode + Calva IDE in the classroom for this workshop. We suggest you
 - Open VSCode and complete the initialization process.
 - Open the "Extensions" Tab and search for "Calva", Install the "Calva: Clojure & ClojureScript Interactive Programming" extension
   - Alternatively you can visit the [Calva page](https://marketplace.visualstudio.com/items?itemName=betterthantomorrow.calva) to install it
-- You need Java Installed
-  - Run `java -version` in your terminal.
-  - If Java is not installed, please [download and install Java from here](https://adoptopenjdk.net/). Any version should do.
-  - Once you are done, `java -version` should show you a Java version.
 
 Once installed:
 
@@ -106,16 +114,6 @@ Once installed:
 - You have a working REPL now!
 
 - Keep the [Paredit guide](https://calva.io/paredit/) handy, editing code will require some understanding of paredit.
-
-### Java
-
-- Run `java -version` in your terminal.
-- If Java is not installed, please [download and install Java from here](https://adoptopenjdk.net/). Any version should do.
-- Once you are done, `java -version` should show you a Java version.
-
-Notes:
-
-- We have not tested this project with Java 7.
 
 ## Your favourite editor:
 
