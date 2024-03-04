@@ -83,7 +83,7 @@ Just do the following one by one, and you should be fine.
 
 ## VSCode + Calva
 
-We support VSCode + Calva IDE in the classroom for this workshop. We suggest you use this setup, unless of course, you have already configured your favourite editor for Clojure development. We've listed alternate starter kits below (VSCode, Vim, Emacs, Atom), _but_ please avoid [bikeshedding](http://catb.org/jargon/html/B/bikeshedding.html) editors. Just complete the workshop first!
+We support VSCode + Calva IDE in the classroom for this workshop. We suggest you use this setup, unless of course, you have already configured your favourite editor for Clojure development. We've listed alternate starter kits below (IntelliJ, Vim, Emacs, Atom), _but_ please avoid [bikeshedding](http://catb.org/jargon/html/B/bikeshedding.html) editors. Just complete the workshop first!
 
 - Download and Install [VSCode](https://code.visualstudio.com/)
 - Open VSCode and complete the initialization process.
@@ -99,7 +99,7 @@ Once installed:
 - Clone the repository on your machine
 - In VSCode Use File > Open Folder... and open the cloned folder
 - Notice that Calva activates
-- Open the [Command Pallete](https://code.visualstudio.com/docs/getstarted/userinterface#_command-palette) in VSCode using `⇧⌘P` on Mac or `Ctrl+Shift+P` on other systems
+- Open the [Command Palette](https://code.visualstudio.com/docs/getstarted/userinterface#_command-palette) in VSCode using `⇧⌘P` on Mac or `Ctrl+Shift+P` on other systems
 - Type "Calva: Start Project REPL" and choose "Calva: Start a Project REPL and Connect (aka Jack-In)" from the list
   - Select `deps.edn` when prompted for Project type. We are using [tools.deps](https://clojure.org/guides/deps_and_cli) for managing the project. You don't need to worry about it's details for this workshop
   - VSCode will create a new pane called 'output.calva-repl' and you will see `clj꞉user꞉>` prompt in that screen
