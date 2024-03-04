@@ -148,6 +148,6 @@ Live long, and prosper.
 
 ## Copyright and License
 
-Copyright © 2017-2018 [IN/Clojure](http://inclojure.org/).
+Copyright © 2017-2024 [IN/Clojure](http://inclojure.org/).
 
 Distributed under the [MIT license](https://github.com/inclojure-org/clojure-by-example/blob/master/LICENSE).
