@@ -34,7 +34,7 @@ A small but vibrant [global community](https://clojure.org/community/user_groups
 
 - Support a 1-day guided workshop for programmers new to Clojure (not absolute programming beginners).
 - Also function as at-home learning material for said programmers.
-- The `master` branch is heavily commented, for at-home use
+- The `master` branch is heavily commented, for at-home use.
 - A `solutions` branch will be available, as a companion to `master`.
   But don't peek at it in advance!
 - You may see a `workshop-code` branch. Ignore it. It is meant only for
@@ -97,20 +97,21 @@ Notes:
 
 We support VSCode + Calva IDE in the classroom for this workshop. We suggest you use this setup, unless of course, you have already configured your favourite editor for Clojure development. We've listed alternate starter kits below (IntelliJ, Vim, Emacs, Atom), _but_ please avoid [bikeshedding](http://catb.org/jargon/html/B/bikeshedding.html) editors. Just complete the workshop first!
 
-- Download and Install [VSCode](https://code.visualstudio.com/)
+- Download and Install [VSCode](https://code.visualstudio.com/).
 - Open VSCode and complete the initialization process.
-- Open the "Extensions" Tab and search for "Calva", Install the "Calva: Clojure & ClojureScript Interactive Programming" extension
-  - Alternatively you can visit the [Calva page](https://marketplace.visualstudio.com/items?itemName=betterthantomorrow.calva) to install it
+- Open the "Extensions" Tab and search for "Calva", Install the "Calva:
+  Clojure & ClojureScript Interactive Programming" extension.
+- Alternatively you can visit the [Calva page](https://marketplace.visualstudio.com/items?itemName=betterthantomorrow.calva) to install it.
 
 Once installed:
 
-- Clone the repository on your machine
-- In VSCode Use File > Open Folder... and open the cloned folder
-- Notice that Calva activates
-- Open the [Command Palette](https://code.visualstudio.com/docs/getstarted/userinterface#_command-palette) in VSCode using `⇧⌘P` on Mac or `Ctrl+Shift+P` on other systems
-- Type "Calva: Start Project REPL" and choose "Calva: Start a Project REPL and Connect (aka Jack-In)" from the list
-  - Select `deps.edn` when prompted for Project type. We are using [tools.deps](https://clojure.org/guides/deps_and_cli) for managing the project. You don't need to worry about it's details for this workshop
-  - VSCode will create a new pane called 'output.calva-repl' and you will see `clj꞉user꞉>` prompt in that screen
+- Clone the repository on your machine.
+- In VSCode Use File > Open Folder... and open the cloned folder.
+- Notice that Calva activates.
+- Open the [Command Palette](https://code.visualstudio.com/docs/getstarted/userinterface#_command-palette) in VSCode using `⇧⌘P` on Mac or `Ctrl+Shift+P` on other systems.
+- Type "Calva: Start Project REPL" and choose "Calva: Start a Project REPL and Connect (aka Jack-In)" from the list.
+  - Select `deps.edn` when prompted for Project type. We are using [tools.deps](https://clojure.org/guides/deps_and_cli) for managing the project. You don't need to worry about it's details for this workshop.
+  - VSCode will create a new pane called 'output.calva-repl' and you will see `clj꞉user꞉>` prompt in that screen.
 - You have a working REPL now!
 
 - Keep the [Paredit guide](https://calva.io/paredit/) handy, editing code will require some understanding of paredit.
