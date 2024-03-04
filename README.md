@@ -86,12 +86,10 @@ Just do the following one by one, and you should be fine.
 You need Java installed.
 
 - Run `java -version` in your terminal.
-- If Java is not installed, please [download and install Java from here](https://adoptopenjdk.net/). Any version should do.
+- If Java is not installed, please [download and install Java from here](https://adoptopenjdk.net/).
+- Any version should do, but prefer Java 8 or higher. We have not tested
+  this project with Java 7.
 - Once you are done, `java -version` should show you a Java version.
-
-Notes:
-
-- We have not tested this project with Java 7.
 
 ## VSCode + Calva
 
