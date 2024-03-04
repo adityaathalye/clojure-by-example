@@ -111,7 +111,6 @@ Once installed:
   - Select `deps.edn` when prompted for Project type. We are using [tools.deps](https://clojure.org/guides/deps_and_cli) for managing the project. You don't need to worry about it's details for this workshop.
   - VSCode will create a new pane called 'output.calva-repl' and you will see `clj꞉user꞉>` prompt in that screen.
 - You have a working REPL now!
-
 - Keep the [Paredit guide](https://calva.io/paredit/) handy, editing code will require some understanding of paredit.
 
 ## Your favourite editor:
